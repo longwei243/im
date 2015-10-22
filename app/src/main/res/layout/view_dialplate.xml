@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialplate_edittext_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/dialplate_edittext_phonenum"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:editable="false"
+            android:gravity="center"
+            android:singleLine="true"
+            android:hint="请输入电话号码"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialNum1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="1"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="1" />
+
+        <Button
+            android:id="@+id/dialNum2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="2"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="2" />
+
+        <Button
+            android:id="@+id/dialNum3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="3"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialNum4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="4"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="4" />
+
+        <Button
+            android:id="@+id/dialNum5"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="5"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="5" />
+
+        <Button
+            android:id="@+id/dialNum6"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="6"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialNum7"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="7"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="7" />
+
+        <Button
+            android:id="@+id/dialNum8"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="8"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="8" />
+
+        <Button
+            android:id="@+id/dialNum9"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="9"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialx"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="*"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="*" />
+
+        <Button
+            android:id="@+id/dialNum0"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="0"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="0" />
+
+        <Button
+            android:id="@+id/dialj"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dialplate_height"
+            android:layout_weight="1"
+            android:background="@drawable/dialplate_edittext_bg"
+            android:text="#"
+            android:textColor="@color/all_black"
+            android:textSize="24sp"
+            android:tag="#" />
+    </LinearLayout>
+
+</LinearLayout>

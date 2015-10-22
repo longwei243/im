@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 主页相关 -->
+    <string name="app_name">容联七陌</string>
+    <string name="spname">7moor</string>
+    <string name="tab_message">消息</string>
+    <string name="tab_contact">通讯录</string>
+    <string name="tab_dial">电话</string>
+    <string name="tab_setup">我</string>
+    <string name="action_search">搜索</string>
+    <string name="action_plus">功能</string>
+    <string name="plus_group">创建群</string>
+    <string name="plus_discussion">创建讨论组</string>
+    <string name="plus_video_chat">视频聊天</string>
+    <string name="plus_scan">扫一扫</string>
+    <string name="plus_camera">拍照分享</string>
+    <string name="loginoff">注销</string>
+
+    <!-- 消息列表相关 -->
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="message_people_name">姓名</string>
+    <string name="message_time">早上09:10</string>
+    <string name="message_content">您好！我是张三。。。。。</string>
+    <string name="message_title">与某某某正在聊天</string>
+    <string name="title_activity_contactdetail">ContactDetailActivity</string>
+    <string name="title_activity_other_people">OtherPeopleActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- 别人的个人消息相关 -->
+    <string name="other_people_name">张三</string>
+    <string name="other_people_nickname">潇湘夜雨</string>
+    <string name="other_people_region">地区</string>
+    <string name="other_people_province_city">北京-朝阳</string>
+    <string name="action_collection">我的收藏</string>
+    <string name="action_card">我的银行卡</string>
+    <string name="action_settings">设置</string>
+    <string name="action_feed">意见反馈</string>
+
+    <!-- 正在呼叫相关 -->
+    <string name="title_activity_calling">CallingActivity</string>
+    <string name="calling_number">13717674924</string>
+    <string name="calling_status">专线电话正在呼叫，请注意接听系统来电！</string>
+    <string name="calling_dialog1">网络直拨</string>
+    <string name="calling_dialog2">专线电话</string>
+    <string name="calling_dialog3">普通电话</string>
+    <string name="calling_dialog4">取消</string>
+    <string name="take_call">take_call</string>
+    <string name="ignore_call">ignore_call</string>
+    <string name="unlock">unlock</string>
+    <string name="clear_call">clear_call</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_start">StartActivity</string>
+    
+    
+    
+    <string name="parentdialog_title">温馨提示</string>
+    
+    <string name="recorder_normal">按住 说话</string>
+    <string name="recorder_recording">松开 手指</string>
+    <string name="recorder_want_cancel">松开手指，取消发送</string>
+    
+
+
+    <string name="aboutme">　　北京容联七陌科技有限公司是一家全新的为企业提供基于互联网通讯服务的创新性互联网公司。企业不仅能直接使用北京容联七陌科技有限公司的企业通讯SAAS产品，如视频电话会议、联络中心、企业微信等；还能将电话、语音、视频、IM、短信等通讯能力集成到企业自己的产品中。</string>
+    <string name="about_copyright">Copyright©2015 北京容联七陌 版权所有</string>
+    <string name="about_company">北京容联七陌科技有限公司技术支持</string>
+
+    <string name="skip_button">Skip</string>
+    <string name="done_button">Done</string>
+    <string name="title_activity_add_gourp">创建群</string>
+    <string name="title_activity_gourp">群组</string>
+
+
+
+</resources>

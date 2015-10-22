@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+
+    >
+
+    <TextView
+        android:id="@+id/dialog_loding_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/all_black"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="16dp"
+        android:text="正在上传图片"/>
+
+    <com.moor.im.ui.view.LoadingView
+        android:layout_below="@id/dialog_loding_tv"
+        android:id="@+id/dialog_loding_LoadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_spinner1" />
+</RelativeLayout>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.moor.im"
+    android:versionCode="1"
+    android:versionName="1.1.6" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_INCOMING_CALLS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.USE_SIP" />
+    <uses-permission android:name="android.permission.CONFIGURE_SIP" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <permission
+        android:name="android.permission.USE_SIP"
+        android:description="@string/permdesc_useSip"
+        android:label="@string/permlab_useSip"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="android.permission.CONFIGURE_SIP"
+        android:description="@string/permdesc_configureSip"
+        android:label="@string/permlab_configureSip"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" />
+
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <application
+        android:name=".app.MobileApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ui.activity.StartActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Start" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.ContactDetailActivity"
+            android:label="@string/title_activity_contactdetail"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.CallingActivity"
+            android:label="@string/title_activity_calling"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.csipsimple.ui.incall.InCallActivity"
+            android:allowTaskReparenting="true"
+            android:configChanges="orientation"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:permission="android.permission.CONFIGURE_SIP"
+            android:process=":sipStack"
+            android:taskAffinity=""
+            android:theme="@style/DarkTheme.NoTitle" >
+            <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.INCALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.csipsimple.ui.incall.InCallMediaControl"
+            android:configChanges="orientation"
+            android:label="@string/prefs_media"
+            android:taskAffinity="com.csipsimple.ui.incall.InCallActivity"
+            android:theme="@style/DarkTheme.Dialog" />
+
+        <service
+            android:name="com.csipsimple.service.SipService"
+            android:exported="true"
+            android:permission="android.permission.CONFIGURE_SIP"
+            android:process=":sipStack" >
+            <intent-filter>
+                <action android:name="com.csipsimple.service.SipService" />
+                <action android:name="com.csipsimple.service.SipConfiguration" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".tcpservice.service.IMService"
+            android:process=":notifyService" >
+        </service>
+
+        <provider
+            android:name="com.csipsimple.service.PreferenceProvider"
+            android:authorities="com.csipsimple.prefs"
+            android:permission="android.permission.CONFIGURE_SIP" />
+        <provider
+            android:name="com.csipsimple.db.DBProvider"
+            android:authorities="com.csipsimple.db"
+            android:permission="android.permission.CONFIGURE_SIP"
+            android:process=":sipStack" />
+
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.dialog.KickedActicity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DepartmentActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.SubDepartmentSelectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DepartmentAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.UserInfoActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.MembersSelectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.SubDepartmentActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DepartmentUpdateActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.UpdateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/parentDialog" >
+        </activity>
+        <activity
+            android:name=".ui.activity.ImageViewLookActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.ClipImageViewActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.IntroActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.AddGourpActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupSettingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupUpdateTitleActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupAddAdminActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupAddMemberActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupMemberDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.GroupAdminSelectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.AddDiscussionActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DiscussionActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DiscussionSettingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DiscussionMemberDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DiscussionUpdateTitleActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.DiscussionAddMemberActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.SystemActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.AboutMeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.ContactSystemActicity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.EditActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <receiver
+            android:name=".receiver.NetWorkReceiver"
+            android:process=":notifyService" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.PhoneReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Extra codecs -->
+
+        <receiver
+            android:name="com.csipsimple.plugins.codecs.ReceiverSILK"
+            android:exported="false" >
+            <meta-data
+                android:name="lib_name"
+                android:value="libpj_g729_codec.so" />
+            <meta-data
+                android:name="init_factory"
+                android:value="pjmedia_codec_g729_init" />
+
+            <intent-filter>
+                <action android:name="com.csipsimple.codecs.action.REGISTER_CODEC" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.BootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":notifyService" >
+            <intent-filter android:priority="2147483647" >
+
+                <!-- <action android:name="android.intent.action.USER_PRESENT" /> -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
+                <!-- <action android:name="android.intent.action.TIME_SET" /> -->
+                <!-- <action android:name="android.intent.action.DATE_CHANGED" /> -->
+                <!-- <action android:name="android.intent.action.TIMEZONE_CHANGED" /> -->
+                <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.IMServiceReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="com.moor.im.LOGIN_SUCCESS" />
+                <action android:name="com.moor.im.NEW_MSG" />
+                <action android:name="com.moor.im.LOGIN_FAILED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.AlarmManagerReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":notifyService" >
+        </receiver>
+        <receiver
+            android:name=".receiver.KickedReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="kicked"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

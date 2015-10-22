@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/jog_tab_right_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/jog_tab_right_normal" android:state_enabled="true"/>
+    <item android:drawable="@drawable/jog_tab_right_confirm_red" android:state_active="true"/>
+
+</selector>

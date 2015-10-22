@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <dimen name="sidebar_lettersize">16sp</dimen>
+     <dimen name="dialplate_height">48dp</dimen>
+</resources>

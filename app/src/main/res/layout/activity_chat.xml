@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ebebeb" >
+
+    <RelativeLayout
+        android:id="@+id/chat_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_50"
+        android:layout_alignParentTop="true"
+        android:background="@color/maincolor"
+        >
+        <ImageView 
+            android:id="@+id/chat_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_left"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            />
+        
+        <TextView
+            android:id="@+id/other_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/all_white"
+            android:text="9999"
+            android:textSize="@dimen/size_18" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/chat_btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_white_36dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bar_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_0.5"
+            android:background="#C0C0C0" />
+
+        <LinearLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_4" >
+
+            <Button
+                android:id="@+id/chat_set_mode_voice"
+                android:layout_width="@dimen/margin_32"
+                android:layout_height="@dimen/margin_32"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:background="@drawable/icon_chat_voice"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/chat_set_mode_keyboard"
+                android:layout_width="@dimen/margin_32"
+                android:layout_height="@dimen/margin_32"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:background="@drawable/chatting_setmode_keyboard_btn"
+                android:visibility="gone" />
+
+            <com.moor.im.ui.view.recordbutton.AudioRecorderButton
+                android:id="@+id/chat_press_to_speak"
+                android:layout_width="@dimen/margin_0"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_6"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:layout_marginRight="@dimen/margin_6"
+                android:layout_marginTop="@dimen/margin_6"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/recorder_normal"
+            	android:textColor="#727272"
+                android:background="@drawable/btn_recorder_normal"
+                android:visibility="gone" >
+
+                
+            </com.moor.im.ui.view.recordbutton.AudioRecorderButton>
+
+            <RelativeLayout
+                android:id="@+id/chat_edittext_layout"
+                android:layout_width="@dimen/margin_0"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_3"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:layout_marginRight="@dimen/margin_6"
+                android:layout_weight="1"
+                android:background="@drawable/input_bar_bg_normal"
+                android:gravity="bottom" >
+
+                <EditText
+                    android:id="@+id/chat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_35"
+                    android:background="@null"
+                    android:maxLines="4"
+                    android:minHeight="@dimen/margin_40"
+                    android:paddingBottom="@dimen/margin_3"
+                    android:paddingLeft="@dimen/margin_1"
+                    android:paddingRight="@dimen/margin_1"
+                    android:paddingTop="@dimen/margin_3"
+                    android:textSize="@dimen/size_16" />
+
+                <ImageView
+                    android:id="@+id/chat_emoji_normal"
+                    android:layout_width="@dimen/margin_24"
+                    android:layout_height="@dimen/margin_24"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_margin="@dimen/margin_1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_chat_emoji_normal"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/chat_emoji_checked"
+                    android:layout_width="@dimen/margin_24"
+                    android:layout_height="@dimen/margin_24"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_margin="@dimen/margin_1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_chat_emoji_checked"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/chat_more"
+                android:layout_width="@dimen/margin_32"
+                android:layout_height="@dimen/margin_32"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:layout_marginRight="@dimen/margin_16"
+                android:background="@drawable/icon_chattype_add" />
+
+            <Button
+                android:id="@+id/chat_send"
+                android:layout_width="@dimen/margin_48"
+                android:layout_height="@dimen/margin_32"
+                android:layout_marginRight="@dimen/margin_4"
+                android:background="@drawable/chat_send_btn_selector"
+                android:text="发送"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <!-- 表情图片 -->
+
+            <RelativeLayout
+                android:id="@+id/chat_face_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_200"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/chat_emoji_vPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/chat_iv_image_face"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/chat_more_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_200"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/chat_more_vPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/chat_iv_image_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bar_bottom"
+        android:layout_below="@id/chat_title" >
+
+        <!--<ProgressBar
+            android:id="@+id/pb_load_more"
+            android:layout_width="@dimen/margin_28"
+            android:layout_height="@dimen/margin_28"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />-->
+
+        <com.moor.im.ui.view.ChatListView
+            android:id="@+id/chat_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@null"
+            android:divider="@null"
+            android:dividerHeight="@dimen/margin_5"
+            android:listSelector="@null"
+            android:scrollbarStyle="outsideOverlay"
+            android:transcriptMode="normal" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

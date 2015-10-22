@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10.0dip"
+    android:paddingRight="10.0dip"
+    android:paddingBottom="5.0dp"
+    android:orientation="vertical"
+    >
+    <TextView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="10.0dip"
+	    android:paddingRight="10.0dip"
+	    android:paddingBottom="5.0dp"
+	    android:gravity="center"
+	    android:text="该账号已在其它设备登录"
+	    android:textColor="@color/all_black"
+	    android:textSize="16.0sp" />
+	<TextView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="10.0dip"
+	    android:paddingRight="10.0dip"
+	    android:paddingBottom="5.0dp"
+	    android:gravity="center"
+	    android:text="是否重新登录"
+	    android:textColor="@color/all_black"
+	    android:textSize="16.0sp" />
+</LinearLayout>

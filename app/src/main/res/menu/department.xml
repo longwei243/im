@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+	
+    <item  
+        android:id="@+id/action_plus"  
+        android:icon="@drawable/actionbar_add_icon"  
+        android:showAsAction="ifRoom"  
+        android:title="添加根部门"/>  
+    
+</menu>

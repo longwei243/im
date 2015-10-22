@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+
+    <item  
+        android:id="@+id/action_collection"  
+        android:icon="@drawable/ofm_collect_icon" 
+        android:showAsAction="never" 
+        android:title="@string/action_collection"/>  
+    <item  
+        android:id="@+id/action_card"  
+        android:icon="@drawable/ofm_card_icon"  
+        android:showAsAction="never" 
+        android:title="@string/action_card"/>  
+   <item  
+        android:id="@+id/action_settings"  
+        android:icon="@drawable/ofm_setting_icon"  
+        android:showAsAction="never" 
+        android:title="@string/action_settings"/>  
+    <item  
+        android:id="@+id/action_feed"  
+        android:icon="@drawable/ofm_feedback_icon"  
+        android:showAsAction="never" 
+        android:title="@string/action_feed"/>  
+</menu>
