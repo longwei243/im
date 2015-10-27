@@ -21,12 +21,9 @@ import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.Group;
 import com.moor.im.model.entity.User;
-import com.moor.im.model.parser.DepartmentParser;
 import com.moor.im.model.parser.HttpParser;
-import com.moor.im.ui.adapter.DepartmentAdapter;
 import com.moor.im.ui.adapter.GroupAdapter;
 import com.moor.im.utils.GroupActivityUtil;
-import com.moor.im.utils.LogUtil;
 
 import org.apache.http.Header;
 
@@ -92,7 +89,6 @@ public class GroupActivity extends Activity{
     private void getGroupDataFromLocal() {
         if(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_GROUP) != null) {
             final List<Group> groups = HttpParser.getGroups(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_GROUP));
-            System.out.println("缓存中群组数据:"+MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_GROUP));
             adapter = new GroupAdapter(GroupActivity.this, groups);
             mListView.setAdapter(adapter);
 
@@ -133,7 +129,6 @@ public class GroupActivity extends Activity{
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             String message = HttpParser.getMessage(responseString);
-            LogUtil.d("GroupActivity", "获取群组返回结果:"+responseString);
             if ("true".equals(succeed)) {
                 //将数据存到本地
               MobileApplication.cacheUtil.put(CacheKey.CACHE_GROUP, responseString);

@@ -43,6 +43,7 @@ import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.activity.ContactDetailActivity;
+import com.moor.im.ui.activity.ContactSystemActicity;
 import com.moor.im.ui.activity.DepartmentActivity;
 import com.moor.im.ui.activity.DiscussionActivity;
 import com.moor.im.ui.activity.GroupActivity;
@@ -73,7 +74,7 @@ public class ContactFragment extends BaseLazyFragment {
 
 	private SharedPreferences sp;
 
-	private LinearLayout department_layout, group_layout, discuss_layout;
+	private LinearLayout department_layout, group_layout, discuss_layout, phone_contact_layout;
 
 	SharedPreferences.Editor editor;
 
@@ -114,8 +115,6 @@ public class ContactFragment extends BaseLazyFragment {
 		public void onSuccess(int statusCode, Header[] headers,
 				String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
-			String message = HttpParser.getMessage(responseString);
-			LogUtil.d("ContactFragment", "获取联系人返回数据:"+responseString);
 			if ("true".equals(succeed)) {
 
 				ContactsDao.getInstance().clear();
@@ -166,7 +165,7 @@ public class ContactFragment extends BaseLazyFragment {
 	 */
 	private void initDatas(final List<Contacts> contacts) {
 
-		if(contacts != null && contacts.size() > 0) {
+		if(contacts != null && contacts.size() > 0 && user != null) {
 			setLetter(contacts);
 			Collections.sort(contacts, pinyinComparator);
 			// 将自己在联系人中移除
@@ -205,9 +204,12 @@ public class ContactFragment extends BaseLazyFragment {
 				public void onScroll(AbsListView view, int firstVisibleItem,
 									 int visibleItemCount, int totalItemCount) {
 					firstItem = firstVisibleItem;
-					String letter = ((Contacts) adapter.getItem(firstItem)).pinyin.toUpperCase()
-							.substring(0, 1);
-					sideBar.setBar(letter);
+					String py = ((Contacts) adapter.getItem(firstItem)).pinyin;
+					if (py != null && !"".equals(py)) {
+						String letter = py.toUpperCase().substring(0, 1);
+						sideBar.setBar(letter);
+					}
+
 
 				}
 			});
@@ -245,7 +247,7 @@ public class ContactFragment extends BaseLazyFragment {
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 									  int arg3) {
 				String key = contact_et_search.getText().toString().trim();
-				if(user.exten.equals(key)) {
+				if(user != null && user.exten.equals(key)) {
 					return;
 				}else if(!"".equals(key)) {
 					SearchContactsTask searchContactsTask = new SearchContactsTask();
@@ -303,6 +305,16 @@ public class ContactFragment extends BaseLazyFragment {
 				startActivity(intent);
 			}
 		});
+		phone_contact_layout = (LinearLayout) viewheader.findViewById(R.id.phone_contact_layout);
+		phone_contact_layout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				//点击进入手机联系人页面
+				Intent intent = new Intent(getActivity(), ContactSystemActicity.class);
+				startActivity(intent);
+			}
+		});
 
 	}
 	
@@ -327,38 +339,33 @@ public class ContactFragment extends BaseLazyFragment {
 		public void onSuccess(int statusCode, Header[] headers,
 				String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
-			String message = HttpParser.getMessage(responseString);
 			if ("true".equals(succeed)) {
-				System.out.println("获取联系人版本号："+responseString);
-				
 				try {
 					JSONObject jsonObject = new JSONObject(responseString);
 					Long contactsVersion = jsonObject.getLong("ContactsVersion");
-//					System.out.println("联系人版本号是："+contactsVersion);
-//					System.out.println("上次存的版本号是："+myPreferences.getString("contactsVersion", ""));
-					if(!"".equals(myPreferences.getString("contactsVersion", "")) && myPreferences.getString("contactsVersion", "") != null) {
+					if(!"".equals(myPreferences.getString("contactsVersion", ""))) {
 						if(!myPreferences.getString("contactsVersion", "").equals(contactsVersion + "")) {
 							//需更新
 							getContactsFromNet();
 						}else {
-							List<Contacts> list = getContactsFromDB();
-
-							if (list != null && list.size() != 0) {
-//								System.out.println("联系人列表不是空的");
-								initDatas(list);
-							}
+//							List<Contacts> list = getContactsFromDB();
+//
+//							if (list != null && list.size() != 0) {
+////								System.out.println("联系人列表不是空的");
+//								initDatas(list);
+//							}
 						}
 					
 					}else{
-						List<Contacts> list = getContactsFromDB();
-
-						if (list != null && list.size() != 0) {
-							System.out.println("联系人列表不是空的");
-							initDatas(list);
-						}
+//						List<Contacts> list = getContactsFromDB();
+//
+//						if (list != null && list.size() != 0) {
+//							System.out.println("联系人列表不是空的");
+//							initDatas(list);
+//						}
 					}
 					
-					if(!"".equals(contactsVersion) && contactsVersion != null) {
+					if(contactsVersion != null && !"".equals(contactsVersion)) {
 						myeditor.putString("contactsVersion", contactsVersion + "");
 						myeditor.commit();
 

@@ -14,6 +14,7 @@ import com.moor.im.utils.LogUtil;
 import com.moor.im.utils.TimeUtil;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -137,9 +138,9 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
         LogUtil.d("ServerMessageHandler", "exceptionCaught被调用了，直接断开连接");
 		MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "ServerMessageHandler,exceptionCaught被调用了，发送MSG_SERVER_DISCONNECTED的事件");
         //有异常时直接断开连接
-//    	SocketManager.getInstance(context).disconnectServer();
-//		EventBus.getDefault().postSticky(LoginEvent.LOGIN_FAILED);
 		EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+		Channel ch = e.getChannel();
+		ch.close();
     }
 
 
@@ -152,6 +153,8 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 				LogUtil.d("ServerMessageHandler", "读取通道空闲了");
 				MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "ServerMessageHandler,读取通道空闲了,发送MSG_SERVER_DISCONNECTED的事件");
 				EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+				Channel ch = e.getChannel();
+				ch.close();
 				break;
 		}
 	}

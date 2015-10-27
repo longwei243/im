@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 >
 
                 <TextView
@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="8001"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@color/setting_text_bg"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:clickable="true"
                 >
 
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="姓名"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@color/setting_text_bg"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -141,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:clickable="true"
                 >
 
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123546484"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@color/setting_text_bg"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -181,7 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:clickable="true"
                 >
 
@@ -201,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123546@7moor.com"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@color/setting_text_bg"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -222,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:clickable="true"
                 >
 
@@ -253,7 +253,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:clickable="true"
                 >
 
@@ -288,7 +288,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setup_bg_selector"
-            android:padding="8dp"
+            android:padding="12dp"
             android:clickable="true"
             android:layout_marginTop="16dp"
             >

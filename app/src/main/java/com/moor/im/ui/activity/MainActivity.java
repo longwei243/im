@@ -573,14 +573,14 @@ public class MainActivity extends FragmentActivity implements
 			editor.putString("moveState", "STATE_CURRENT");
 			editor.commit();
 
-			title_btn_contact.setVisibility(View.VISIBLE);
-			title_btn_contact.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(MainActivity.this, ContactSystemActicity.class);
-					startActivity(intent);
-				}
-			});
+//			title_btn_contact.setVisibility(View.VISIBLE);
+//			title_btn_contact.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					Intent intent = new Intent(MainActivity.this, ContactSystemActicity.class);
+//					startActivity(intent);
+//				}
+//			});
 		}
 	}
 

@@ -3,82 +3,150 @@
         android:id="@+id/above_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         >
         <LinearLayout
-            android:id="@+id/department_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:background="@drawable/setup_bg_selector"
-            >
-            <com.moor.im.ui.view.RoundImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_addfriend_contact"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="4dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="组织架构"
-                android:textColor="@color/all_black"
-                android:textSize="16sp"
-                android:layout_gravity="center_horizontal"
-                />
-        </LinearLayout>
-        <LinearLayout
             android:id="@+id/group_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:clickable="true"
             android:background="@drawable/setup_bg_selector"
             >
-            <com.moor.im.ui.view.RoundImageView
+            <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_addfriend_group"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="4dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="4dp"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="群组"
                 android:textColor="@color/all_black"
-                android:textSize="16sp"
-                android:layout_gravity="center_horizontal"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+
                 />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lightgrey"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="24dp"
+
+            />
         <LinearLayout
             android:id="@+id/discuss_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:clickable="true"
             android:background="@drawable/setup_bg_selector"
             >
-            <com.moor.im.ui.view.RoundImageView
+            <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_addfriend_discuss"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="讨论组"
                 android:textColor="@color/all_black"
-                android:textSize="16sp"
-                android:layout_gravity="center_horizontal"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+
                 />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lightgrey"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="24dp"
+
+            />
+        <LinearLayout
+            android:id="@+id/department_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:background="@drawable/setup_bg_selector"
+            >
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_addfriend_department"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="4dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="组织架构"
+                android:textColor="@color/all_black"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+
+                />
+        </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/lightgrey"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
+
+        />
+    <LinearLayout
+        android:id="@+id/phone_contact_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:background="@drawable/setup_bg_selector"
+        >
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_addfriend_contact"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="4dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机联系人"
+            android:textColor="@color/all_black"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+
+            />
+    </LinearLayout>
+
 </LinearLayout>
 

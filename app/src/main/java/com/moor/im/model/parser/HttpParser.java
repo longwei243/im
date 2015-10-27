@@ -10,15 +10,12 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.moor.im.app.CacheKey;
-import com.moor.im.app.MobileApplication;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Department;
 import com.moor.im.model.entity.Discussion;
 import com.moor.im.model.entity.FromToMessage;
 import com.moor.im.model.entity.Group;
 import com.moor.im.model.entity.User;
-import com.moor.im.utils.LogUtil;
 
 /**
  * 用户解析类
@@ -32,7 +29,7 @@ public class HttpParser {
 	 * 获取返回成功状态
 	 * 
 	 * @param responseString
-	 * @return
+	 * @returnF
 	 */
 	public static String getSucceed(String responseString) {
 		String succeed = "";
@@ -226,7 +223,6 @@ public class HttpParser {
 	 */
 	public static List<FromToMessage> getMsgs(String responseString) {
 		List<FromToMessage> newMessage = new ArrayList<FromToMessage>();
-		LogUtil.i("取消息的返回数据:", responseString);
 		try {
 			JSONObject o = new JSONObject(responseString);
 			JSONArray o1 = o.getJSONArray("Msgs");
@@ -318,7 +314,6 @@ public class HttpParser {
 		List<Group> groups = new ArrayList<Group>();
 		try {
 			JSONObject o = new JSONObject(responseString);
-			LogUtil.d("HttpParser", "获取群组数据:"+responseString);
 			JSONArray o1 = o.getJSONArray("Groups");
 
 

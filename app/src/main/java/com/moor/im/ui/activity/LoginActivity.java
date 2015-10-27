@@ -145,8 +145,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		pb = (ProgressBar) this.findViewById(R.id.login_progress);
 
 		// ===========完了删了
-//		mLoginName.setText("8029@7moor");
-//		mLoginPass.setText("8029");
+		mLoginName.setText("8029@7moor");
+		mLoginPass.setText("8029");
 //		mLoginName.setText("8001@phoneTest");
 //		mLoginPass.setText("8001");
 		// ====================

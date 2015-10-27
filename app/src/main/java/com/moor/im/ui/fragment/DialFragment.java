@@ -1,5 +1,6 @@
 package com.moor.im.ui.fragment;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,18 +10,22 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -121,10 +126,29 @@ public class DialFragment extends BaseLazyFragment {
 	}
 
 	private void initViews(View view) {
+
+
 		dialplate_layout = (LinearLayout) view
 				.findViewById(R.id.dialplate_layout);
 		editText_phone_number = (EditText) view
 				.findViewById(R.id.dialplate_edittext_phonenum);
+
+		if (android.os.Build.VERSION.SDK_INT <= 10) {
+			editText_phone_number.setInputType(InputType.TYPE_NULL);
+		} else {
+			getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+			try {
+				Class<EditText> cls = EditText.class;
+				Method setSoftInputShownOnFocus;
+				setSoftInputShownOnFocus = cls.getMethod("setShowSoftInputOnFocus", boolean.class);
+				setSoftInputShownOnFocus.setAccessible(true);
+				setSoftInputShownOnFocus.invoke(editText_phone_number, false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+
 		btn_dialnum_1 = (Button) view.findViewById(R.id.dialNum1);
 		btn_dialnum_2 = (Button) view.findViewById(R.id.dialNum2);
 		btn_dialnum_3 = (Button) view.findViewById(R.id.dialNum3);
