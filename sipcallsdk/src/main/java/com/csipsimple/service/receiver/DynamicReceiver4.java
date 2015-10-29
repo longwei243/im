@@ -270,8 +270,8 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     
     
     public void startMonitoring() {
-        int pollingIntervalMin = service.getPrefs().getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING);
-
+//        int pollingIntervalMin = service.getPrefs().getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING);
+        int pollingIntervalMin = 1;
         Log.d(THIS_FILE, "Start monitoring of route file ? " + pollingIntervalMin);
         if(pollingIntervalMin > 0) {
             pollingTimer = new Timer("RouteChangeMonitor", true);

@@ -163,14 +163,14 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_WIFI_OUT, true);
 		put(SipConfigManager.USE_OTHER_IN, true);
 		put(SipConfigManager.USE_OTHER_OUT, true);
-		put(SipConfigManager.USE_3G_IN, false);
-		put(SipConfigManager.USE_3G_OUT, false);
-		put(SipConfigManager.USE_GPRS_IN, false);
-		put(SipConfigManager.USE_GPRS_OUT, false);
-		put(SipConfigManager.USE_EDGE_IN, false);
-		put(SipConfigManager.USE_EDGE_OUT, false);
-        put(SipConfigManager.USE_ANYWAY_IN, false);
-        put(SipConfigManager.USE_ANYWAY_OUT, false);
+		put(SipConfigManager.USE_3G_IN, true);
+		put(SipConfigManager.USE_3G_OUT, true);
+		put(SipConfigManager.USE_GPRS_IN, true);
+		put(SipConfigManager.USE_GPRS_OUT, true);
+		put(SipConfigManager.USE_EDGE_IN, true);
+		put(SipConfigManager.USE_EDGE_OUT, true);
+        put(SipConfigManager.USE_ANYWAY_IN, true);
+        put(SipConfigManager.USE_ANYWAY_OUT, true);
         put(SipConfigManager.USE_ROAMING_IN, true);
         put(SipConfigManager.USE_ROAMING_OUT, true);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
@@ -230,7 +230,7 @@ public class PreferencesWrapper {
 	private final static HashMap<String, Float> FLOAT_PREFS = new HashMap<String, Float>(){
 		private static final long serialVersionUID = 1L;
 	{
-		put(SipConfigManager.SND_MIC_LEVEL, (float)1.0);
+		put(SipConfigManager.SND_MIC_LEVEL, (float)4.0);
 		put(SipConfigManager.SND_SPEAKER_LEVEL, (float)1.0);
 		put(SipConfigManager.SND_BT_MIC_LEVEL, (float)1.0);
 		put(SipConfigManager.SND_BT_SPEAKER_LEVEL, (float)1.0);

@@ -1041,21 +1041,6 @@ public class SipService extends Service {
 			prefsWrapper.resetAllDefaultValues();
 		}
 
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_OUT, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_OUT, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_OUT, true);
-
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_OUT, true);
-
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_OUT, true);
-		SipConfigManager.setPreferenceFloatValue(this, SipConfigManager.SND_SPEAKER_LEVEL, 0.85f);
-
-
 	}
 
 	@Override

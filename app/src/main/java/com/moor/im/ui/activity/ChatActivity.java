@@ -1384,6 +1384,12 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		updateMessage();
+	}
+
+	@Override
 	public void toRefresh() {
 		// TODO Auto-generated method stub
 		if (JZflag == true) {
