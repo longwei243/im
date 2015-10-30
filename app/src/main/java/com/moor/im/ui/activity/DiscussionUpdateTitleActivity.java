@@ -41,6 +41,9 @@ public class DiscussionUpdateTitleActivity extends Activity {
         setContentView(R.layout.activity_group_update_title);
         sp = getSharedPreferences("SP", 4);
         sessionId = getIntent().getStringExtra("sessionId");
+        if(sessionId == null) {
+            sessionId = "";
+        }
 
         title_tv_name = (TextView) findViewById(R.id.title_tv_name);
         title_tv_name.setText("修改讨论组名称");

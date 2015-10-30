@@ -59,6 +59,9 @@ public class DiscussionAddMemberActivity extends Activity implements View.OnClic
         setContentView(R.layout.activity_group_add_member);
         sp = getSharedPreferences("SP", 4);
         sessionId = getIntent().getStringExtra("sessionId");
+        if(sessionId == null) {
+            sessionId = "";
+        }
 
         group_add_member_btn_select_members = (Button) findViewById(R.id.group_add_member_btn_select_members);
         group_add_member_btn_select_members.setOnClickListener(this);
@@ -70,20 +73,24 @@ public class DiscussionAddMemberActivity extends Activity implements View.OnClic
         pb = (ProgressBar) findViewById(R.id.group_add_member_progress);
         //先把该群组已有的管理员显示出来
         Discussion discussion  = DiscussionParser.getInstance().getDiscussionById(sessionId);
-        List<String> adminId = discussion.member;
-        if(adminId.size() != 0) {
-            for (int i=0; i<adminId.size(); i++) {
-                Contacts contact = ContactsDao.getInstance().getContactById(adminId.get(i));
-                contacts.add(contact);
+
+        if(discussion != null) {
+            List<String> adminId = discussion.member;
+            if(adminId.size() != 0) {
+                for (int i=0; i<adminId.size(); i++) {
+                    Contacts contact = ContactsDao.getInstance().getContactById(adminId.get(i));
+                    contacts.add(contact);
+                }
             }
+
+            adapter = new GVContactAdapter(DiscussionAddMemberActivity.this, contacts);
+            group_add_member_gv.setAdapter(adapter);
+
+
+            title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
+            title_btn_back.setOnClickListener(this);
         }
 
-        adapter = new GVContactAdapter(DiscussionAddMemberActivity.this, contacts);
-        group_add_member_gv.setAdapter(adapter);
-
-
-        title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
-        title_btn_back.setOnClickListener(this);
     }
 
     @Override

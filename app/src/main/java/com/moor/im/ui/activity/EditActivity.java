@@ -21,6 +21,7 @@ import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -50,6 +51,9 @@ public class EditActivity extends Activity{
         sp = getSharedPreferences("SP", 4);
         Intent intent = getIntent();
         type = intent.getStringExtra("edittype");
+        if(type == null) {
+            type = "";
+        }
         loadingFragmentDialog = new LoadingFragmentDialog();
         title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
         title_btn_back.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +70,7 @@ public class EditActivity extends Activity{
         title_btn_ok = (ImageView) findViewById(R.id.title_btn_ok);
 
         if(type.equals("name")) {
-            edit_userinfo.setText(user.displayName);
+            edit_userinfo.setText(NullUtil.checkNull(user.displayName));
             title_name.setText("修改名字");
             title_btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,7 +90,7 @@ public class EditActivity extends Activity{
             });
         }else if(type.equals("phone")) {
             title_name.setText("修改手机");
-            edit_userinfo.setText(user.mobile);
+            edit_userinfo.setText(NullUtil.checkNull(user.mobile));
             edit_userinfo.setInputType(EditorInfo.TYPE_CLASS_PHONE);
             title_btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,7 +110,7 @@ public class EditActivity extends Activity{
             });
         }else if(type.equals("email")) {
             title_name.setText("修改邮箱");
-            edit_userinfo.setText(user.email);
+            edit_userinfo.setText(NullUtil.checkNull(user.email));
             edit_userinfo.setInputType(EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             title_btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override

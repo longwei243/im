@@ -59,7 +59,7 @@ public class UserDao {
 	 * @return
 	 */
 	public User getUser() {
-		User user = null;
+		User user = new User();
 		try {
 			user = userDao.queryForAll().get(0);
 		} catch (SQLException e) {

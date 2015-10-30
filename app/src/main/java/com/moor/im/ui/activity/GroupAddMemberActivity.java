@@ -55,6 +55,9 @@ public class GroupAddMemberActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_group_add_member);
         sp = getSharedPreferences("SP", 4);
         sessionId = getIntent().getStringExtra("sessionId");
+        if(sessionId == null) {
+            sessionId = "";
+        }
 
         group_add_member_btn_select_members = (Button) findViewById(R.id.group_add_member_btn_select_members);
         group_add_member_btn_select_members.setOnClickListener(this);
@@ -70,7 +73,9 @@ public class GroupAddMemberActivity extends Activity implements View.OnClickList
         if(adminId.size() != 0) {
             for (int i=0; i<adminId.size(); i++) {
                 Contacts contact = ContactsDao.getInstance().getContactById(adminId.get(i));
-                contacts.add(contact);
+                if(contact != null) {
+                    contacts.add(contact);
+                }
             }
         }
 
@@ -120,10 +125,8 @@ public class GroupAddMemberActivity extends Activity implements View.OnClickList
 
         if(requestCode == 0x222 && resultCode == 0x222) {
             contacts.clear();
-//			System.out.println("选择成员返回结果");
             membersTempList = (List<Contacts>) data.getSerializableExtra("memberslist");
             contacts = membersTempList;
-            System.out.println("size:"+membersTempList.size());
             adapter = new GVContactAdapter(GroupAddMemberActivity.this, membersTempList);
             group_add_member_gv.setAdapter(adapter);
         }
@@ -144,10 +147,8 @@ public class GroupAddMemberActivity extends Activity implements View.OnClickList
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
-            String message = HttpParser.getMessage(responseString);
             group_add_member_btn_save.setVisibility(View.VISIBLE);
             pb.setVisibility(View.GONE);
-            LogUtil.d("GroupAddAdminActivity", "添加成员返回数据:"+responseString);
             if ("true".equals(succeed)) {
 
                 //添加管理员成功了

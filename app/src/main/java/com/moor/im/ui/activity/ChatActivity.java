@@ -203,10 +203,19 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		MessageFragment.chatHandler = handler;
 		//对方的姓名
 		otherName = intent.getStringExtra("otherName");
+		if(otherName == null) {
+			otherName = "";
+		}
 
 		_id = intent.getStringExtra("_id");
+		if(_id == null) {
+			_id = "";
+		}
 		//接收到聊天的类型
 		type = intent.getStringExtra("type");
+		if(type == null) {
+			type = "";
+		}
 		if("User".equals(type)) {
 			sessionId = createSessionId(user._id, _id);
 			LogUtil.d("ChatActivity", "聊天的sessionId是:"+sessionId);

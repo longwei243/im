@@ -26,6 +26,8 @@ import com.moor.im.ui.view.RoundImageView;
 import com.moor.im.utils.DiscussionActivityUtil;
 import com.moor.im.utils.GroupActivityUtil;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NetUtils;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 
@@ -70,31 +72,46 @@ public class DiscussionMemberDetailActivity extends Activity{
         name = intent.getStringExtra("name");
         sessionId = intent.getStringExtra("sessionId");
 
+        if(_id == null) {
+            _id = "";
+        }
+
+        if(name == null) {
+            name = "";
+        }
+
+        if(sessionId == null) {
+            sessionId = "";
+        }
+
         title_name = (TextView) findViewById(R.id.title_name);
         title_name.setText("成员详细资料");
 
         contact = ContactsDao.getInstance().getContactById(_id);
+        if(contact == null) {
+            return;
+        }
 
         contact_detail_tv_name = (TextView) findViewById(R.id.contact_detail_tv_name);
         contact_detail_tv_num = (TextView) findViewById(R.id.contact_detail_tv_num);
         contact_detail_tv_phone = (TextView) findViewById(R.id.contact_detail_tv_phone);
         contact_detail_tv_email = (TextView) findViewById(R.id.contact_detail_tv_email);
         contact_detail_tv_product = (TextView) findViewById(R.id.contact_detail_tv_product);
-        if("".equals(contact.mobile)) {
+        if("".equals(NullUtil.checkNull(contact.mobile))) {
             contact_detail_tv_phone.setText("未绑定");
         }else{
             contact_detail_tv_phone.setText(contact.mobile);
         }
-        if("".equals(contact.email)) {
+        if("".equals(NullUtil.checkNull(contact.email))) {
             contact_detail_tv_email.setText("未绑定");
         }else{
             contact_detail_tv_email.setText(contact.email);
         }
         contact_detail_tv_name.setText(contact.displayName);
         contact_detail_tv_num.setText(contact.exten);
-        if("zj".equals(contact.product)) {
+        if("zj".equals(NullUtil.checkNull(contact.product))) {
             contact_detail_tv_product.setText("企业总机");
-        }else if("cc".equals(contact.product)){
+        }else if("cc".equals(NullUtil.checkNull(contact.product))){
             contact_detail_tv_product.setText("联络中心");
         }
 

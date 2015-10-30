@@ -65,6 +65,9 @@ public class GroupSettingActivity extends Activity implements View.OnClickListen
         sessionId = getIntent().getStringExtra("sessionId");
         adminAndMemberses.clear();
 
+        if(sessionId == null) {
+            sessionId = "";
+        }
         chat_btn_back = (ImageView) findViewById(R.id.chat_btn_back);
         chat_btn_setting = (ImageView) findViewById(R.id.chat_btn_setting);
 
@@ -74,6 +77,9 @@ public class GroupSettingActivity extends Activity implements View.OnClickListen
         group_setting_list = (ListView) findViewById(R.id.group_setting_list);
 
         Group group = GroupParser.getInstance().getGroupById(sessionId);
+        if(group == null) {
+            return;
+        }
 
         List<String> admins = group.admin;
 

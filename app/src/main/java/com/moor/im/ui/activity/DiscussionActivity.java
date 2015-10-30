@@ -26,6 +26,7 @@ import com.moor.im.ui.adapter.GroupAdapter;
 import com.moor.im.utils.DiscussionActivityUtil;
 import com.moor.im.utils.GroupActivityUtil;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 
@@ -103,8 +104,8 @@ public class DiscussionActivity extends Activity{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent chatIntent = new Intent(DiscussionActivity.this, ChatActivity.class);
                     chatIntent.putExtra("type", "Discussion");
-                    chatIntent.putExtra("_id", discussions.get(position)._id);
-                    chatIntent.putExtra("otherName", discussions.get(position).title);
+                    chatIntent.putExtra("_id", NullUtil.checkNull(discussions.get(position)._id));
+                    chatIntent.putExtra("otherName", NullUtil.checkNull(discussions.get(position).title));
                     startActivity(chatIntent);
                     finish();
                 }
@@ -134,7 +135,6 @@ public class DiscussionActivity extends Activity{
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             String message = HttpParser.getMessage(responseString);
-            LogUtil.d("DiscussionActivity", "获取讨论组返回结果:" + responseString);
             if ("true".equals(succeed)) {
                 //将数据存到本地
                 MobileApplication.cacheUtil.put(CacheKey.CACHE_DISCUSSION, responseString);
@@ -148,8 +148,8 @@ public class DiscussionActivity extends Activity{
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent chatIntent = new Intent(DiscussionActivity.this, ChatActivity.class);
                         chatIntent.putExtra("type", "Discussion");
-                        chatIntent.putExtra("_id", discussions.get(position)._id);
-                        chatIntent.putExtra("otherName", discussions.get(position).title);
+                        chatIntent.putExtra("_id", NullUtil.checkNull(discussions.get(position)._id));
+                        chatIntent.putExtra("otherName", NullUtil.checkNull(discussions.get(position).title));
                         startActivity(chatIntent);
                         finish();
                     }

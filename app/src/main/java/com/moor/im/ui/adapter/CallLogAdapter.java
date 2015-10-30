@@ -60,7 +60,7 @@ public class CallLogAdapter extends BaseAdapter{
 		holder.tv_name.setText(calllogs.get(position).getDisplayName());
 		holder.tv_number.setText(calllogs.get(position).getNumber());
 		holder.tv_date.setText(TimeUtil.convertTimeToFriendly(calllogs.get(position).getDate()));
-		holder.tv_duration.setText(calllogs.get(position).getDuration()+"秒");
+		holder.tv_duration.setText(TimeUtil.getContactsLogTime(calllogs.get(position).getDuration())+"秒");
 		holder.tv_type.setText(calllogs.get(position).getType());
 		return convertView;
 	}

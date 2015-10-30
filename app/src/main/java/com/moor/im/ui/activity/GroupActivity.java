@@ -24,6 +24,7 @@ import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.adapter.GroupAdapter;
 import com.moor.im.utils.GroupActivityUtil;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 
@@ -62,14 +63,14 @@ public class GroupActivity extends Activity{
 
         title_btn_add = (ImageView) findViewById(R.id.title_btn_add);
         String product = user.product;
-        if("zj".equals(product)) {
+        if("zj".equals(NullUtil.checkNull(product))) {
             boolean isAdmin = user.isAdmin;
             if(!isAdmin) {
                 title_btn_add.setVisibility(View.GONE);
             }
-        }else if("cc".equals(product)) {
+        }else if("cc".equals(NullUtil.checkNull(product))) {
             String type = user.type;
-            if(!"manager".equals(type)) {
+            if(!"manager".equals(NullUtil.checkNull(type))) {
                 title_btn_add.setVisibility(View.GONE);
             }
         }
@@ -97,8 +98,8 @@ public class GroupActivity extends Activity{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent chatIntent = new Intent(GroupActivity.this, ChatActivity.class);
                     chatIntent.putExtra("type", "Group");
-                    chatIntent.putExtra("_id", groups.get(position)._id);
-                    chatIntent.putExtra("otherName", groups.get(position).title);
+                    chatIntent.putExtra("_id", NullUtil.checkNull(groups.get(position)._id));
+                    chatIntent.putExtra("otherName", NullUtil.checkNull(groups.get(position).title));
                     startActivity(chatIntent);
                     finish();
                 }
@@ -142,8 +143,8 @@ public class GroupActivity extends Activity{
                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                       Intent chatIntent = new Intent(GroupActivity.this, ChatActivity.class);
                       chatIntent.putExtra("type", "Group");
-                      chatIntent.putExtra("_id", groups.get(position)._id);
-                      chatIntent.putExtra("otherName", groups.get(position).title);
+                      chatIntent.putExtra("_id", NullUtil.checkNull(groups.get(position)._id));
+                      chatIntent.putExtra("otherName", NullUtil.checkNull(groups.get(position).title));
                       startActivity(chatIntent);
                       finish();
                   }

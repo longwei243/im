@@ -273,6 +273,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".ui.activity.ContactsSearchActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".ui.activity.EditActivity"
             android:screenOrientation="portrait" >
         </activity>

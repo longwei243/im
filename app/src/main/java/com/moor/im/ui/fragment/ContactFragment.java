@@ -53,6 +53,7 @@ import com.moor.im.ui.view.ListViewInScrollView;
 import com.moor.im.ui.view.SideBar;
 import com.moor.im.ui.view.SideBar.OnTouchingLetterChangedListener;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NullUtil;
 import com.moor.im.utils.PingYinUtil;
 import com.moor.im.utils.PinyinComparator;
 
@@ -221,12 +222,15 @@ public class ContactFragment extends BaseLazyFragment {
 				public void onItemClick(AdapterView<?> parent, View view,
 										int position, long id) {
 					Contacts messageWall = (Contacts) parent.getAdapter().getItem(position);
-					Intent intent = new Intent(getActivity(),
-							ContactDetailActivity.class);
-					intent.putExtra("_id", messageWall._id + "");
-					intent.putExtra("otherName", messageWall.displayName + "");
-					intent.putExtra("contact", messageWall);
-					startActivity(intent);
+					if(messageWall != null) {
+						Intent intent = new Intent(getActivity(),
+								ContactDetailActivity.class);
+						intent.putExtra("_id", NullUtil.checkNull(messageWall._id + ""));
+						intent.putExtra("otherName", NullUtil.checkNull(messageWall.displayName + ""));
+						intent.putExtra("contact", messageWall);
+						startActivity(intent);
+					}
+
 				}
 			});
 		}
@@ -240,7 +244,7 @@ public class ContactFragment extends BaseLazyFragment {
 		dialog = (TextView) view.findViewById(R.id.contact_textview_dialog);
 		sideBar.setTextView(dialog);
 		contact_et_search = (EditText) view.findViewById(R.id.contact_et_search);
-
+		contact_et_search.setVisibility(View.GONE);
 		contact_et_search.addTextChangedListener(new TextWatcher() {
 
 			@Override

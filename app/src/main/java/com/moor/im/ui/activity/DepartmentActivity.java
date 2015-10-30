@@ -42,6 +42,8 @@ import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.adapter.DepartmentAdapter;
 import com.moor.im.ui.dialog.ConfirmDialog;
 import com.moor.im.utils.DepartmentActivityUtil;
+import com.moor.im.utils.NullUtil;
+
 /**
  * 组织架构界面,该界面只显示根部门
  * @author LongWei
@@ -102,14 +104,14 @@ public class DepartmentActivity extends Activity {
 			}
 		});
 		String product = user.product;
-		if("zj".equals(product)) {
+		if("zj".equals(NullUtil.checkNull(product))) {
 			boolean isAdmin = user.isAdmin;
 			if(!isAdmin) {
 				title_btn_add.setVisibility(View.GONE);
 			}
-		}else if("cc".equals(product)) {
+		}else if("cc".equals(NullUtil.checkNull(product))) {
 			String type = user.type;
-			if(!"manager".equals(type)) {
+			if(!"manager".equals(NullUtil.checkNull(type))) {
 				title_btn_add.setVisibility(View.GONE);
 			}
 		}
@@ -144,7 +146,7 @@ public class DepartmentActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String rootId = rootDepartments.get(position)._id;
+				String rootId = NullUtil.checkNull(rootDepartments.get(position)._id);
 				DepartmentParser dp = new DepartmentParser(departments);
 				//该部门下有子部门或成员就可以进入下级界面
 				if(dp.hasSubDepartment(rootId) || dp.hasMembers(rootId)){
@@ -241,7 +243,7 @@ public class DepartmentActivity extends Activity {
 		case 0:
 			
 			String product = user.product;
-			if("zj".equals(product)) {
+			if("zj".equals(NullUtil.checkNull(product))) {
 				boolean isAdmin = user.isAdmin;
 				if(isAdmin) {
 					//添加子部门
@@ -251,9 +253,9 @@ public class DepartmentActivity extends Activity {
 				}else {
 					Toast.makeText(DepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 				}
-			}else if("cc".equals(product)) {
+			}else if("cc".equals(NullUtil.checkNull(product))) {
 				String type = user.type;
-				if("manager".equals(type)) {
+				if("manager".equals(NullUtil.checkNull(type))) {
 					//添加子部门
 					Intent intent = new Intent(DepartmentActivity.this, DepartmentAddActivity.class);
 					intent.putExtra("departmentId", rootDepartments.get(info.position)._id);
@@ -266,7 +268,7 @@ public class DepartmentActivity extends Activity {
 		case 1:
 			
 			String product1 = user.product;
-			if("zj".equals(product1)) {
+			if("zj".equals(NullUtil.checkNull(product1))) {
 				boolean isAdmin = user.isAdmin;
 				if(isAdmin) {
 					//删除子部门
@@ -288,9 +290,9 @@ public class DepartmentActivity extends Activity {
 				}else {
 					Toast.makeText(DepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 				}
-			}else if("cc".equals(product1)) {
+			}else if("cc".equals(NullUtil.checkNull(product1))) {
 				String type = user.type;
-				if("manager".equals(type)) {
+				if("manager".equals(NullUtil.checkNull(type))) {
 					//删除子部门
 					final String id = rootDepartments.get(info.position)._id;
 					DepartmentParser dp = new DepartmentParser(departments);
@@ -315,7 +317,7 @@ public class DepartmentActivity extends Activity {
 			//修改部门
 			
 			String product2 = user.product;
-			if("zj".equals(product2)) {
+			if("zj".equals(NullUtil.checkNull(product2))) {
 				boolean isAdmin = user.isAdmin;
 				if(isAdmin) {
 					String id = rootDepartments.get(info.position)._id;
@@ -325,9 +327,9 @@ public class DepartmentActivity extends Activity {
 				}else {
 					Toast.makeText(DepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 				}
-			}else if("cc".equals(product2)) {
+			}else if("cc".equals(NullUtil.checkNull(product2))) {
 				String type = user.type;
-				if("manager".equals(type)) {
+				if("manager".equals(NullUtil.checkNull(type))) {
 					String id = rootDepartments.get(info.position)._id;
 					Intent intent = new Intent(DepartmentActivity.this, DepartmentUpdateActivity.class);
 					intent.putExtra("departmentId", id);
@@ -357,13 +359,11 @@ public class DepartmentActivity extends Activity {
 				String responseString) {
 //			System.out.println("删除部门返回结果："+responseString);
 			String succeed = HttpParser.getSucceed(responseString);
-			String message = HttpParser.getMessage(responseString);
 			if ("true".equals(succeed)) {
 				//删除成功了
 				Toast.makeText(DepartmentActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
 				handler.sendEmptyMessage(0x1001);
 			} else {
-//				Toast.makeText(DepartmentActivity.this, message, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -411,7 +411,7 @@ public class DepartmentActivity extends Activity {
 					String DepartmentVersion = jsonObject.getLong("DepartmentVersion") + "";
 					
 					if(!"".equals(myPreferences.getString("DepartmentVersion", ""))) {
-						if(!myPreferences.getString("DepartmentVersion", "").equals(DepartmentVersion)) {
+						if(!myPreferences.getString("DepartmentVersion", "").equals(NullUtil.checkNull(DepartmentVersion))) {
 							//需更新
 							getDepartmentDataFromNet();
 						}else {
@@ -419,7 +419,7 @@ public class DepartmentActivity extends Activity {
 						}
 					}
 					
-					if(!"".equals(DepartmentVersion) && DepartmentVersion != null) {
+					if(DepartmentVersion != null && !"".equals(DepartmentVersion)) {
 						myeditor.putString("DepartmentVersion", DepartmentVersion);
 						myeditor.commit();
 					}

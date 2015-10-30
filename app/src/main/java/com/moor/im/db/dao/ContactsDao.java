@@ -134,8 +134,9 @@ public class ContactsDao {
 	 * @return
 	 */
 	public Contacts getContactById(String _id) {
+		Contacts contact = new Contacts();
 		try {
-			Contacts contact = dao.queryBuilder().where().eq("_id", _id)
+			contact = dao.queryBuilder().where().eq("_id", _id)
 					.queryForFirst();
 			if (contact != null) {
 				return contact;
@@ -143,7 +144,7 @@ public class ContactsDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return contact;
 	}
 	/**
 	 * 清空联系人数据库

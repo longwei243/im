@@ -42,6 +42,8 @@ import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.adapter.SubDepartmentAdapter;
 import com.moor.im.ui.dialog.ConfirmDialog;
 import com.moor.im.utils.DepartmentActivityUtil;
+import com.moor.im.utils.NullUtil;
+
 /**
  * 子部门界面
  * 删除子部门有bug，父部门中没有将子部门信息删除
@@ -83,18 +85,24 @@ public class SubDepartmentActivity extends Activity{
 		//获取了上级部门的Id
 		Intent intent = getIntent();
 		departmentId = intent.getStringExtra("departmentId");
+		if(departmentId == null) {
+			departmentId = "";
+		}
 //		System.out.println("子部门界面接收到的id是："+departmentId);
 		
 		List<Department> departments = HttpParser.getDepartments(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_DEPARTMENT));
 		DepartmentParser dp = new DepartmentParser(departments);
 		Department rootDepartment = dp.getDepartmentById(departmentId);
+		if(rootDepartment == null) {
+			return;
+		}
 		//取得子部门
 		List<Department> subDept = dp.getSecondDepartments(rootDepartment);
 //		System.out.println("有多少了子部门："+subDept.size());
 		for (int i = 0; i < subDept.size(); i++) {
 			
-			String id = subDept.get(i)._id;
-			String name = subDept.get(i).Name;
+			String id = NullUtil.checkNull(subDept.get(i)._id);
+			String name = NullUtil.checkNull(subDept.get(i).Name);
 			if("".equals(name)) {
 				name = "部门名称是空的";
 			}
@@ -112,8 +120,8 @@ public class SubDepartmentActivity extends Activity{
 //		System.out.println("有多少了成员："+members.size());
 		for (int i = 0; i < members.size(); i++) {
 			
-			String id =  members.get(i)._id;
-			String name = members.get(i).displayName;
+			String id =  NullUtil.checkNull(members.get(i)._id);
+			String name = NullUtil.checkNull(members.get(i).displayName);
 			String type = "member";
 			
 			DeptAndMember dam = new DeptAndMember();
@@ -160,7 +168,7 @@ public class SubDepartmentActivity extends Activity{
 					if(dp.hasSubDepartment(dam.getId()) || dp.hasMembers(dam.getId())){
 						//可以进入下级界面
 						Intent intent = new Intent(SubDepartmentActivity.this, SubDepartmentActivity.class);
-						intent.putExtra("departmentId", dam.getId());
+						intent.putExtra("departmentId", NullUtil.checkNull(dam.getId()));
 						startActivity(intent);
 					}
 					
@@ -170,8 +178,8 @@ public class SubDepartmentActivity extends Activity{
 //					System.out.println("点击了成员");
 					Contacts contact = ContactsDao.getInstance().getContactById(dam.getId());
 					Intent intent = new Intent(SubDepartmentActivity.this, ContactDetailActivity.class);
-					intent.putExtra("_id", dam.getId());
-					intent.putExtra("otherName", dam.getName());
+					intent.putExtra("_id", NullUtil.checkNull(dam.getId()));
+					intent.putExtra("otherName", NullUtil.checkNull(dam.getName()));
 					intent.putExtra("contact", contact);
 					startActivity(intent);
 				}
@@ -198,7 +206,7 @@ public class SubDepartmentActivity extends Activity{
 			public void onClick(View v) {
 				alert.dismiss();
 				String product1 = user.product;
-				if("zj".equals(product1)) {
+				if("zj".equals(NullUtil.checkNull(product1))) {
 					boolean isAdmin = user.isAdmin;
 					if(isAdmin) {
 						Intent intent = new Intent(SubDepartmentActivity.this, DepartmentAddActivity.class);
@@ -207,9 +215,9 @@ public class SubDepartmentActivity extends Activity{
 					}else {
 						Toast.makeText(SubDepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 					}
-				}else if("cc".equals(product1)) {
+				}else if("cc".equals(NullUtil.checkNull(product1))) {
 					String type = user.type;
-					if("manager".equals(type)) {
+					if("manager".equals(NullUtil.checkNull(type))) {
 						Intent intent = new Intent(SubDepartmentActivity.this, DepartmentAddActivity.class);
 						intent.putExtra("departmentId", dam.getId());
 						startActivity(intent);
@@ -232,7 +240,7 @@ public class SubDepartmentActivity extends Activity{
 				alert.dismiss();
 				
 				String product1 = user.product;
-				if("zj".equals(product1)) {
+				if("zj".equals(NullUtil.checkNull(product1))) {
 					boolean isAdmin = user.isAdmin;
 					if(isAdmin) {
 						final String id = dam.getId();
@@ -253,9 +261,9 @@ public class SubDepartmentActivity extends Activity{
 					}else {
 						Toast.makeText(SubDepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 					}
-				}else if("cc".equals(product1)) {
+				}else if("cc".equals(NullUtil.checkNull(product1))) {
 					String type = user.type;
-					if("manager".equals(type)) {
+					if("manager".equals(NullUtil.checkNull(type))) {
 						final String id = dam.getId();
 						List<Department> departments = HttpParser.getDepartments(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_DEPARTMENT));
 						DepartmentParser dp = new DepartmentParser(departments);
@@ -290,7 +298,7 @@ public class SubDepartmentActivity extends Activity{
 				alert.dismiss();
 				
 				String product1 = user.product;
-				if("zj".equals(product1)) {
+				if("zj".equals(NullUtil.checkNull(product1))) {
 					boolean isAdmin = user.isAdmin;
 					if(isAdmin) {
 						String id = dam.getId();
@@ -300,7 +308,7 @@ public class SubDepartmentActivity extends Activity{
 					}else {
 						Toast.makeText(SubDepartmentActivity.this, "您没有该权限", Toast.LENGTH_SHORT).show();
 					}
-				}else if("cc".equals(product1)) {
+				}else if("cc".equals(NullUtil.checkNull(product1))) {
 					String type = user.type;
 					if("manager".equals(type)) {
 						String id = dam.getId();

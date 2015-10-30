@@ -141,10 +141,8 @@ public class AddDiscussionActivity extends Activity implements View.OnClickListe
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
-            String message = HttpParser.getMessage(responseString);
             group_add_btn_save.setVisibility(View.VISIBLE);
             pb.setVisibility(View.GONE);
-            LogUtil.d("AddGroupActivity", "新建讨论组返回结果是:" + responseString);
             if ("true".equals(succeed)) {
                 //若添加讨论组成功
                 Intent intent = new Intent(AddDiscussionActivity.this, DiscussionActivity.class);
@@ -162,21 +160,10 @@ public class AddDiscussionActivity extends Activity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-//        if(requestCode == 0x221 && resultCode == 0x221) {
-//            adminContacts.clear();
-//            System.out.println("选择管理员返回结果");
-//            adminsTempList = (List<Contacts>) data.getSerializableExtra("memberslist");
-//            adminContacts = adminsTempList;
-//            System.out.println("size:"+adminsTempList.size());
-//            adminAdapter = new GVContactAdapter(AddGourpActivity.this, adminsTempList);
-//            group_add_gv_admins.setAdapter(adminAdapter);
-//        }else
         if(requestCode == 0x222 && resultCode == 0x222){
             memberContacts.clear();
-            System.out.println("选择成员返回结果");
             membersTempList = (List<Contacts>) data.getSerializableExtra("memberslist");
             memberContacts = membersTempList;
-            System.out.println("size:"+membersTempList.size());
             memberAdapter = new GVContactAdapter(AddDiscussionActivity.this, membersTempList);
             group_add_gv_members.setAdapter(memberAdapter);
         }

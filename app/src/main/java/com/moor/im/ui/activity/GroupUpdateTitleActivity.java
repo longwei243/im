@@ -39,6 +39,9 @@ public class GroupUpdateTitleActivity extends Activity{
         setContentView(R.layout.activity_group_update_title);
         sp = getSharedPreferences("SP", 4);
         sessionId = getIntent().getStringExtra("sessionId");
+        if(sessionId == null) {
+            sessionId = "";
+        }
 
         group_update_et_name = (EditText) findViewById(R.id.group_update_et_name);
 

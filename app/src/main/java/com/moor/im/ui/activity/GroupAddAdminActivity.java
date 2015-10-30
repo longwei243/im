@@ -57,6 +57,9 @@ public class GroupAddAdminActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_group_add_admin);
         sp = getSharedPreferences("SP", 4);
         sessionId = getIntent().getStringExtra("sessionId");
+        if(sessionId == null) {
+            sessionId = "";
+        }
 
         title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
         title_btn_back.setOnClickListener(new View.OnClickListener() {

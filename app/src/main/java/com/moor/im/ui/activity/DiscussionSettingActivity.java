@@ -35,6 +35,7 @@ import com.moor.im.ui.adapter.GroupAdminAndMemberAdapter;
 import com.moor.im.ui.dialog.ConfirmDialog;
 import com.moor.im.utils.DiscussionActivityUtil;
 import com.moor.im.utils.GroupActivityUtil;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 
@@ -68,6 +69,10 @@ public class DiscussionSettingActivity extends Activity implements View.OnClickL
         sessionId = getIntent().getStringExtra("sessionId");
         members.clear();
 
+        if(sessionId == null) {
+            sessionId = "";
+        }
+
         title_tv = (TextView) findViewById(R.id.title_tv);
         title_tv.setText("讨论组信息");
 
@@ -82,7 +87,9 @@ public class DiscussionSettingActivity extends Activity implements View.OnClickL
 
         Discussion discussion = DiscussionParser.getInstance().getDiscussionById(sessionId);
 
-
+        if(discussion == null) {
+            return;
+        }
 
 
         List<String> memberIdList = discussion.member;
@@ -100,8 +107,8 @@ public class DiscussionSettingActivity extends Activity implements View.OnClickL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(DiscussionSettingActivity.this, DiscussionMemberDetailActivity.class);
-                String _id = members.get(position)._id;
-                String name = members.get(position).displayName;
+                String _id = NullUtil.checkNull(members.get(position)._id);
+                String name = NullUtil.checkNull(members.get(position).displayName);
                 intent.putExtra("_id", _id);
                 intent.putExtra("name", name);
                 intent.putExtra("sessionId", sessionId);

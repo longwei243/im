@@ -99,7 +99,7 @@ public class MainActivity extends FragmentActivity implements
 
 	private int mCurrentIndex = -1;
 
-	private ImageView title_btn_contact;
+	private ImageView title_btn_contact_search;
 
 	private User user = UserDao.getInstance().getUser();
 
@@ -165,7 +165,16 @@ public class MainActivity extends FragmentActivity implements
 		IntentFilter intentFilter = new IntentFilter("netchanged");
 		registerReceiver(ncr, intentFilter);
 
-		title_btn_contact = (ImageView) findViewById(R.id.title_btn_contact);
+		title_btn_contact_search = (ImageView) findViewById(R.id.title_btn_contact_search);
+
+		title_btn_contact_search.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, ContactsSearchActivity.class);
+				startActivity(intent);
+			}
+		});
+
 		mViewPager = (ViewPager) findViewById(R.id.id_main_viewpager);
 
 		initDatas();
@@ -303,8 +312,6 @@ public class MainActivity extends FragmentActivity implements
 		public void onSuccess(int statusCode, Header[] headers,
 							  String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
-			String message = HttpParser.getMessage(responseString);
-			System.out.println("联系人的数据为："+responseString);
 			if ("true".equals(succeed)) {
 
 				ContactsDao.getInstance().clear();
@@ -568,19 +575,10 @@ public class MainActivity extends FragmentActivity implements
 			editor.putString("moveState", "STATE_MOVE");
 			editor.commit();
 			EventBus.getDefault().post(new DialEvent());
-			title_btn_contact.setVisibility(View.GONE);
 		} else {
 			editor.putString("moveState", "STATE_CURRENT");
 			editor.commit();
 
-//			title_btn_contact.setVisibility(View.VISIBLE);
-//			title_btn_contact.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					Intent intent = new Intent(MainActivity.this, ContactSystemActicity.class);
-//					startActivity(intent);
-//				}
-//			});
 		}
 	}
 

@@ -34,6 +34,8 @@ import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.adapter.GVContactAdapter;
 import com.moor.im.ui.adapter.MembersSelectAdapter;
 import com.moor.im.ui.view.GridViewInScrollView;
+import com.moor.im.utils.NullUtil;
+
 /**
  * 部门增加界面
  * @author LongWei
@@ -169,9 +171,9 @@ public class DepartmentAddActivity extends Activity implements OnClickListener{
 					List<Department> departments = HttpParser.getDepartments((MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_DEPARTMENT)));
 					DepartmentParser dp = new DepartmentParser(departments);
 					Department rootDept = dp.getDepartmentById(rootId);
-					String id = rootDept._id;
-					String name = rootDept.Name;
-					String desc = rootDept.Description;
+					String id = NullUtil.checkNull(rootDept._id);
+					String name = NullUtil.checkNull(rootDept.Name);
+					String desc = NullUtil.checkNull(rootDept.Description);
 					boolean isRoot = rootDept.Root;
 					ArrayList members = (ArrayList) rootDept.Members;
 					ArrayList subDept = (ArrayList) rootDept.Subdepartments;

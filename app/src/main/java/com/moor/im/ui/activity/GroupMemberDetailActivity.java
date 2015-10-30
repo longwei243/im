@@ -25,6 +25,7 @@ import com.moor.im.ui.dialog.ConfirmDialog;
 import com.moor.im.ui.view.RoundImageView;
 import com.moor.im.utils.GroupActivityUtil;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NullUtil;
 
 import org.apache.http.Header;
 
@@ -70,28 +71,44 @@ public class GroupMemberDetailActivity extends Activity{
         type = intent.getStringExtra("type");
         sessionId = intent.getStringExtra("sessionId");
 
+        if(_id == null) {
+            _id = "";
+        }
+        if(name == null) {
+            name = "";
+        }
+        if(type == null) {
+            type = "";
+        }
+        if(sessionId == null) {
+            sessionId = "";
+        }
+
         contact = ContactsDao.getInstance().getContactById(_id);
+        if(contact == null) {
+            return;
+        }
 
         contact_detail_tv_name = (TextView) findViewById(R.id.contact_detail_tv_name);
         contact_detail_tv_num = (TextView) findViewById(R.id.contact_detail_tv_num);
         contact_detail_tv_phone = (TextView) findViewById(R.id.contact_detail_tv_phone);
         contact_detail_tv_email = (TextView) findViewById(R.id.contact_detail_tv_email);
         contact_detail_tv_product = (TextView) findViewById(R.id.contact_detail_tv_product);
-        if("".equals(contact.mobile)) {
+        if("".equals(NullUtil.checkNull(contact.mobile))) {
             contact_detail_tv_phone.setText("未绑定");
         }else{
             contact_detail_tv_phone.setText(contact.mobile);
         }
-        if("".equals(contact.email)) {
+        if("".equals(NullUtil.checkNull(contact.email))) {
             contact_detail_tv_email.setText("未绑定");
         }else{
             contact_detail_tv_email.setText(contact.email);
         }
-        contact_detail_tv_name.setText(contact.displayName);
-        contact_detail_tv_num.setText(contact.exten);
-        if("zj".equals(contact.product)) {
+        contact_detail_tv_name.setText(NullUtil.checkNull(contact.displayName));
+        contact_detail_tv_num.setText(NullUtil.checkNull(contact.exten));
+        if("zj".equals(NullUtil.checkNull(contact.product))) {
             contact_detail_tv_product.setText("企业总机");
-        }else if("cc".equals(contact.product)){
+        }else if("cc".equals(NullUtil.checkNull(contact.product))){
             contact_detail_tv_product.setText("联络中心");
         }
 
@@ -145,63 +162,12 @@ public class GroupMemberDetailActivity extends Activity{
         });
 
 
-
-
-//        if("Admin".equals(type)) {
-////            delete_admin.setVisibility(View.VISIBLE);
-//            delete_member.setVisibility(View.VISIBLE);
-//        }else if("Member".equals(type)) {
-//            delete_member.setVisibility(View.GONE);
-//        }
-
-
-        //自己就不显示删除按钮了
-//        if(_id.equals(sp.getString("_id", ""))) {
-//            delete_admin.setVisibility(View.GONE);
-//            delete_member.setVisibility(View.GONE);
-//        }
-
-
         if(_id.equals(user._id)) {
             delete_admin.setVisibility(View.GONE);
             delete_member.setText("退出该群");
             delete_member.setVisibility(View.VISIBLE);
         }
 
-//        String product1 = sp.getString("product", "");
-//        if("zj".equals(product1)) {
-//            boolean isAdmin = sp.getBoolean("isAdmin", false);
-//            if(!isAdmin) {
-//                delete_admin.setVisibility(View.GONE);
-//                delete_member.setVisibility(View.GONE);
-//                if(_id.equals(sp.getString("_id", ""))) {
-//                    delete_admin.setVisibility(View.GONE);
-//                    delete_member.setText("退出该群");
-//                    delete_member.setVisibility(View.VISIBLE);
-//                }
-//            }else {
-//                if(_id.equals(sp.getString("_id", ""))) {
-//                    delete_admin.setVisibility(View.GONE);
-//                    delete_member.setVisibility(View.GONE);
-//                }
-//            }
-//        }else if("cc".equals(product1)) {
-//            String type = sp.getString("type", "");
-//            if("manager".equals(type)) {
-//                if(_id.equals(sp.getString("_id", ""))) {
-//                    delete_admin.setVisibility(View.GONE);
-//                    delete_member.setVisibility(View.GONE);
-//                }
-//            }else {
-//                delete_admin.setVisibility(View.GONE);
-//                delete_member.setVisibility(View.GONE);
-//                if(_id.equals(sp.getString("_id", ""))) {
-//                    delete_admin.setVisibility(View.GONE);
-//                    delete_member.setText("退出该群");
-//                    delete_member.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        }
     }
 
     class DeleteGroupAdminResponseHandler extends TextHttpResponseHandler {
