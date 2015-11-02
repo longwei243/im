@@ -32,7 +32,6 @@ import android.util.SparseIntArray;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.bluetooth.BluetoothWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,9 +210,7 @@ public class Filter {
                     return true;
                 }
             }
-	    }else if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
-            return BluetoothWrapper.getInstance(ctxt).isBTHeadsetConnected();
-        }else {
+	    }else {
             try {
                 return Pattern.matches(matchPattern, number);
             }catch(PatternSyntaxException e) {

@@ -34,7 +34,7 @@
 	            android:layout_weight="1"
 	            android:background="#FCFCFC"
 				android:editable="true"
-	            android:inputType="none"
+	            android:inputType="phone"
 				android:textIsSelectable="false"
 	            android:gravity="center"
 	            android:singleLine="true"

@@ -47,11 +47,10 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
 import com.csipsimple.utils.accessibility.AccessibilityWrapper;
 import com.csipsimple.utils.audio.AudioFocusWrapper;
-import com.csipsimple.utils.bluetooth.BluetoothWrapper;
-import com.csipsimple.utils.bluetooth.BluetoothWrapper.BluetoothChangeListener;
+
 
 @SuppressLint("InlinedApi")
-public class MediaManager implements BluetoothChangeListener {
+public class MediaManager{
 	
 	final private static String THIS_FILE = "MediaManager";
 	
@@ -78,8 +77,6 @@ public class MediaManager implements BluetoothChangeListener {
 	private boolean restartAudioWhenRoutingChange = true;
 	private Intent mediaStateChangedIntent;
 	
-	//Bluetooth related
-	private BluetoothWrapper bluetoothWrapper;
 
 	private AudioFocusWrapper audioFocusWrapper;
 	private AccessibilityWrapper accessibilityManager;
@@ -114,11 +111,7 @@ public class MediaManager implements BluetoothChangeListener {
 	
 	
 	public void startService() {
-		if(bluetoothWrapper == null) {
-			bluetoothWrapper = BluetoothWrapper.getInstance(service);
-			bluetoothWrapper.setBluetoothChangeListener(this);
-			bluetoothWrapper.register();
-		}
+
 		if(audioFocusWrapper == null) {
 			audioFocusWrapper = AudioFocusWrapper.getInstance();
 			audioFocusWrapper.init(service, audioManager);
@@ -135,11 +128,7 @@ public class MediaManager implements BluetoothChangeListener {
 	
 	public void stopService() {
 		Log.i(THIS_FILE, "Remove media manager....");
-		if(bluetoothWrapper != null) {
-			bluetoothWrapper.unregister();
-			bluetoothWrapper.setBluetoothChangeListener(null);
-			bluetoothWrapper = null;
-		}
+
 	}
 	
 	private int getAudioTargetMode() {
@@ -162,11 +151,7 @@ public class MediaManager implements BluetoothChangeListener {
 	}
 	
 	public int validateAudioClockRate(int clockRate) {
-	    if(bluetoothWrapper != null && clockRate != 8000) {
-            if(userWantBluetooth && bluetoothWrapper.canBluetooth()) {
-                return -1;
-            }
-        }
+
 	    return 0;
 	}
 	
@@ -282,10 +267,7 @@ public class MediaManager implements BluetoothChangeListener {
 			}
 			
 			audioManager.setMicrophoneMute(false);
-			if(bluetoothWrapper != null && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
-				Log.d(THIS_FILE, "Try to enable bluetooth");
-				bluetoothWrapper.setBluetoothOn(true);
-			}
+
 		
 		}else {
 			//WebRTC implementation for routing
@@ -436,12 +418,7 @@ public class MediaManager implements BluetoothChangeListener {
 		Log.d(THIS_FILE, "Unset Audio In call");
 
 		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
-		if(bluetoothWrapper != null) {
-			//This fixes the BT activation but... but... seems to introduce a lot of other issues
-			//bluetoothWrapper.setBluetoothOn(true);
-			Log.d(THIS_FILE, "Unset bt");
-			bluetoothWrapper.setBluetoothOn(false);
-		}
+
 		audioManager.setMicrophoneMute(false);
 		if(doFocusAudio) {
 			audioManager.setStreamSolo(inCallStream, false);
@@ -532,9 +509,6 @@ public class MediaManager implements BluetoothChangeListener {
 		    service.setNoSnd();
 			userWantBluetooth = on;
 			service.setSnd();
-		}else {
-            userWantBluetooth = on;
-		    bluetoothWrapper.setBluetoothOn(on);
 		}
 		broadcastMediaChanged();
 	}
@@ -553,15 +527,7 @@ public class MediaManager implements BluetoothChangeListener {
 		mediaState.isSpeakerphoneOn = userWantSpeaker;
 		mediaState.canSpeakerphoneOn = true && !mediaState.isBluetoothScoOn; //Compatibility.isCompatible(5);
 		
-		//Bluetooth
-		
-		if(bluetoothWrapper != null) {
-			mediaState.isBluetoothScoOn = bluetoothWrapper.isBluetoothOn();
-			mediaState.canBluetoothSco = bluetoothWrapper.canBluetooth();
-		}else {
-			mediaState.isBluetoothScoOn = false;
-			mediaState.canBluetoothSco = false;
-		}
+
 		
 		return mediaState;
 	}
@@ -572,7 +538,7 @@ public class MediaManager implements BluetoothChangeListener {
 	public void setSoftwareVolume(){
 		
 		if(service != null) {
-			final boolean useBT = (bluetoothWrapper != null && bluetoothWrapper.isBluetoothOn());
+			final boolean useBT = false;
 			
 			String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
 			String mic_key = useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
@@ -771,12 +737,6 @@ public class MediaManager implements BluetoothChangeListener {
                 toneGenerator.release();
             }
         }
-    }
-
-    @Override
-    public void onBluetoothStateChanged(int status) {
-        setSoftwareVolume();
-        broadcastMediaChanged();
     }
 
 

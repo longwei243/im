@@ -825,11 +825,11 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_REG_TIMEOUT
      */
-    public int reg_timeout = 900;
+    public int reg_timeout = 60;
     /**
      * @see #FIELD_KA_INTERVAL
      */
-    public int ka_interval = 0;
+    public int ka_interval = 15;
     /**
      * @see #FIELD_PIDF_TUPLE_ID
      */
@@ -911,7 +911,7 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_REG_DELAY_BEFORE_REFRESH
      */
-    public int reg_delay_before_refresh = -1;
+    public int reg_delay_before_refresh = 5;
     /**
      * @see #FIELD_TRY_CLEAN_REGISTERS
      */

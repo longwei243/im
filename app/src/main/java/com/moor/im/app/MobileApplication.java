@@ -83,16 +83,15 @@ public class MobileApplication extends Application {
 			}
 		}).start();
 
-		setSipConfig();
 		startSipService();
 		startIMService();
 
 		/**
 		 * 初始化配置文件
 		 */
-		PropertyConfigurator.getConfigurator(mobileApplication).configure();
-		final FileAppender fa = (FileAppender)logger.getAppender(1);
-		fa.setAppend(true);
+//		PropertyConfigurator.getConfigurator(mobileApplication).configure();
+//		final FileAppender fa = (FileAppender)logger.getAppender(1);
+//		fa.setAppend(true);
 
 		/**
 		 * 初始化异常捕获
@@ -126,27 +125,6 @@ public class MobileApplication extends Application {
 		};
 		t.start();
 		LogUtil.d("MobileApplication", "启动IMService");
-	}
-	/**
-	 * 设置sip电话一些参数
-	 */
-	private void setSipConfig() {
-		//设置sip电话网络支持方式
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_OUT, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_OUT, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_OUT, true);
-		
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_OUT, true);
-		
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_IN, true);
-		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_OUT, true);
-		SipConfigManager.setPreferenceFloatValue(this, SipConfigManager.SND_SPEAKER_LEVEL, 0.95f);
-
-		LogUtil.d("MobileApplication", "设置sip电话一些参数");
 	}
 	
 	public static MobileApplication getInstance() {
