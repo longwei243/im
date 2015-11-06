@@ -96,7 +96,10 @@ public class DiscussionSettingActivity extends Activity implements View.OnClickL
 
         for (int i=0; i<memberIdList.size(); i++) {
             Contacts contact = ContactsDao.getInstance().getContactById(memberIdList.get(i));
-            members.add(contact);
+            if(contact != null && contact.displayName != null && !"".equals(contact.displayName)) {
+                members.add(contact);
+            }
+
         }
 
         ContactListViewAdapter adapter = new ContactListViewAdapter(DiscussionSettingActivity.this, members);

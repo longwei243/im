@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,6 +71,7 @@ import com.moor.im.ui.fragment.SetupFragment;
 import com.moor.im.ui.view.ChangeColorTabItem;
 import com.moor.im.ui.view.appmsg.AppMsg;
 import com.moor.im.utils.LogUtil;
+import com.moor.im.utils.NullUtil;
 
 import de.greenrobot.event.EventBus;
 
@@ -97,10 +99,9 @@ public class MainActivity extends FragmentActivity implements
 	SharedPreferences.Editor editor;
 	private SharedPreferences sp;
 
-	private int mCurrentIndex = -1;
-
 	private ImageView title_btn_contact_search;
 
+	private AudioManager audioManager;
 	private User user = UserDao.getInstance().getUser();
 
 	private ISipService service;
@@ -160,6 +161,8 @@ public class MainActivity extends FragmentActivity implements
 		editor.putString("moveState", "STATE_MOVE");
 		editor.commit();
 		EventBus.getDefault().register(this);
+
+		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		ncr = new NetChangedReceiver();
 		IntentFilter intentFilter = new IntentFilter("netchanged");
@@ -361,7 +364,7 @@ public class MainActivity extends FragmentActivity implements
 					JSONObject jsonObject = new JSONObject(responseString);
 					JSONObject jb = (JSONObject) jsonObject.get("AppVersion");
 					String version = jb.getString("android");
-					if(!getVersion().equals(version)) {
+					if(!getVersion().equals(NullUtil.checkNull(version))) {
 						//有更新
 						Intent updateIntent = new Intent(MainActivity.this, UpdateActivity.class);
 						startActivity(updateIntent);
@@ -580,6 +583,12 @@ public class MainActivity extends FragmentActivity implements
 			editor.commit();
 
 		}
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		audioManager.setMode(AudioManager.MODE_NORMAL);
 	}
 
 	@Override

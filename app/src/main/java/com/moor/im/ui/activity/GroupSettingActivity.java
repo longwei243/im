@@ -94,10 +94,13 @@ public class GroupSettingActivity extends Activity implements View.OnClickListen
             gaam.set_id(admins.get(i));
             String name = ContactsDao.getInstance().getContactsName(admins.get(i));
             String icicon = ContactsDao.getInstance().getContactsIcon(admins.get(i));
-            gaam.setName(name);
-            gaam.setType("Admin");
-            gaam.setImicon(icicon);
-            adminAndMemberses.add(gaam);
+            if(name != null && !"".equals(name)) {
+                gaam.setName(name);
+                gaam.setType("Admin");
+                gaam.setImicon(icicon);
+                adminAndMemberses.add(gaam);
+            }
+
         }
 
 
@@ -115,31 +118,33 @@ public class GroupSettingActivity extends Activity implements View.OnClickListen
             gaam.set_id(tempMembers.get(i));
             String name = ContactsDao.getInstance().getContactsName(tempMembers.get(i));
             String icicon = ContactsDao.getInstance().getContactsIcon(tempMembers.get(i));
-            gaam.setName(name);
-            gaam.setType("Member");
-            gaam.setImicon(icicon);
-            adminAndMemberses.add(gaam);
+            if(name != null && !"".equals(name)) {
+                gaam.setName(name);
+                gaam.setType("Member");
+                gaam.setImicon(icicon);
+                adminAndMemberses.add(gaam);
+            }
+
         }
 
         GroupAdminAndMemberAdapter adapter = new GroupAdminAndMemberAdapter(GroupSettingActivity.this, adminAndMemberses);
         group_setting_list.setAdapter(adapter);
 
 
-//        group_setting_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(GroupSettingActivity.this, GroupMemberDetailActivity.class);
-//                String _id = adminAndMemberses.get(position).get_id();
-//                String name = adminAndMemberses.get(position).getName();
-//                String type = adminAndMemberses.get(position).getType();
-//                intent.putExtra("_id", _id);
-//                intent.putExtra("name", name);
-//                intent.putExtra("type", type);
-//                intent.putExtra("sessionId", sessionId);
-//                System.out.println("type是："+type);
-//                startActivity(intent);
-//            }
-//        });
+        group_setting_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(GroupSettingActivity.this, GroupMemberDetailActivity.class);
+                String _id = adminAndMemberses.get(position).get_id();
+                String name = adminAndMemberses.get(position).getName();
+                String type = adminAndMemberses.get(position).getType();
+                intent.putExtra("_id", _id);
+                intent.putExtra("name", name);
+                intent.putExtra("type", type);
+                intent.putExtra("sessionId", sessionId);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

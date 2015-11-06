@@ -373,7 +373,7 @@ public class DepartmentActivity extends Activity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction() == "department_update") {
+			if("department_update".equals(intent.getAction())) {
 //				System.out.println("接收到了部门更新的广播");
 				handler.sendEmptyMessage(0x1001);
 			}

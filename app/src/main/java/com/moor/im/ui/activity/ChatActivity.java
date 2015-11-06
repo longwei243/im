@@ -11,6 +11,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,6 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
@@ -160,6 +164,12 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 	private String imicon;
 
+	private AudioManager audioManager;
+	/**
+	 * 当前模式是否为扬声器
+	 */
+	private boolean isSpeaker = true;
+
 	private User user = UserDao.getInstance().getUser();
 
 	private Handler handler = new Handler() {
@@ -198,6 +208,14 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		MobileApplication.getInstance().add(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_chat);
+
+		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		int mode = audioManager.getMode();
+		if(AudioManager.MODE_NORMAL == mode) {
+			isSpeaker = true;
+		}else if(AudioManager.MODE_IN_CALL == mode){
+			isSpeaker = false;
+		}
 		Intent intent = getIntent();
 		sp = this.getSharedPreferences("SP", 4);
 		MessageFragment.chatHandler = handler;
@@ -304,7 +322,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		}
 		if (flag == false) {
 			//没有收到消息时
-			chatAdapter = new ChatAdapter(ChatActivity.this, handler, imicon);
+			chatAdapter = new ChatAdapter(ChatActivity.this, handler, imicon, isSpeaker);
 			list = chatAdapter.getAdapterData();
 			list.addAll(descFromToMessage);
 			mChatList.setAdapter(chatAdapter);
@@ -331,7 +349,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			msg.obj = "newMsg";
 			MobileApplication.getHandler().sendMessage(msg);
 		}
+
 	}
+
 
 	// 分页加载更多
 	public void JZMoreMessage() {
@@ -1375,6 +1395,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onDestroy();
 		readflag = false;
 		MediaManager.relese();
+
+		audioManager.setMode(AudioManager.MODE_NORMAL);
+
 	}
 
 	@Override

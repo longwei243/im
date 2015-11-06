@@ -13,11 +13,13 @@ import java.util.regex.Pattern;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
@@ -26,6 +28,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,15 +95,22 @@ public class ChatAdapter extends MyBaseAdapter {
 
 	private String im_icon;
 
+	private AudioManager audioManager;
+	/**
+	 * 当前模式是否为扬声器
+	 */
+	private boolean isSpeaker = true;
+
 	private User user = UserDao.getInstance().getUser();
 
-	public ChatAdapter(Context context, Handler handler, String im_icon) {
+	public ChatAdapter(Context context, Handler handler, String im_icon, boolean isSpeaker) {
 		super(context);
 		this.context = context;
 		this.handler = handler;
 		this.im_icon = im_icon;
+		this.isSpeaker = isSpeaker;
 		sp = context.getSharedPreferences("SP", 4);
-		
+		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		
 		DisplayMetrics outMetrics = new DisplayMetrics();
@@ -273,6 +283,14 @@ public class ChatAdapter extends MyBaseAdapter {
 					}
 				});
 
+				holder.chat_to_recorder_length.setOnLongClickListener(new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						showVoiceDialog();
+						return false;
+					}
+				});
+
 				final ImageView failureMsgs = (ImageView) convertView
 						.findViewById(R.id.failure_msgs);
 				final ProgressBar progressBar = (ProgressBar) convertView
@@ -428,6 +446,15 @@ public class ChatAdapter extends MyBaseAdapter {
 				holder.chat_from_recorder_length.setVisibility(View.VISIBLE);
 
 				holder.chat_from_layout_img.setVisibility(View.GONE);
+
+				holder.chat_from_recorder_length.setOnLongClickListener(new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						showVoiceDialog();
+						return false;
+					}
+				});
+
 				String url = message.message;
 				if("".equals(message.filePath) || message.filePath == null) {
 					AsyncHttpClient httpclient = MobileApplication.httpclient;
@@ -459,7 +486,7 @@ public class ChatAdapter extends MyBaseAdapter {
 								message.filePath = "";
 							}
 							
-							LogUtil.d("接收到录音", "保存到本地的文件路径是："+message.filePath);
+							LogUtil.d("接收到录音", "保存到本地的文件路径是：" + message.filePath);
 							holder.fromContent.setVisibility(View.GONE);
 							
 							holder.chat_from_recorder_length.setVisibility(View.VISIBLE);
@@ -470,10 +497,10 @@ public class ChatAdapter extends MyBaseAdapter {
 							lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond )));
 							
 							holder.chat_from_recorder_length.setOnClickListener(new OnClickListener() {
-								
+
 								@Override
 								public void onClick(View v) {
-									if(chat_from_recorder_anim != null) {
+									if (chat_from_recorder_anim != null) {
 										chat_from_recorder_anim.setBackgroundResource(R.drawable.adj_left);
 										chat_from_recorder_anim = null;
 									}
@@ -483,9 +510,9 @@ public class ChatAdapter extends MyBaseAdapter {
 									AnimationDrawable anim = (AnimationDrawable) chat_from_recorder_anim.getBackground();
 									anim.start();
 									//播放声音
-									System.out.println("adapter中的message.filePath是:"+message.filePath);
+									System.out.println("adapter中的message.filePath是:" + message.filePath);
 									MediaManager.playSound(message.filePath, new MediaPlayer.OnCompletionListener() {
-										
+
 										@Override
 										public void onCompletion(MediaPlayer mp) {
 											chat_from_recorder_anim.setBackgroundResource(R.drawable.adj_left);
@@ -494,6 +521,8 @@ public class ChatAdapter extends MyBaseAdapter {
 									});
 								}
 							});
+
+
 							handler.sendEmptyMessage(0x88);
 						}
 
@@ -520,7 +549,7 @@ public class ChatAdapter extends MyBaseAdapter {
 					holder.chat_from_recorder_time.setText(message.voiceSecond + "\"");
 					LayoutParams lp = holder.chat_from_recorder_length.getLayoutParams();
 					lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond )));
-					
+
 					holder.chat_from_recorder_length.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -580,6 +609,52 @@ public class ChatAdapter extends MyBaseAdapter {
 		return convertView;
 	}
 
+
+	/**
+	 * 显示切换录音播放方式的对话框
+	 */
+	public void showVoiceDialog() {
+		LayoutInflater myInflater = LayoutInflater.from(context);
+		final View myDialogView = myInflater.inflate(R.layout.voice_convert_dialog,
+				null);
+		final AlertDialog.Builder dialog = new AlertDialog.Builder(context)
+				.setView(myDialogView);
+		final AlertDialog alert = dialog.show();
+		alert.setCanceledOnTouchOutside(true);// 设置点击Dialog外部任意区域关闭Dialog
+		alert.getWindow().setGravity(Gravity.CENTER);
+
+
+		LinearLayout mDirectSeeding = (LinearLayout) myDialogView
+				.findViewById(R.id.voice_convert_layout);
+		final TextView voice_convert_tv = (TextView) myDialogView.findViewById(R.id.voice_convert_tv);
+		if(isSpeaker) {
+			voice_convert_tv.setText("切换为听筒模式");
+		}else {
+			voice_convert_tv.setText("切换为扬声器模式");
+		}
+
+		mDirectSeeding.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(isSpeaker) {
+					//当前是扬声器模式，需切换为听筒模式
+					audioManager.setMode(AudioManager.MODE_IN_CALL);
+					isSpeaker = false;
+					alert.dismiss();
+				}else {
+					audioManager.setMode(AudioManager.MODE_NORMAL);
+					isSpeaker = true;
+					alert.dismiss();
+				}
+
+
+			}
+		});
+
+
+	}
 
 
 	private SpannableStringBuilder handler(final TextView gifTextView,

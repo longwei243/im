@@ -1277,8 +1277,8 @@ public class PjSipService {
             pjsua.pj_pool_release(pool);
             return status;
         } else {
-            service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "
-                    + callee);
+            service.notifyUserOfMessage("网络波动，请稍后重试");
+            service.restartSipStack();
         }
         return -1;
     }

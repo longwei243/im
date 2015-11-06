@@ -4,7 +4,15 @@
     android:layout_height="wrap_content"
     >
     
-		
+		<com.moor.im.ui.view.RoundImageView
+			android:id="@+id/calllog_listview_item_iv_head"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:src="@drawable/calllog_head"
+			android:layout_marginLeft="16dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			/>
 	    
 	    <TextView 
 	        android:id="@+id/calllog_listview_item_textview_name"
@@ -12,6 +20,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="16dp"
 	        android:layout_marginTop="8dp"
+			android:layout_toRightOf="@id/calllog_listview_item_iv_head"
 	        android:text="姓名"
 	        android:textSize="18sp"
 	        android:textColor="@color/all_black"
@@ -19,6 +28,7 @@
 	        />
 	    <LinearLayout 
 	        android:layout_marginTop="4dp"
+			android:layout_toRightOf="@id/calllog_listview_item_iv_head"
 	        android:layout_below="@id/calllog_listview_item_textview_name"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -30,6 +40,7 @@
 	            android:layout_height="wrap_content"
 	            android:text="125423556"
 	            android:textSize="14sp"
+				android:textColor="@color/setting_text_bg"
 	            android:layout_marginLeft="16dp"
 	            />
 	        
@@ -39,14 +50,14 @@
 	            android:layout_height="wrap_content"
 	            android:text="date"
 	            android:textSize="14sp"
+				android:textColor="@color/setting_text_bg"
 	            android:layout_marginLeft="16dp"
 	            />
-	        <TextView 
-	            android:id="@+id/calllog_listview_item_textview_type"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="呼出"
-	            android:textSize="14sp"
+	        <ImageView
+	            android:id="@+id/calllog_listview_item_iv_type"
+	            android:layout_width="24dp"
+	            android:layout_height="24dp"
+				android:scaleType="center"
 	            android:layout_marginLeft="16dp"
 	            />
 	        <TextView 
@@ -54,6 +65,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="duration"
+				android:textColor="@color/setting_text_bg"
 	            android:textSize="14sp"
 	            />
 	        

@@ -82,7 +82,7 @@ public class DepartmentParser {
 			for (int i = 0; i < rootDepartment.Members.size(); i++) {
 				String id = (String) rootDepartment.Members.get(i);
 				Contacts contact = ContactsDao.getInstance().getContactById(id);
-				if(contact != null) {
+				if(contact != null && contact.displayName != null && !"".equals(contact.displayName)) {
 					members.add(contact);
 				}
 			}

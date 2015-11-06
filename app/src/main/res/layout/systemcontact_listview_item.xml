@@ -22,13 +22,15 @@
 	    android:layout_height="wrap_content"
 	    >
 	    
-	    <ImageView
+	    <com.moor.im.ui.view.RoundImageView
 	        android:id="@+id/contact_listview_item_iamgeview"
 	        android:layout_width="48dp"
 	        android:layout_height="48dp"
 	        android:layout_centerVertical="true"
 	        android:layout_marginLeft="16dp"
-			android:visibility="gone"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:src="@drawable/system_contact_head"
 	        />
 	    
 	    <LinearLayout 
@@ -43,6 +45,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="8dp"
+				android:layout_marginTop="4dp"
 		        android:text="姓名"
 		        android:textSize="18sp"
 		        
@@ -52,6 +55,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="8dp"
+				android:textColor="@color/setting_text_bg"
 		        android:text="8001"
 		        android:textSize="14sp"
 		        

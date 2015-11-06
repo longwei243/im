@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moor.im.R;
@@ -51,7 +52,7 @@ public class CallLogAdapter extends BaseAdapter{
 			holder.tv_number = (TextView) convertView.findViewById(R.id.calllog_listview_item_textview_number);
 			holder.tv_date = (TextView) convertView.findViewById(R.id.calllog_listview_item_textview_date);
 			holder.tv_duration = (TextView) convertView.findViewById(R.id.calllog_listview_item_textview_duration);
-			holder.tv_type = (TextView) convertView.findViewById(R.id.calllog_listview_item_textview_type);
+			holder.iv_type = (ImageView) convertView.findViewById(R.id.calllog_listview_item_iv_type);
 			convertView.setTag(holder);
 		}else{
 			holder = (Viewholder) convertView.getTag();
@@ -61,7 +62,13 @@ public class CallLogAdapter extends BaseAdapter{
 		holder.tv_number.setText(calllogs.get(position).getNumber());
 		holder.tv_date.setText(TimeUtil.convertTimeToFriendly(calllogs.get(position).getDate()));
 		holder.tv_duration.setText(TimeUtil.getContactsLogTime(calllogs.get(position).getDuration())+"秒");
-		holder.tv_type.setText(calllogs.get(position).getType());
+		if("呼入".equals(calllogs.get(position).getType())) {
+			holder.iv_type.setBackgroundResource(R.drawable.listitem_history_callin);
+		}else if("呼出".equals(calllogs.get(position).getType())) {
+			holder.iv_type.setBackgroundResource(R.drawable.listitem_history_callout);
+		}else if("未接听".equals(calllogs.get(position).getType())) {
+			holder.iv_type.setBackgroundResource(R.drawable.listitem_history_misscall);
+		}
 		return convertView;
 	}
 	
@@ -70,7 +77,7 @@ public class CallLogAdapter extends BaseAdapter{
 		TextView tv_number;
 		TextView tv_date;
 		TextView tv_duration;
-		TextView tv_type;
+		ImageView iv_type;
 	}
 
 }
