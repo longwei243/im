@@ -11,6 +11,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -164,11 +165,15 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 	private String imicon;
 
+	SharedPreferences myPreferences;
+	SharedPreferences.Editor editor;
 	private AudioManager audioManager;
 	/**
 	 * 当前模式是否为扬声器
 	 */
 	private boolean isSpeaker = true;
+
+	private ImageView title_iv_voice_mode;
 
 	private User user = UserDao.getInstance().getUser();
 
@@ -199,6 +204,19 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				openAlbum();
 			}
 
+			if(msg.what == 0x777) {
+				int mode = myPreferences.getInt("mode", AudioManager.MODE_NORMAL);
+				if(AudioManager.MODE_NORMAL == mode) {
+					isSpeaker = true;
+					title_iv_voice_mode.setVisibility(View.GONE);
+
+				}else if(AudioManager.MODE_IN_CALL == mode){
+					isSpeaker = false;
+					title_iv_voice_mode.setVisibility(View.VISIBLE);
+				}
+				updateMessage();
+			}
+
 		}
 	};
 
@@ -208,14 +226,14 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		MobileApplication.getInstance().add(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_chat);
+		myPreferences = getSharedPreferences(MobileApplication.getInstance()
+						.getResources().getString(R.string.spname),
+				Activity.MODE_PRIVATE);
+		editor = myPreferences.edit();
+		title_iv_voice_mode = (ImageView) findViewById(R.id.title_iv_voice_mode);
 
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		int mode = audioManager.getMode();
-		if(AudioManager.MODE_NORMAL == mode) {
-			isSpeaker = true;
-		}else if(AudioManager.MODE_IN_CALL == mode){
-			isSpeaker = false;
-		}
+
 		Intent intent = getIntent();
 		sp = this.getSharedPreferences("SP", 4);
 		MessageFragment.chatHandler = handler;
@@ -285,7 +303,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		initMoreViewPager();
 		initMorePoint();
 		initMoreData();
-		updateMessage();
 	}
 
 	/**
@@ -1395,9 +1412,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onDestroy();
 		readflag = false;
 		MediaManager.relese();
-
-		audioManager.setMode(AudioManager.MODE_NORMAL);
-
 	}
 
 	@Override
@@ -1405,6 +1419,22 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onResume();
 		readflag = true;
+
+		int mode = myPreferences.getInt("mode", AudioManager.MODE_NORMAL);
+		if(AudioManager.MODE_NORMAL == mode) {
+			isSpeaker = true;
+			audioManager.setMode(AudioManager.MODE_NORMAL);
+			editor.putInt("mode", AudioManager.MODE_NORMAL);
+			editor.commit();
+			title_iv_voice_mode.setVisibility(View.GONE);
+		}else if(AudioManager.MODE_IN_CALL == mode){
+			isSpeaker = false;
+			audioManager.setMode(AudioManager.MODE_IN_CALL);
+			editor.putInt("mode", AudioManager.MODE_IN_CALL);
+			editor.commit();
+			title_iv_voice_mode.setVisibility(View.VISIBLE);
+		}
+		updateMessage();
 		MediaManager.resume();
 	}
 	
@@ -1412,6 +1442,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		audioManager.setMode(AudioManager.MODE_NORMAL);
 		MediaManager.pause();
 	}
 

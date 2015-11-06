@@ -84,7 +84,7 @@ import java.util.TimerTask;
 
 public class InCallActivity extends SherlockFragmentActivity implements IOnCallActionTrigger, 
         IOnLeftRightChoice, ProximityDirector, OnDtmfListener {
-    private static final int QUIT_DELAY = 3000;
+    private static final int QUIT_DELAY = 300;
     private final static String THIS_FILE = "InCallActivity";
     //private final static int DRAGGING_DELAY = 150;
     

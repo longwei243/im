@@ -1519,26 +1519,6 @@ public class SipService extends Service {
 		
 		Collections.sort(activeProfilesState, SipProfileState.getComparator());
 		
-		
-
-		// Handle status bar notification
-		if (activeProfilesState.size() > 0 && 
-				prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR, true)) {
-		// Testing memory / CPU leak as per issue 676
-		//	for(int i=0; i < 10; i++) {
-		//		Log.d(THIS_FILE, "Notify ...");
-			System.out.println("账户注册的状态是："+activeProfilesState.get(0).getStatusCode());
-//				notificationManager.notifyRegisteredAccounts(activeProfilesState, prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR_NBR));
-		//		try {
-		//			Thread.sleep(6000);
-		//		} catch (InterruptedException e) {
-		//			e.printStackTrace();
-		//		}
-		//	}
-		} else {
-//			notificationManager.cancelRegisters();
-		}
-		
 		if(hasSomeActiveAccount) {
 			acquireResources();
 		}else {
@@ -1610,31 +1590,16 @@ public class SipService extends Service {
 		if(holdResources) {
 			return;
 		}
-		
-		// Add a wake lock for CPU if necessary
-		if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_PARTIAL_WAKE_LOCK)) {
-			PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			if (wakeLock == null) {
-				wakeLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
-				wakeLock.setReferenceCounted(false);
-			}
-			// Extra check if set reference counted is false ???
-			if (!wakeLock.isHeld()) {
-				wakeLock.acquire();
-			}
-		}
 
 		// Add a lock for WIFI if necessary
 		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wifiLock == null) {
 			int mode = WifiManager.WIFI_MODE_FULL;
-			if(Compatibility.isCompatible(9) && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI_PERFS)) {
-				mode = 0x3; // WIFI_MODE_FULL_HIGH_PERF 
-			}
+
 			wifiLock = wman.createWifiLock(mode, "com.csipsimple.SipService");
 			wifiLock.setReferenceCounted(false);
 		}
-		if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI) && !wifiLock.isHeld()) {
+		if (!wifiLock.isHeld()) {
 			WifiInfo winfo = wman.getConnectionInfo();
 			if (winfo != null) {
 				DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());

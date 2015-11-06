@@ -588,7 +588,6 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onStop() {
 		super.onStop();
-		audioManager.setMode(AudioManager.MODE_NORMAL);
 	}
 
 	@Override

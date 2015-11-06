@@ -94,12 +94,17 @@ public class AudioManager {
 	}
 	
 	public void release() {
-		if(mRecorder != null) {
-			mRecorder.stop();
-			mRecorder.release();
-			mRecorder = null;
-			System.out.println("录音文件存起来了");
+		try{
+			if(mRecorder != null) {
+				mRecorder.stop();
+				mRecorder.release();
+				mRecorder = null;
+				System.out.println("录音文件存起来了");
+			}
+		}catch (Exception e) {
+
 		}
+
 	}
 	
 	public void cancel() {

@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -93,6 +94,9 @@ public class ChatAdapter extends MyBaseAdapter {
 	
 	Handler handler;
 
+	SharedPreferences myPreferences;
+	SharedPreferences.Editor editor;
+
 	private String im_icon;
 
 	private AudioManager audioManager;
@@ -110,6 +114,11 @@ public class ChatAdapter extends MyBaseAdapter {
 		this.im_icon = im_icon;
 		this.isSpeaker = isSpeaker;
 		sp = context.getSharedPreferences("SP", 4);
+
+		myPreferences = context.getSharedPreferences(MobileApplication.getInstance()
+						.getResources().getString(R.string.spname),
+				Activity.MODE_PRIVATE);
+		editor = myPreferences.edit();
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		
@@ -255,8 +264,12 @@ public class ChatAdapter extends MyBaseAdapter {
 				
 				holder.chat_to_recorder_time.setText(Math.round(message.recordTime) + "\"");
 				LayoutParams lp = holder.chat_to_recorder_length.getLayoutParams();
-				lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * message.recordTime));
-				
+				try{
+					lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * message.recordTime));
+				}catch (Exception e) {
+					lp.width = mMinRecordLength;
+				}
+
 				holder.chat_to_recorder_length.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -336,12 +349,12 @@ public class ChatAdapter extends MyBaseAdapter {
 							.crossFade()
 							.into(holder.chat_to_iv_img);
 
-					holder.chat_to_layout_img.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							//点击查看原图
-							Intent intent = new Intent(context, ImageViewLookActivity.class);
-							intent.putExtra("imagePath", message.filePath);
+				holder.chat_to_layout_img.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//点击查看原图
+						Intent intent = new Intent(context, ImageViewLookActivity.class);
+						intent.putExtra("imagePath", message.filePath);
 							context.startActivity(intent);
 						}
 					});
@@ -494,8 +507,12 @@ public class ChatAdapter extends MyBaseAdapter {
 							
 							holder.chat_from_recorder_time.setText(message.voiceSecond + "\"");
 							LayoutParams lp = holder.chat_from_recorder_length.getLayoutParams();
-							lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond )));
-							
+							try{
+								lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond )));
+							}catch (Exception e) {
+								lp.width = mMinRecordLength;
+							}
+
 							holder.chat_from_recorder_length.setOnClickListener(new OnClickListener() {
 
 								@Override
@@ -548,7 +565,11 @@ public class ChatAdapter extends MyBaseAdapter {
 
 					holder.chat_from_recorder_time.setText(message.voiceSecond + "\"");
 					LayoutParams lp = holder.chat_from_recorder_length.getLayoutParams();
-					lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond )));
+					try{
+						lp.width = (int) (mMinRecordLength + (mMaxRecordLength / 60 * Integer.parseInt(message.voiceSecond)));
+					}catch (Exception e) {
+						lp.width = mMinRecordLength;
+					}
 
 					holder.chat_from_recorder_length.setOnClickListener(new OnClickListener() {
 						
@@ -564,9 +585,9 @@ public class ChatAdapter extends MyBaseAdapter {
 							AnimationDrawable anim = (AnimationDrawable) chat_from_recorder_anim.getBackground();
 							anim.start();
 							//播放声音
-							System.out.println("adapter中的message.filePath是:"+message.filePath);
+							System.out.println("adapter中的message.filePath是:" + message.filePath);
 							MediaManager.playSound(message.filePath, new MediaPlayer.OnCompletionListener() {
-								
+
 								@Override
 								public void onCompletion(MediaPlayer mp) {
 									chat_from_recorder_anim.setBackgroundResource(R.drawable.adj_left);
@@ -640,15 +661,21 @@ public class ChatAdapter extends MyBaseAdapter {
 				// TODO Auto-generated method stub
 				if(isSpeaker) {
 					//当前是扬声器模式，需切换为听筒模式
+					alert.dismiss();
 					audioManager.setMode(AudioManager.MODE_IN_CALL);
 					isSpeaker = false;
-					alert.dismiss();
+					editor.putInt("mode", AudioManager.MODE_IN_CALL);
+					editor.commit();
+
 				}else {
+					alert.dismiss();
 					audioManager.setMode(AudioManager.MODE_NORMAL);
 					isSpeaker = true;
-					alert.dismiss();
-				}
+					editor.putInt("mode", AudioManager.MODE_NORMAL);
+					editor.commit();
 
+				}
+				handler.sendEmptyMessage(0x777);
 
 			}
 		});
