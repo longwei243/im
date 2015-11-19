@@ -9,13 +9,18 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +30,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.csipsimple.api.SipProfile;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.m7.imkfsdk.chat.ChatActivity;
+import com.m7.imkfsdk.chat.OfflineMessageDialog;
+import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.moor.im.R;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
@@ -48,6 +56,9 @@ import com.moor.im.ui.activity.UserInfoActivity;
 import com.moor.im.ui.dialog.LoginOffDialog;
 import com.moor.im.ui.view.RoundImageView;
 import com.moor.im.utils.LogUtil;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.InitListener;
+import com.moor.imkf.OnSessionBeginListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -55,19 +66,24 @@ public class SetupFragment extends Fragment{
 	
 	RelativeLayout setup_ll_loginoff, setup_ll_update,
 			setup_ll_aboutme, setup_ll_icon,
-			setup_ll_edit_name, setup_ll_edit_email, setup_ll_edit_phone;
+			setup_ll_edit_name, setup_ll_edit_email, setup_ll_edit_phone, setup_ll_kefu;
 	
 	TextView user_detail_tv_name, user_detail_tv_num, user_detail_tv_email, user_detail_tv_phone;
 
 	ImageView contact_detail_image;
+
+	CheckBox setup_cb_gongdan;
 
 	private LoginOffDialog loginoffDialog;
 	
 	static String connectionId;
 	
 	private SharedPreferences sp;
-	private SharedPreferences.Editor editor;
-	
+
+
+	SharedPreferences myPreferences;
+	SharedPreferences.Editor editor;
+
 	private IMService imService;
 	
 	private LoginManager loginMgr;
@@ -91,13 +107,13 @@ public class SetupFragment extends Fragment{
 		
 	};
 	
-	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		imServiceConnector.connect(getActivity());
 		EventBus.getDefault().register(this);
+
+
 	}
 
 	@Override
@@ -128,8 +144,12 @@ public class SetupFragment extends Fragment{
 		setup_ll_edit_email.setOnClickListener(clickListener);
 		
 		sp = getActivity().getSharedPreferences("SP", 4);
-		editor = sp.edit();
 		connectionId = sp.getString("connecTionId", "");
+
+		myPreferences = getActivity().getSharedPreferences(MobileApplication.getInstance()
+						.getResources().getString(R.string.spname),
+				Activity.MODE_PRIVATE);
+		editor = myPreferences.edit();
 
 		User user = UserDao.getInstance().getUser();
 
@@ -150,6 +170,32 @@ public class SetupFragment extends Fragment{
 		}else {
 			Glide.with(this).load(R.drawable.head_default_local).asBitmap().into(contact_detail_image);
 		}
+
+		setup_cb_gongdan = (CheckBox) view.findViewById(R.id.setup_cb_gongdan);
+		boolean isc = myPreferences.getBoolean("gongdan", true);
+		if(isc) {
+			setup_cb_gongdan.setChecked(true);
+		}else {
+			setup_cb_gongdan.setChecked(false);
+		}
+
+		setup_cb_gongdan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked) {
+					editor.putBoolean("gongdan", true);
+					editor.commit();
+					MobileApplication.getHandler().sendEmptyMessage(0x99);
+				}else {
+					editor.putBoolean("gongdan", false);
+					editor.commit();
+					MobileApplication.getHandler().sendEmptyMessage(0x97);
+				}
+			}
+		});
+
+		setup_ll_kefu = (RelativeLayout) view.findViewById(R.id.setup_ll_kefu);
+		setup_ll_kefu.setOnClickListener(clickListener);
 
 		return view;
 		
@@ -240,6 +286,36 @@ public class SetupFragment extends Fragment{
 				Intent emailIntent = new Intent(getActivity(), EditActivity.class);
 				emailIntent.putExtra("edittype", "email");
 				startActivity(emailIntent);
+				break;
+			case R.id.setup_ll_kefu:
+				IMChatManager.getInstance().beginSession(new OnSessionBeginListener() {
+
+					@Override
+					public void onLeaveMessage() {
+						//提交离线留言
+						OfflineMessageDialog dialog = new OfflineMessageDialog();
+						dialog.show(SetupFragment.this.getActivity().getFragmentManager(), "OfflineMessageDialog");
+					}
+
+					@Override
+					public void onRobot() {
+						Intent chatIntent = new Intent(SetupFragment.this.getActivity(), ChatActivity.class);
+						chatIntent.putExtra("isRobot", true);
+						startActivity(chatIntent);
+					}
+
+					@Override
+					public void onPeople() {
+						Intent chatIntent = new Intent(SetupFragment.this.getActivity(), ChatActivity.class);
+						chatIntent.putExtra("isRobot", false);
+						startActivity(chatIntent);
+					}
+
+					@Override
+					public void onFailed() {
+						Toast.makeText(SetupFragment.this.getActivity(), "由于网络原因等会话开始失败", Toast.LENGTH_SHORT).show();
+					}
+				});
 				break;
 			}
 		}

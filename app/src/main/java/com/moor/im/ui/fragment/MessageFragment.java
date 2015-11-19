@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,7 @@ import com.moor.im.ui.activity.DepartmentAddActivity;
 import com.moor.im.ui.activity.DepartmentUpdateActivity;
 import com.moor.im.ui.activity.LoginActivity;
 import com.moor.im.ui.activity.SystemActivity;
+import com.moor.im.ui.activity.WebActivity;
 import com.moor.im.ui.adapter.MessageAdapter;
 import com.moor.im.ui.dialog.KickedActicity;
 import com.moor.im.utils.LogUtil;
@@ -63,8 +66,12 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 	private List<NewMessage> newMsgs;
 	private MessageAdapter messageAdapter;
 	private TextView mAllUnreadcount;
+
+	private LinearLayout fragment_message_gongdan;
 	
 	private String largeMsgId = "";
+
+	SharedPreferences myPreferences;
 
 	// 接收消息
 	private Handler handler = new Handler() {
@@ -86,6 +93,16 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				MobileApplication.getInstance().startActivity(intent);
 			}
+			if(msg.what == 0x99) {
+				//工单助手打开
+				LogUtil.d("MessageFragment", "收到了发送过来的0x99");
+				fragment_message_gongdan.setVisibility(View.VISIBLE);
+			}
+			if(msg.what == 0x97) {
+				//工单助手关闭
+				LogUtil.d("MessageFragment", "收到了发送过来的0x97");
+				fragment_message_gongdan.setVisibility(View.GONE);
+			}
 		}
 	};
 
@@ -96,6 +113,9 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 		sp = getActivity().getSharedPreferences("SP", 4);
 		MobileApplication.setHandler(handler);
 
+		myPreferences = getActivity().getSharedPreferences(MobileApplication.getInstance()
+						.getResources().getString(R.string.spname),
+				Activity.MODE_PRIVATE);
 		init();
 		registerListener();
 
@@ -174,6 +194,18 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 		mAllUnreadcount = (TextView) getActivity().findViewById(
 				R.id.all_unreadcount);
 
+		fragment_message_gongdan = (LinearLayout) mView.findViewById(R.id.fragment_message_gongdan);
+		boolean ischeck = myPreferences.getBoolean("gongdan", true);
+		if(ischeck) {
+			fragment_message_gongdan.setVisibility(View.VISIBLE);
+		}else {
+			fragment_message_gongdan.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 
 	// 注册监听方法
@@ -183,6 +215,14 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 			@Override
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 				menu.add(0, 0, 0, "删除该聊天");
+			}
+		});
+
+		fragment_message_gongdan.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent webIntent = new Intent(getActivity(), WebActivity.class);
+				startActivity(webIntent);
 			}
 		});
 

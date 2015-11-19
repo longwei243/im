@@ -218,6 +218,42 @@
             android:layout_marginTop="16dp"
             >
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setup_bg_selector"
+                android:padding="8dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开启工单助手"
+                    android:textSize="18sp"
+                    android:textColor="@color/all_black"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    />
+
+                <CheckBox
+                    android:id="@+id/setup_cb_gongdan"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:checked="true"
+                    />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgrey"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
+            <RelativeLayout
                 android:id="@+id/setup_ll_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -278,6 +314,44 @@
                     />
 
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgrey"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
+
+            <RelativeLayout
+                android:id="@+id/setup_ll_kefu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setup_bg_selector"
+                android:padding="12dp"
+                android:clickable="true"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系客服"
+                    android:textSize="18sp"
+                    android:textColor="@color/all_black"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_marginRight="8dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
         </LinearLayout>
 
 
@@ -291,6 +365,7 @@
             android:padding="12dp"
             android:clickable="true"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             >
 
             <TextView

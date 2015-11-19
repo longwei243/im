@@ -8,6 +8,7 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.SipService;
@@ -20,6 +21,8 @@ import com.moor.im.ui.dialog.KickedActicity;
 import com.moor.im.utils.CacheUtils;
 import com.moor.im.utils.FaceConversionUtil;
 import com.moor.im.utils.LogUtil;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.InitListener;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -85,6 +88,30 @@ public class MobileApplication extends Application {
 
 		startSipService();
 		startIMService();
+
+		IMChatManager.getInstance().setOnInitListener(new InitListener() {
+			@Override
+			public void oninitSuccess() {
+				Log.d("MobileApplication", "sdk初始化成功");
+				//初始化表情,界面效果需要
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						com.m7.imkfsdk.utils.FaceConversionUtil.getInstace().getFileText(
+								MobileApplication.getInstance());
+					}
+				}).start();
+			}
+
+			@Override
+			public void onInitFailed() {
+				Log.d("MobileApplication", "sdk初始化失败");
+			}
+		});
+
+		//初始化IMSdk,启动了IMService
+		IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.imkf.KEFU_NEW_MSG", "f228f440-7882-11e5-944c-43cb6c167371", "龙伟测试号", "7788");
+
 
 		/**
 		 * 初始化配置文件

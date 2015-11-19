@@ -43,6 +43,7 @@ import com.moor.im.utils.PingYinUtil;
 import com.moor.im.utils.SCPinyinComparator;
 import com.moor.im.utils.Utils;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

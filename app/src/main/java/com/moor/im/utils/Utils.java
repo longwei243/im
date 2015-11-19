@@ -104,7 +104,7 @@ public class Utils {
 	public static List<String> getEmojiFile(Context context) {
 		try {
 			List<String> list = new ArrayList<String>();
-			InputStream in = context.getResources().getAssets().open("emoji");
+			InputStream in = context.getResources().getAssets().open("emojikf");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in,
 					"utf-8"));
 			String str = null;

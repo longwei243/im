@@ -55,4 +55,17 @@
 	<style name="SelectableItem">
         <item name="android:background">@android:drawable/list_selector_background</item>
     </style>
+
+    <style name="topbar_text">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:shadowColor">#40000000</item>
+        <item name="android:shadowDy">-2.0</item>
+        <item name="android:shadowRadius">4.0</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
 </resources>

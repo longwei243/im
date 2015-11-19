@@ -235,37 +235,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 					NewMessageDao.getInstance().deleteAllMsgs();
 					ContactsDao.getInstance().clear();
 				}
-				
-//				editor.putString("connecTionId", connectionid + "");
-//				editor.putString("loginName", mLoginName.getText().toString()
-//						.trim());
-//				editor.putString("loginPass", mLoginPass.getText().toString()
-//						.trim());
-
-
-//				if(user.im_icon != null && !"".equals(user.im_icon)) {
-//					editor.putString("usericon", user.im_icon + "");
-//				}
-//
-//				editor.putString("product", user.product + "");
-//				if("zj".equals(user.product)) {
-//					editor.putBoolean("isAdmin", user.isAdmin);
-//				}else if("cc".equals(user.product)) {
-//					editor.putString("type", user.type + "");
-//				}
-//				editor.putString("_id", user._id + "");
-//				editor.putString("sipExten", user.sipExten + "");
-//				editor.putString("pbxSipAddr", user.pbxSipAddr + "");
-//				editor.putString("sipExtenSecret", user.sipExtenSecret + "");
-//				editor.putString("account", user.account + "");
-//				editor.putString("exten", user.exten + "");
-//				editor.putString("pbx", user.pbx + "");
-//				editor.putString("mobile", user.mobile + "");
-//				editor.putString("displayName", user.displayName + "");
-//				editor.putString("email", user.email + "");
-//				editor.putInt("loginCount", sp.getInt("loginCount", 0) + 1);
-//
-//				editor.commit();
 
 				myeditor.putInt("loginCount", myPreferences.getInt("loginCount", 0) + 1);
 				myeditor.commit();

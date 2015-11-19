@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    >
+
+    <RelativeLayout
+        android:id="@+id/acbuwa_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="48.0dip"
+        android:visibility="visible"
+        android:background="@color/maincolor" >
+
+        <TextView
+            android:id="@+id/topbar_title"
+            style="@style/topbar_text"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="..."
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="#00000000"
+            android:onClick="exit_zhuxiao"
+            android:src="@drawable/ic_arrow_left" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/webviewrelay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/acbuwa_topbar" >
+
+        <WebView
+            android:id="@+id/webView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

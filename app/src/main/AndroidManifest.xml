@@ -280,6 +280,10 @@
             android:name=".ui.activity.EditActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.activity.WebActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <receiver
             android:name=".receiver.NetWorkReceiver"
@@ -352,6 +356,45 @@
             <intent-filter>
                 <action android:name="kicked"/>
             </intent-filter>
+        </receiver>
+
+        <!--kefu-->
+        <activity
+            android:name="com.m7.imkfsdk.chat.ChatActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <service
+            android:name="com.moor.imkf.tcpservice.service.IMService"
+            >
+        </service>
+
+        <receiver
+            android:name="com.moor.imkf.receiver.NetWorkReceiver"
+            >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+
+        <!--自己定义消息接收的广播-->
+        <receiver
+            android:name="com.m7.imkfsdk.receiver.NewMsgReceiver"
+            android:enabled="true"
+            >
+            <intent-filter android:priority="2147483647" >
+                <!--修改此action为自己的，该action必须和SDKc初始化接口中所填的一样-->
+                <action android:name="com.moor.imkf.KEFU_NEW_MSG" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.moor.imkf.receiver.AlarmManagerReceiver"
+            android:enabled="true"
+
+            >
         </receiver>
     </application>
 
