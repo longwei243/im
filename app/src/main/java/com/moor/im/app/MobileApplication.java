@@ -23,7 +23,6 @@ import com.moor.im.utils.FaceConversionUtil;
 import com.moor.im.utils.LogUtil;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.InitListener;
-import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * 手机的Application,进行一些项目启动时的初始化工作
@@ -89,29 +88,6 @@ public class MobileApplication extends Application {
 		startSipService();
 		startIMService();
 
-		IMChatManager.getInstance().setOnInitListener(new InitListener() {
-			@Override
-			public void oninitSuccess() {
-				Log.d("MobileApplication", "sdk初始化成功");
-				//初始化表情,界面效果需要
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						com.m7.imkfsdk.utils.FaceConversionUtil.getInstace().getFileText(
-								MobileApplication.getInstance());
-					}
-				}).start();
-			}
-
-			@Override
-			public void onInitFailed() {
-				Log.d("MobileApplication", "sdk初始化失败");
-			}
-		});
-
-		//初始化IMSdk,启动了IMService
-		IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.imkf.KEFU_NEW_MSG", "f228f440-7882-11e5-944c-43cb6c167371", "龙伟测试号", "7788");
-
 
 		/**
 		 * 初始化配置文件
@@ -120,10 +96,6 @@ public class MobileApplication extends Application {
 //		final FileAppender fa = (FileAppender)logger.getAppender(1);
 //		fa.setAppend(true);
 
-		/**
-		 * 初始化异常捕获
-		 */
-		CrashReport.initCrashReport(mobileApplication, "900005144", true);
 	}
 
 	/**
@@ -153,6 +125,8 @@ public class MobileApplication extends Application {
 		t.start();
 		LogUtil.d("MobileApplication", "启动IMService");
 	}
+
+
 	
 	public static MobileApplication getInstance() {
 
