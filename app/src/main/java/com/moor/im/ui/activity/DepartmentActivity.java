@@ -73,7 +73,7 @@ public class DepartmentActivity extends Activity {
 			switch(msg.what) {
 			case 0x1001:
 				//重新更新数据从网络
-				System.out.println("部门handler接收到了更新界面的消息");
+//				System.out.println("部门handler接收到了更新界面的消息");
 				getVersionFromNet();
 				break;
 			}

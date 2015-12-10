@@ -34,6 +34,8 @@ public class MobileApplication extends Application {
 
 	private static MobileApplication mobileApplication;
 	public static CacheUtils cacheUtil;
+
+	public static boolean isKFSDK = false;
 	
 	private List<Activity> activities = new ArrayList<Activity>();
 

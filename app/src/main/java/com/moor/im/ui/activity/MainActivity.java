@@ -33,6 +33,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +73,8 @@ import com.moor.im.ui.view.ChangeColorTabItem;
 import com.moor.im.ui.view.appmsg.AppMsg;
 import com.moor.im.utils.LogUtil;
 import com.moor.im.utils.NullUtil;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.InitListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -230,8 +233,7 @@ public class MainActivity extends FragmentActivity implements
 		}
 //		LogUtil.d("MainActivity", "从网络获取应用版本号");
 		getVersionFromNet();
-		
-		
+
 	}
 
 
@@ -643,4 +645,7 @@ public class MainActivity extends FragmentActivity implements
 			}
 		}
 	}
+
+
+
 }

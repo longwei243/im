@@ -43,7 +43,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 	
 	public ServerMessageHandler(Context context) {
 		this.context = context;
-		sp = context.getSharedPreferences("SP", 4);
+		sp = context.getSharedPreferences("SP", 0);
 		editor = sp.edit();
 
 	}
@@ -53,6 +53,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
 		super.channelConnected(ctx, e);
+		System.out.println("连接tcp服务");
 	}
 
 	@Override
@@ -93,6 +94,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		super.messageReceived(ctx, e);
 		ChannelBuffer buffer = (ChannelBuffer) e.getMessage();
         String result = buffer.toString(Charset.defaultCharset());
+		System.out.println("服务器返回的数据是：" + result);
         LogUtil.d("ServerMessageHandler", "服务器返回的数据是：" + result);
 		MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "ServerMessageHandler，服务器返回的数据是："+ result);
 
@@ -117,8 +119,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			editor.putString("connecTionId", connectionid + "");
 			editor.commit();
 			//发送登录成功的事件
-			EventBus.getDefault().postSticky(LoginEvent.LOGIN_SUCCESS);
-			Intent intnet = new Intent("com.moor.im.LOGIN_SUCCESS");
+			Intent intnet = new Intent("com.moor.im.LOGIN_SUCCESS_FOR_RECEIVER");
 			intnet.putExtra("connecTionId", connectionid + "");
 			context.sendBroadcast(intnet);
 

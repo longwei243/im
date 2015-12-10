@@ -38,6 +38,7 @@ import com.moor.im.model.entity.ContactBean;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.User;
 import com.moor.im.ui.adapter.SystemContactAdapter;
+import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.view.SideBar;
 import com.moor.im.utils.PingYinUtil;
 import com.moor.im.utils.SCPinyinComparator;
@@ -72,6 +73,8 @@ public class ContactSystemActicity extends Activity{
     private SystemContactAdapter adapter;
     private int firstItem = 0;
 
+    private LoadingFragmentDialog loadingFragmentDialog;
+
     User user = UserDao.getInstance().getUser();
     private EditText editText;
     private SharedPreferences sp;
@@ -99,6 +102,8 @@ public class ContactSystemActicity extends Activity{
         bindService(new Intent().setComponent(new ComponentName("com.moor.im", "com.csipsimple.service.SipService"))
                 , connection,
                 Context.BIND_AUTO_CREATE);
+        loadingFragmentDialog = new LoadingFragmentDialog();
+        loadingFragmentDialog.show(getFragmentManager(), "");
 
         systemcontact_listview = (ListView) findViewById(R.id.systemcontact_listview);
         systemcontact_sidebar = (SideBar) findViewById(R.id.systemcontact_sidebar);
@@ -221,6 +226,8 @@ public class ContactSystemActicity extends Activity{
 
         setLetter(contacts);
         Collections.sort(contacts, pinyinComparator);
+
+        loadingFragmentDialog.dismiss();
 
         adapter = new SystemContactAdapter(ContactSystemActicity.this, contacts);
         systemcontact_listview.setAdapter(adapter);

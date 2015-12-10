@@ -195,12 +195,12 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 				R.id.all_unreadcount);
 
 		fragment_message_gongdan = (LinearLayout) mView.findViewById(R.id.fragment_message_gongdan);
-		boolean ischeck = myPreferences.getBoolean("gongdan", true);
-		if(ischeck) {
-			fragment_message_gongdan.setVisibility(View.VISIBLE);
-		}else {
-			fragment_message_gongdan.setVisibility(View.GONE);
-		}
+//		boolean ischeck = myPreferences.getBoolean("gongdan", true);
+//		if(ischeck) {
+//			fragment_message_gongdan.setVisibility(View.VISIBLE);
+//		}else {
+//			fragment_message_gongdan.setVisibility(View.GONE);
+//		}
 	}
 
 	@Override

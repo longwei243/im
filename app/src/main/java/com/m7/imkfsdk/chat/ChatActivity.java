@@ -54,6 +54,7 @@ import com.moor.imkf.IMChat;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.IMMessage;
 import com.moor.imkf.OnConvertManualListener;
+import com.moor.imkf.OnSessionBeginListener;
 import com.moor.imkf.model.entity.ChatEmoji;
 import com.moor.imkf.model.entity.ChatMore;
 import com.moor.imkf.model.entity.FromToMessage;
@@ -111,9 +112,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	private String picFileFullName;
 
 	MsgReceiver msgReceiver;
-
-	//是否是机器人对话
-	private boolean isRobot = false;
+	KeFuStatusReceiver keFuStatusReceiver;
 
 	private Handler handler = new Handler() {
 
@@ -126,7 +125,24 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				// 加载更多的时候
 				JZMoreMessage();
 			}
-			
+			if(msg.what == 0x111) {
+				//当前是机器人
+				Toast.makeText(ChatActivity.this, "当前是机器人为你服务", Toast.LENGTH_SHORT).show();
+				chat_btn_convert.setVisibility(View.VISIBLE);
+			}
+
+			if(msg.what == 0x222) {
+				//当前是客服
+				Toast.makeText(ChatActivity.this, "当前是客服为你服务", Toast.LENGTH_SHORT).show();
+				chat_btn_convert.setVisibility(View.GONE);
+			}
+			if(msg.what == 0x333) {
+				//当前是客服
+				Toast.makeText(ChatActivity.this, "当前客服不在线", Toast.LENGTH_SHORT).show();
+				chat_btn_convert.setVisibility(View.GONE);
+				OfflineMessageDialog dialog = new OfflineMessageDialog();
+				dialog.show(ChatActivity.this.getFragmentManager(), "OfflineMessageDialog");
+			}
 			if(msg.what == 0x88) {
 				updateMessage();
 			}
@@ -148,14 +164,16 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_chat_kf);
 
-		isRobot = getIntent().getBooleanExtra("isRobot", false);
-		if(isRobot) {
-			Toast.makeText(ChatActivity.this, "当前是机器人为你服务", Toast.LENGTH_SHORT).show();
-		}
-
 		IntentFilter intentFilter = new IntentFilter("com.m7.imkfsdk.msgreceiver");
 		msgReceiver = new MsgReceiver();
 		registerReceiver(msgReceiver, intentFilter);
+
+		IntentFilter kefuIntentFilter = new IntentFilter();
+		kefuIntentFilter.addAction(IMChatManager.ROBOT_ACTION);
+		kefuIntentFilter.addAction(IMChatManager.ONLINE_ACTION);
+		kefuIntentFilter.addAction(IMChatManager.OFFLINE_ACTION);
+		keFuStatusReceiver = new KeFuStatusReceiver();
+		registerReceiver(keFuStatusReceiver, kefuIntentFilter);
 
 
 		init();
@@ -168,6 +186,26 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		initMoreData();
 		updateMessage();
 
+		beginSession();
+
+	}
+
+	private void beginSession() {
+		IMChatManager.getInstance().beginSession(new OnSessionBeginListener() {
+
+			@Override
+			public void onSuccess() {
+
+			}
+
+
+			@Override
+			public void onFailed() {
+				chat_btn_convert.setVisibility(View.GONE);
+				OfflineMessageDialog dialog = new OfflineMessageDialog();
+				dialog.show(ChatActivity.this.getFragmentManager(), "OfflineMessageDialog");
+			}
+		});
 	}
 
 	/**
@@ -278,11 +316,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 		//转人工服务按钮，判断是否需要显示
 		chat_btn_convert = (Button) this.findViewById(R.id.chat_btn_convert);
-		if(isRobot) {
-			chat_btn_convert.setVisibility(View.VISIBLE);
-		}else {
-			chat_btn_convert.setVisibility(View.GONE);
-		}
 
 
 		mOtherName = (TextView) this.findViewById(R.id.other_name);
@@ -455,7 +488,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				@Override
 				public void offLine() {
 					//当前没有客服在线
-					Toast.makeText(ChatActivity.this, "转人工服务失败", Toast.LENGTH_SHORT).show();
+					OfflineMessageDialog dialog = new OfflineMessageDialog();
+					dialog.show(ChatActivity.this.getFragmentManager(), "OfflineMessageDialog");
+//					Toast.makeText(ChatActivity.this, "转人工服务失败", Toast.LENGTH_SHORT).show();
 				}
 			});
 			break;
@@ -1014,6 +1049,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		MediaManager.relese();
 
 		unregisterReceiver(msgReceiver);
+		unregisterReceiver(keFuStatusReceiver);
 	}
 
 	@Override
@@ -1022,7 +1058,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onResume();
 		MediaManager.resume();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -1095,6 +1131,26 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			handler.sendEmptyMessage(1);
+		}
+	}
+
+	/**
+	 * 客服状态接收器
+	 */
+	class KeFuStatusReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if(IMChatManager.ROBOT_ACTION.equals(action)) {
+				//当前是机器人
+				handler.sendEmptyMessage(0x111);
+			}else if(IMChatManager.ONLINE_ACTION.equals(action)) {
+				//当前在线客服
+				handler.sendEmptyMessage(0x222);
+			}else if(IMChatManager.OFFLINE_ACTION.equals(action)) {
+				//当前客服不在线
+				handler.sendEmptyMessage(0x333);
+			}
 		}
 	}
 }

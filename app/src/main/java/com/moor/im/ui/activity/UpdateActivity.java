@@ -34,6 +34,8 @@ import com.moor.im.http.HttpManager;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.view.LoadingView;
 
+import de.greenrobot.event.EventBus;
+
 public class UpdateActivity extends Activity{
 	
 	public final static int HasUpdate = 0;
@@ -57,7 +59,8 @@ public class UpdateActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		sp = getSharedPreferences("SP", 4);
+
+		sp = getSharedPreferences("SP", 0);
 		setContentView(R.layout.parentdialog);
 		
 		initViews();

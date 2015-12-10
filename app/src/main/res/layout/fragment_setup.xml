@@ -218,6 +218,7 @@
             android:layout_marginTop="16dp"
             >
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setup_bg_selector"
@@ -247,6 +248,7 @@
             </RelativeLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightgrey"

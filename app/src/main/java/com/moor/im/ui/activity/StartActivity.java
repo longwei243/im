@@ -79,12 +79,12 @@ public class StartActivity extends Activity {
 		String name = sp.getString("loginName", "");
 		String password = sp.getString("loginPass", "");
 		String isStoreUsernamePasswordRight = sp.getString("isStoreUsernamePasswordRight", "false");
-		if(name != null && password !=null && !name.equals("") && !password.equals("") && isStoreUsernamePasswordRight.equals("true")){
+		if(name != null && password !=null && !"".equals(name) && !"".equals(password) && "true".equals(isStoreUsernamePasswordRight)){
 			new Thread() {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1000);
 						Message msg = new Message();
 						msg.what = 0x33;
 						handler.sendMessage(msg);
@@ -120,7 +120,7 @@ public class StartActivity extends Activity {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1000);
 						Message msg = new Message();
 						msg.what = 0x11;
 						handler.sendMessage(msg);

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.moor.im"
     android:versionCode="1"
-    android:versionName="1.1.8" >
+    android:versionName="1.2.0" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -338,7 +338,7 @@
             android:enabled="true"
             android:exported="true" >
             <intent-filter android:priority="2147483647" >
-                <action android:name="com.moor.im.LOGIN_SUCCESS" />
+                <action android:name="com.moor.im.LOGIN_SUCCESS_FOR_RECEIVER" />
                 <action android:name="com.moor.im.NEW_MSG" />
                 <action android:name="com.moor.im.LOGIN_FAILED" />
             </intent-filter>
@@ -385,16 +385,10 @@
             android:name="com.m7.imkfsdk.receiver.NewMsgReceiver"
             android:enabled="true"
             >
-            <intent-filter android:priority="2147483647" >
+            <intent-filter>
                 <!--修改此action为自己的，该action必须和SDKc初始化接口中所填的一样-->
                 <action android:name="com.moor.imkf.KEFU_NEW_MSG" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.moor.imkf.receiver.AlarmManagerReceiver"
-            android:enabled="true"
-
-            >
         </receiver>
     </application>
 

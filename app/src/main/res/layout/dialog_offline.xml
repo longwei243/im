@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/all_white"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -31,6 +32,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
+        android:textSize="16sp"
         android:hint="输入手机号"
         />
     <EditText
@@ -46,6 +48,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
+        android:textSize="16sp"
         android:hint="输入邮箱号"
         />
     <EditText
@@ -54,13 +57,15 @@
         android:layout_height="wrap_content"
         android:background="@drawable/offlinedialog_et_bg"
         android:gravity="top"
-        android:minLines="6"
-        android:maxLines="6"
+        android:minLines="4"
+        android:maxLines="4"
         android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
+        android:textSize="16sp"
         android:hint="客服当前不在线,请输入离线留言内容"
         />
 
@@ -72,17 +77,27 @@
         <Button
             android:id="@+id/id_btn_cancel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dip"
             android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:text="取消"/>
+            android:layout_margin="5dip"
+            android:background="@drawable/dialog_button_bg_selector"
+            android:gravity="center"
+            android:padding="3dip"
+            android:text="取消"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
         <Button
             android:id="@+id/id_btn_submit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dip"
             android:layout_weight="1"
-            android:layout_marginRight="16dp"
-            android:text="提交"/>
+            android:layout_margin="5dip"
+            android:background="@drawable/dialog_button_bg_selector"
+            android:gravity="center"
+            android:padding="3dip"
+            android:text="提交"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </LinearLayout>  

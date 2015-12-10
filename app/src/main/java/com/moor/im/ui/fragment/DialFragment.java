@@ -324,7 +324,12 @@ public class DialFragment extends BaseLazyFragment {
 				break;
 			case R.id.dial_delete:
 				if (editText_phone_number.getText().length() != 0) {
-					sb.deleteCharAt(sb.length() - 1);
+					//找到光标位置
+					int index = editText_phone_number.getSelectionStart();
+					if(index > 0) {
+						sb.deleteCharAt(index - 1);
+					}
+
 				}
 				break;
 			case R.id.dial_call:
@@ -373,7 +378,7 @@ public class DialFragment extends BaseLazyFragment {
 								Toast.LENGTH_LONG).show();
 					}
 					alert.dismiss();
-					editText_phone_number.setText("");
+//					editText_phone_number.setText("");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

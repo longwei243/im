@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
 import com.moor.im.db.dao.UserDao;
+import com.moor.im.event.UserIconUpdate;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
@@ -27,6 +28,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by longwei on 2015/8/27.
@@ -145,17 +148,7 @@ public class EditActivity extends Activity{
             String succeed = HttpParser.getSucceed(responseString);
             String message = HttpParser.getMessage(responseString);
             if ("true".equals(succeed)) {
-
-                if(type.equals("name")) {
-                    user.displayName = edit_userinfo.getText().toString().trim();
-                    UserDao.getInstance().updateUser(user);
-                }else if(type.equals("phone")) {
-                    user.mobile = edit_userinfo.getText().toString().trim();
-                    UserDao.getInstance().updateUser(user);
-                }else if(type.equals("email")) {
-                    user.email = edit_userinfo.getText().toString().trim();
-                    UserDao.getInstance().updateUser(user);
-                }
+                EventBus.getDefault().post(new UserIconUpdate());
                 loadingFragmentDialog.dismiss();
                 Toast.makeText(EditActivity.this, "信息修改成功", Toast.LENGTH_SHORT)
                         .show();
@@ -174,7 +167,7 @@ public class EditActivity extends Activity{
                             if("mobile".equals(ja.get(i))) {
                                 sb.append("您的电话与别人重复");
                             }
-                            if("displayName".equals(ja.get(i))) {
+                            if("name".equals(ja.get(i))) {
                                 sb.append("您的姓名与别人重复");
                             }
                         }

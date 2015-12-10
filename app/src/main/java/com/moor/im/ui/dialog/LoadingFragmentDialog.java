@@ -25,7 +25,7 @@ public class LoadingFragmentDialog extends DialogFragment{
         View view = inflater.inflate(R.layout.dialog_loading, null);
         TextView title = (TextView) view
                 .findViewById(R.id.id_dialog_loading_msg);
-        title.setText("正在上传");
+        title.setText("请稍等...");
         Dialog dialog = new Dialog(getActivity(), R.style.dialog);
         dialog.setContentView(view);
         return dialog;

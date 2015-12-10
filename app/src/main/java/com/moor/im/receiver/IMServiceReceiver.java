@@ -22,7 +22,7 @@ public class IMServiceReceiver extends BroadcastReceiver {
         MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "IMServiceReceiver 收到广播," + intent.getAction());
 
         switch (intent.getAction()){
-            case "com.moor.im.LOGIN_SUCCESS":
+            case "com.moor.im.LOGIN_SUCCESS_FOR_RECEIVER":
                 handlerLoginSuccess(context, intent);
                 break;
             case "com.moor.im.NEW_MSG":
@@ -35,7 +35,7 @@ public class IMServiceReceiver extends BroadcastReceiver {
     }
 
     private void handlerLoginSuccess(Context context, Intent intent){
-        SharedPreferences sp = context.getSharedPreferences("SP", 4);
+        SharedPreferences sp = context.getSharedPreferences("SP", 0);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("connecTionId", intent.getExtras().get("connecTionId") + "");
         editor.putString("isStoreUsernamePasswordRight", "true");

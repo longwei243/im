@@ -88,6 +88,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 				// 获取用户信息
 				connectionid = sp.getString("connecTionId", "");
+				System.out.println("ConnectionId is :"+connectionid);;
 				HttpManager.getUserInfo(connectionid,
 						new GetUserInfoResponseHandler());
 				break;
@@ -116,7 +117,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		EventBus.getDefault().register(this);
 		
-		sp = this.getSharedPreferences("SP", 4);
+		sp = getSharedPreferences("SP", 0);
 		editor = sp.edit();
 
 		myPreferences = getSharedPreferences(MobileApplication.getInstance()
@@ -145,8 +146,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		pb = (ProgressBar) this.findViewById(R.id.login_progress);
 
 		// ===========完了删了
-		mLoginName.setText("8029@7moor");
-		mLoginPass.setText("8029");
+//		mLoginName.setText("8029@7moor");
+//		mLoginPass.setText("8029");
 //		mLoginName.setText("8001@phoneTest");
 //		mLoginPass.setText("8001");
 		// ====================
@@ -213,6 +214,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 		public void onFailure(int statusCode, Header[] headers,
 				String responseString, Throwable throwable) {
 			Toast.makeText(LoginActivity.this, "请检查您的网络问题！！！", Toast.LENGTH_SHORT).show();
+			//清除登录名
+
+			editor.putString("isStoreUsernamePasswordRight", "false");
+			editor.commit();
 			mLoginLog.setVisibility(View.VISIBLE);
 			pb.setVisibility(View.GONE);
 		}
@@ -245,6 +250,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 			} else {
 				Toast.makeText(LoginActivity.this, "网络有问题", Toast.LENGTH_SHORT)
 						.show();
+				editor.putString("isStoreUsernamePasswordRight", "false");
+				editor.commit();
 				mLoginLog.setVisibility(View.VISIBLE);
 				pb.setVisibility(View.GONE);
 			}

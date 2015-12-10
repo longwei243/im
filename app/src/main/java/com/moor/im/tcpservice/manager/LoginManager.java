@@ -70,7 +70,6 @@ public class LoginManager {
 			}
 
 			String str = "1" + jb.toString() + "\n";
-
 			MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "发送登陆请求" + name + "  " + password);
 			socketManager.sendData(str);
 			SocketManager.getInstance(MobileApplication.getInstance()).setStatus(SocketManagerStatus.WAIT_LOGIN);

@@ -816,6 +816,7 @@ public class PjSipService {
     }
 
     public boolean addAccount(SipProfile profile) throws SameThreadException {
+        System.out.println("进入了pjsipservice的addAccount方法");
         int status = pjsuaConstants.PJ_FALSE;
         if (!created) {
             Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
@@ -854,6 +855,7 @@ public class PjSipService {
                 // Re register
                 if (status == pjsuaConstants.PJ_SUCCESS) {
                     status = pjsua.acc_set_registration(currentAccountStatus.getPjsuaId(), 1);
+                    System.out.println("进行sip注册"+status);
                     if (status == pjsuaConstants.PJ_SUCCESS) {
                         pjsua.acc_set_online_status(currentAccountStatus.getPjsuaId(), 1);
                     }
@@ -905,7 +907,7 @@ public class PjSipService {
                 pjsua.acc_set_online_status(accId[0], 1);
             }
         }
-
+        System.out.println("注册状态："+status);
         return status == pjsuaConstants.PJ_SUCCESS;
     }
 
@@ -1652,6 +1654,7 @@ public class PjSipService {
      */
     public boolean setAccountRegistration(SipProfile account, int renew, boolean forceReAdd)
             throws SameThreadException {
+        System.out.println("======sip账户信息========"+account.acc_id);
         int status = -1;
         if (!created || account == null) {
             Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
@@ -1705,9 +1708,10 @@ public class PjSipService {
             }
 
         }
+        System.out.println("======账户注册状态========"+status);
         // PJ_SUCCESS = 0
         if(status == 0) {
-        	System.out.println("账户注册成功了");
+        	System.out.println("======账户注册成功了========");
         }
         return status == 0;
     }

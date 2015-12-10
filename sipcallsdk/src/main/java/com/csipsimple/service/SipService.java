@@ -1333,6 +1333,7 @@ public class SipService extends Service {
 			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
+		System.out.println("启动了sipstack");
 	}
 	
 	/**
@@ -1370,7 +1371,9 @@ public class SipService extends Service {
 	
 
     public void restartSipStack() throws SameThreadException {
-        if(stopSipStack()) {
+		System.out.println("进入到重启sip方法");
+
+		if(stopSipStack()) {
             startSipStack();
         }else {
             Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
@@ -1416,16 +1419,20 @@ public class SipService extends Service {
     					}
     					index ++;
     				} while (c.moveToNext() && index < 10);
+				}else {
+					System.out.println("添加sip用户Cursor的count是0");
 				}
 			} catch (Exception e) {
 				Log.e(THIS_FILE, "Error on looping over sip profiles", e);
 			} finally {
 				c.close();
 			}
+		}else {
+			System.out.println("添加sip用户Cursor是空的");
 		}
 		
 		hasSomeActiveAccount = hasSomeSuccess;
-
+		System.out.println("添加sip用户是"+hasSomeActiveAccount);
 		if (hasSomeSuccess) {
 			acquireResources();
 			

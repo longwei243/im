@@ -5,4 +5,9 @@
 
     <stroke android:color="@color/lightgrey"
         android:width="1dp"/>
+
+    <gradient
+        android:startColor="@color/all_white"
+        android:endColor="@color/all_white"
+        />
 </shape>

@@ -7,11 +7,13 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,38 +22,55 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.moor.im.R;
+import com.moor.im.app.RequestUrl;
+import com.moor.im.ui.js.JSObject;
 
 /**
  * Created by longwei on 2015/11/9.
  */
+@SuppressLint("SetJavaScriptEnabled")
 public class WebActivity extends Activity{
 
     private WebView mWebView;
     static ProgressDialog m_Dialog;
 
-    String Now_Url = "http://www.baidu.com";
+    private SharedPreferences sp;
+
+    String action = "webGetCalllog";
+    String connectionId = "";
+
+    String Now_Url = RequestUrl.baseHttp1+"/?Action="+action+"&ConnectionId="+connectionId;
     String Now_Url_def;
 
+    JSObject jsobject;
 
-    @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_web);
-
+        sp = this.getSharedPreferences("SP", 0);
+//        connectionId = sp.getString("connecTionId", "");
         mWebView = (WebView) findViewById(R.id.webView1);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
-        Intent intent = getIntent();
+        jsobject = new JSObject(WebActivity.this);
+        mWebView.addJavascriptInterface(jsobject, "JsGetConnectionId");
+
+//        Intent intent = getIntent();
 //        Now_Url = intent.getStringExtra("OpenUrl");
+
+
+        Now_Url = RequestUrl.baseHttp1+"/?Action="+action+"&ConnectionId="+sp.getString("connecTionId", "");
+        System.out.println("网页请求的地址是："+Now_Url);
         Now_Url_def = Now_Url;
 
         TextView topbar_title =(TextView) findViewById(R.id.topbar_title);
         topbar_title.setText("");
 
-        mWebView.setWebChromeClient(new chromeClient());
+        mWebView.setWebChromeClient(new chromeClient() );
         mWebView.setWebViewClient(new WebViewClient() {
             Dialog progressDialog = ProgressDialog.show(WebActivity.this, null, "正在加载，请稍后...");
 
@@ -90,9 +109,13 @@ public class WebActivity extends Activity{
     class chromeClient extends WebChromeClient {
 
         @Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            Toast.makeText(WebActivity.this, message, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        @Override
 
         public void onProgressChanged(WebView view, int newProgress) {
-
 
             super.onProgressChanged(view, newProgress);
 
@@ -107,8 +130,6 @@ public class WebActivity extends Activity{
             super.onReceivedTitle(view, title);
 
         }
-
-
 
     }
 
