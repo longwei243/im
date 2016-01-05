@@ -131,10 +131,6 @@ public class MobileApplication extends Application {
 
 	
 	public static MobileApplication getInstance() {
-
-		if (mobileApplication == null) {
-			mobileApplication = new MobileApplication();
-		}
 		return mobileApplication;
 	}
 	

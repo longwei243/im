@@ -123,11 +123,40 @@ public class ContactFragment extends BaseLazyFragment {
 
 				ContactsDao.getInstance().saveContacts(contacts);
 
-				initDatas(contacts);
+				SetLetterTask slt = new SetLetterTask();
+				slt.execute(contacts);
+
+//				initDatas(contacts);
 			} else {
 //				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
 //						.show();
 			}
+		}
+	}
+
+	class SetLetterTask extends AsyncTask<List<Contacts>, Void, List<Contacts>> {
+
+		@Override
+		protected List<Contacts> doInBackground(List<Contacts>... params) {
+			List<Contacts> cbs = params[0];
+			if(cbs != null && cbs.size() > 0 && user != null) {
+				setLetter(cbs);
+				Collections.sort(cbs, pinyinComparator);
+				for (int i = 0; i < cbs.size(); i++) {
+					if (cbs.get(i)._id.equals(user._id)) {
+						cbs.remove(i);
+					}
+				}
+			}
+			return cbs;
+		}
+
+		@Override
+		protected void onPostExecute(List<Contacts> contacts) {
+
+			initDatas(contacts);
+
+			super.onPostExecute(contacts);
 		}
 	}
 
@@ -138,7 +167,9 @@ public class ContactFragment extends BaseLazyFragment {
 	public void onFirstUserVisible() {
 		List<Contacts> list = getContactsFromDB();
 		if (list != null && list.size() != 0) {
-			initDatas(list);
+			SetLetterTask slt = new SetLetterTask();
+			slt.execute(list);
+//			initDatas(list);
 		}
 		
 		getVersionFromNet();
@@ -166,15 +197,15 @@ public class ContactFragment extends BaseLazyFragment {
 	 */
 	private void initDatas(final List<Contacts> contacts) {
 
-		if(contacts != null && contacts.size() > 0 && user != null) {
-			setLetter(contacts);
-			Collections.sort(contacts, pinyinComparator);
-			// 将自己在联系人中移除
-			for (int i = 0; i < contacts.size(); i++) {
-				if (contacts.get(i)._id.equals(user._id)) {
-					contacts.remove(i);
-				}
-			}
+//		if(contacts != null && contacts.size() > 0 && user != null) {
+//			setLetter(contacts);
+//			Collections.sort(contacts, pinyinComparator);
+//			// 将自己在联系人中移除
+//			for (int i = 0; i < contacts.size(); i++) {
+//				if (contacts.get(i)._id.equals(user._id)) {
+//					contacts.remove(i);
+//				}
+//			}
 
 			adapter = new ContactListViewAdapter(getActivity(), contacts);
 			listView.setAdapter(adapter);
@@ -233,7 +264,7 @@ public class ContactFragment extends BaseLazyFragment {
 
 				}
 			});
-		}
+//		}
 
 	}
 
@@ -245,36 +276,36 @@ public class ContactFragment extends BaseLazyFragment {
 		sideBar.setTextView(dialog);
 		contact_et_search = (EditText) view.findViewById(R.id.contact_et_search);
 		contact_et_search.setVisibility(View.GONE);
-		contact_et_search.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-									  int arg3) {
-				String key = contact_et_search.getText().toString().trim();
-				if(user != null && user.exten.equals(key)) {
-					return;
-				}else if(!"".equals(key)) {
-					SearchContactsTask searchContactsTask = new SearchContactsTask();
-					searchContactsTask.execute(key);
-				}else {
-					List<Contacts> list = getContactsFromDB();
-					if (list != null && list.size() != 0) {
-						initDatas(list);
-					}
-				}
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1,
-										  int arg2, int arg3) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable arg0) {
-
-			}
-		});
+//		contact_et_search.addTextChangedListener(new TextWatcher() {
+//
+//			@Override
+//			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+//									  int arg3) {
+//				String key = contact_et_search.getText().toString().trim();
+//				if(user != null && user.exten.equals(key)) {
+//					return;
+//				}else if(!"".equals(key)) {
+//					SearchContactsTask searchContactsTask = new SearchContactsTask();
+//					searchContactsTask.execute(key);
+//				}else {
+//					List<Contacts> list = getContactsFromDB();
+//					if (list != null && list.size() != 0) {
+//						initDatas(list);
+//					}
+//				}
+//
+//			}
+//
+//			@Override
+//			public void beforeTextChanged(CharSequence arg0, int arg1,
+//										  int arg2, int arg3) {
+//			}
+//
+//			@Override
+//			public void afterTextChanged(Editable arg0) {
+//
+//			}
+//		});
 
 		View viewheader = LayoutInflater.from(getActivity()).inflate(R.layout.contact_listview_header, null);
 		listView.addHeaderView(viewheader);
@@ -396,30 +427,30 @@ public class ContactFragment extends BaseLazyFragment {
 		}
 	}
 
-	class SearchContactsTask extends AsyncTask<String, Void, List<Contacts>> {
-
-		@Override
-		protected List<Contacts> doInBackground(String[] params) {
-			String key = params[0];
-			List<Contacts> contactsList = ContactsDao.getInstance().getContactsByMoHu(key);
-
-			List<Contacts> searchContacts = new ArrayList<Contacts>();
-
-			if(contactsList != null && contactsList.size() != 0) {
-				for (int i=0; i<contactsList.size(); i++) {
-					Contacts contacts = contactsList.get(i);
-					searchContacts.add(contacts);
-
-				}
-			}
-			return searchContacts;
-		}
-
-		@Override
-		protected void onPostExecute(List<Contacts> contactses) {
-			super.onPostExecute(contactses);
-
-			initDatas(contactses);
-		}
-	}
+//	class SearchContactsTask extends AsyncTask<String, Void, List<Contacts>> {
+//
+//		@Override
+//		protected List<Contacts> doInBackground(String[] params) {
+//			String key = params[0];
+//			List<Contacts> contactsList = ContactsDao.getInstance().getContactsByMoHu(key);
+//
+//			List<Contacts> searchContacts = new ArrayList<Contacts>();
+//
+//			if(contactsList != null && contactsList.size() != 0) {
+//				for (int i=0; i<contactsList.size(); i++) {
+//					Contacts contacts = contactsList.get(i);
+//					searchContacts.add(contacts);
+//
+//				}
+//			}
+//			return searchContacts;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(List<Contacts> contactses) {
+//			super.onPostExecute(contactses);
+//
+//			initDatas(contactses);
+//		}
+//	}
 }

@@ -11,6 +11,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -210,8 +211,13 @@ public class ContactSystemActicity extends Activity{
                     }
                 }
                 if (list.size() > 0) {
-                    initDatas(list);
+//                    initDatas(list);
+
+                    SetLetterTask slt = new SetLetterTask();
+                    slt.execute(list);
                 }
+
+
 
             }
             cursor.close();
@@ -219,13 +225,32 @@ public class ContactSystemActicity extends Activity{
 
     }
 
+    class SetLetterTask extends AsyncTask<List<ContactBean>, Void, List<ContactBean>> {
+
+        @Override
+        protected List<ContactBean> doInBackground(List<ContactBean>... params) {
+            List<ContactBean> cbs = params[0];
+            setLetter(cbs);
+            Collections.sort(cbs, pinyinComparator);
+            return cbs;
+        }
+
+        @Override
+        protected void onPostExecute(List<ContactBean> contacts) {
+
+            initDatas(contacts);
+
+            super.onPostExecute(contacts);
+        }
+    }
+
     /**
      * 加载数据
      */
     private void initDatas(final List<ContactBean> contacts) {
 
-        setLetter(contacts);
-        Collections.sort(contacts, pinyinComparator);
+//        setLetter(contacts);
+//        Collections.sort(contacts, pinyinComparator);
 
         loadingFragmentDialog.dismiss();
 
