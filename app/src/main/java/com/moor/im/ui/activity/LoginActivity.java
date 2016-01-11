@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.csipsimple.api.SipProfile;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
 import com.moor.im.db.dao.MessageDao;
@@ -227,7 +228,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
 			String message = HttpParser.getMessage(responseString);
-//			LogUtil.d("LoginActivity", "获取用户信息返回的数据是:"+responseString);
+			LogUtil.d("LoginActivity", "获取用户信息返回的数据是:"+responseString);
 			if ("true".equals(succeed)) {
 				User user = HttpParser.getUserInfo(responseString);
 				// 用户信息存入数据库
@@ -243,6 +244,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 				myeditor.putInt("loginCount", myPreferences.getInt("loginCount", 0) + 1);
 				myeditor.commit();
+
+				MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "true", 99);
+
 				// 跳转到首页
 				Intent main = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(main);

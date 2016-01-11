@@ -18,4 +18,8 @@ public class CacheKey {
 	 * 获取的讨论组
 	 */
 	public static final String CACHE_DISCUSSION = "cache_discussion";
+	/**
+	 * 用户的密码是否改变
+	 */
+	public static final String CACHE_CHANGED_PASSWORD = "cache_change_password";
 }

@@ -9,7 +9,10 @@ import android.os.Message;
 
 import com.moor.im.R;
 import com.moor.im.app.MobileApplication;
+import com.moor.im.event.LoginEvent;
 import com.moor.im.utils.TimeUtil;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * 启动页
@@ -47,7 +50,7 @@ public class StartActivity extends Activity {
 					finish();
 					break;
 				case 0x33:
-					// 跳转到登陆页面
+					// 跳转到主页面
 					editor.putInt("loginCount", myPreferences.getInt("loginCount", 0) + 1);
 					editor.commit();
 					Intent main = new Intent(StartActivity.this,
@@ -74,11 +77,12 @@ public class StartActivity extends Activity {
 		editor = myPreferences.edit();
 
 //		MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "StartAty，进入了onCreate方法");
-		sp = getSharedPreferences("SP", 4);
+		sp = getSharedPreferences("SP", 0);
 		spEditor = sp.edit();
 		String name = sp.getString("loginName", "");
 		String password = sp.getString("loginPass", "");
 		String isStoreUsernamePasswordRight = sp.getString("isStoreUsernamePasswordRight", "false");
+		System.out.println("isStoreUsernamePasswordRight："+isStoreUsernamePasswordRight);
 		if(name != null && password !=null && !"".equals(name) && !"".equals(password) && "true".equals(isStoreUsernamePasswordRight)){
 			new Thread() {
 				@Override
@@ -138,4 +142,5 @@ public class StartActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 	}
+
 }

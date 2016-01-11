@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.SipService;
@@ -17,12 +18,16 @@ import com.google.code.microlog4android.LoggerFactory;
 import com.google.code.microlog4android.appender.FileAppender;
 import com.google.code.microlog4android.config.PropertyConfigurator;
 import com.loopj.android.http.AsyncHttpClient;
+import com.moor.im.event.LoginEvent;
+import com.moor.im.ui.activity.LoginActivity;
 import com.moor.im.ui.dialog.KickedActicity;
 import com.moor.im.utils.CacheUtils;
 import com.moor.im.utils.FaceConversionUtil;
 import com.moor.im.utils.LogUtil;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.InitListener;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * 手机的Application,进行一些项目启动时的初始化工作
@@ -143,5 +148,6 @@ public class MobileApplication extends Application {
 			activities.get(i).finish();
 		}
 	}
+
 
 }

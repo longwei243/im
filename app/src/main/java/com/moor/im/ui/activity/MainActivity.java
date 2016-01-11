@@ -54,8 +54,11 @@ import com.moor.im.R;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
+import com.moor.im.db.dao.MessageDao;
+import com.moor.im.db.dao.NewMessageDao;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.DialEvent;
+import com.moor.im.event.LoginEvent;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Discussion;
@@ -155,6 +158,9 @@ public class MainActivity extends FragmentActivity implements
 		MobileApplication.getInstance().add(this);
 
 		setContentView(R.layout.activity_main);
+
+
+
 		MyPreferences = getSharedPreferences(MobileApplication.getInstance()
 						.getResources().getString(R.string.spname),
 				Activity.MODE_PRIVATE);
@@ -213,6 +219,24 @@ public class MainActivity extends FragmentActivity implements
 				Context.BIND_AUTO_CREATE);
 //		bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection,
 //				Context.BIND_AUTO_CREATE);
+
+		//检测是否修改过密码
+		if(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD) != null) {
+			if("false".equals(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD))) {
+				//修改过了
+				sp.edit().clear().commit();
+				editor.clear().commit();
+				getContentResolver().delete(SipProfile.ACCOUNT_URI, null, null);
+				UserDao.getInstance().deleteUser();
+				ContactsDao.getInstance().clear();
+				NewMessageDao.getInstance().deleteAllMsgs();
+
+				Toast.makeText(MainActivity.this, "您最近修改过密码，请重新登录", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		}
 
 		List<Contacts> list = getContactsFromDB();
 		if (list != null && list.size() != 0) {
@@ -600,10 +624,16 @@ public class MainActivity extends FragmentActivity implements
 		unregisterReceiver(ncr);
 	}
 
-	public void onEventMainThread(Integer i) {
-
+	public void onEventMainThread(LoginEvent loginEvent) {
+		switch (loginEvent) {
+			case LOGIN_FAILED:
+				//登录失败400，用户后台改了密码了
+				Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+				startActivity(loginIntent);
+				finish();
+				break;
+		}
 	}
-
 	@Override
 	public void makeCall(String callee) {
 		// TODO 获取id

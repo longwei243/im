@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.event.LoginEvent;
 import com.moor.im.event.SocketEvent;
@@ -111,8 +112,9 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		} else if ("400".equals(result)) {
 			//登录失败，用户名或密码错误
 			//发送登录失败的事件
+			MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "false", 99);
 			LoginManager.getInstance(MobileApplication.getInstance()).setIsStoreUsernamePasswordRight(false);
-			EventBus.getDefault().postSticky(LoginEvent.LOGIN_FAILED);
+			EventBus.getDefault().post(LoginEvent.LOGIN_FAILED);
 			SocketManager.getInstance(MobileApplication.getInstance()).setStatus(SocketManagerStatus.CONNECTED);
 		} else if(result.startsWith("200")) {
 			String connectionid = result.replace("200", "");
