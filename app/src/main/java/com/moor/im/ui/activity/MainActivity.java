@@ -1,7 +1,9 @@
 package com.moor.im.ui.activity;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -60,11 +62,15 @@ import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.DialEvent;
 import com.moor.im.event.LoginEvent;
 import com.moor.im.http.HttpManager;
+import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Discussion;
 import com.moor.im.model.entity.Group;
+import com.moor.im.model.entity.MAAgent;
+import com.moor.im.model.entity.MAQueue;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
+import com.moor.im.model.parser.MobileAssitantParser;
 import com.moor.im.ui.adapter.DiscussionAdapter;
 import com.moor.im.ui.adapter.GroupAdapter;
 import com.moor.im.ui.fragment.ContactFragment;
@@ -195,7 +201,7 @@ public class MainActivity extends FragmentActivity implements
 		mViewPager.setOnPageChangeListener(this);
 		
 		if (MyPreferences.getInt("loginCount", 0) == 1) {
-			System.out.println("第一次创建sip账户:"+MyPreferences.getInt("loginCount", 0));
+//			System.out.println("第一次创建sip账户:"+MyPreferences.getInt("loginCount", 0));
 			// 创建了sip电话的账户，该账户只能有一个
 			String sipExten = user.sipExten;
 			String displayName = user.displayName;
@@ -220,23 +226,6 @@ public class MainActivity extends FragmentActivity implements
 //		bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection,
 //				Context.BIND_AUTO_CREATE);
 
-		//检测是否修改过密码
-		if(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD) != null) {
-			if("false".equals(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD))) {
-				//修改过了
-				sp.edit().clear().commit();
-				editor.clear().commit();
-				getContentResolver().delete(SipProfile.ACCOUNT_URI, null, null);
-				UserDao.getInstance().deleteUser();
-				ContactsDao.getInstance().clear();
-				NewMessageDao.getInstance().deleteAllMsgs();
-
-				Toast.makeText(MainActivity.this, "您最近修改过密码，请重新登录", Toast.LENGTH_LONG).show();
-				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		}
 
 		List<Contacts> list = getContactsFromDB();
 		if (list != null && list.size() != 0) {
@@ -258,8 +247,83 @@ public class MainActivity extends FragmentActivity implements
 //		LogUtil.d("MainActivity", "从网络获取应用版本号");
 		getVersionFromNet();
 
+		if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null) {
+			MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
+		}
+
+		if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null) {
+			MobileHttpManager.getQueueCache(user._id, new GetQueueResponseHandler());
+		}
 	}
 
+	class GetAgentResponseHandler extends TextHttpResponseHandler {
+		@Override
+		public void onFailure(int statusCode, Header[] headers,
+							  String responseString, Throwable throwable) {
+		}
+
+		@Override
+		public void onSuccess(int statusCode, Header[] headers,
+							  String responseString) {
+			try {
+				JSONObject o = new JSONObject(responseString);
+				if(o.getBoolean("success")) {
+					List<MAAgent> agents = MobileAssitantParser.getAgents(responseString);
+					HashMap<String, MAAgent> agentDatas = MobileAssitantParser.transformAgentData(agents);
+					MobileApplication.cacheUtil.put(CacheKey.CACHE_MAAgent, agentDatas);
+					System.out.println("agent数据缓存了");
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	class GetQueueResponseHandler extends TextHttpResponseHandler {
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+								  String responseString, Throwable throwable) {
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+								  String responseString) {
+				try {
+					JSONObject o = new JSONObject(responseString);
+					if(o.getBoolean("success")) {
+						List<MAQueue> queues = MobileAssitantParser.getQueues(responseString);
+						HashMap<String, MAQueue> queueDatas = MobileAssitantParser.transformQueueData(queues);
+						MobileApplication.cacheUtil.put(CacheKey.CACHE_MAQueue, queueDatas);
+						System.out.println("queue数据缓存了");
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//检测是否修改过密码
+		if(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD) != null) {
+			if("false".equals(MobileApplication.cacheUtil.getAsString(CacheKey.CACHE_CHANGED_PASSWORD))) {
+				//修改过了
+				sp.edit().clear().commit();
+				editor.clear().commit();
+				getContentResolver().delete(SipProfile.ACCOUNT_URI, null, null);
+				UserDao.getInstance().deleteUser();
+				ContactsDao.getInstance().clear();
+				NewMessageDao.getInstance().deleteAllMsgs();
+
+				Toast.makeText(MainActivity.this, "您最近修改过密码，请重新登录", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		}
+	}
 
 	public void getDiscussionDataFromNet() {
 		HttpManager.getDiscussionByUser(sp.getString("connecTionId", ""),
@@ -645,8 +709,8 @@ public class MainActivity extends FragmentActivity implements
 				id = c.getLong(c.getColumnIndex("id"));
 			}
 		}
-		System.out.println(callee);
-		System.out.println(service);
+//		System.out.println(callee);
+//		System.out.println(service);
 		try {
 			service.makeCall(callee, id.intValue());
 		} catch (RemoteException e) {

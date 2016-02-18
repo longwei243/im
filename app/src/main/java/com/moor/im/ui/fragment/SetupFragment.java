@@ -41,6 +41,7 @@ import com.moor.im.db.dao.NewMessageDao;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.UserIconUpdate;
 import com.moor.im.http.HttpManager;
+import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.tcpservice.manager.LoginManager;
@@ -51,6 +52,7 @@ import com.moor.im.ui.activity.AboutMeActivity;
 import com.moor.im.ui.activity.ClipImageViewActivity;
 import com.moor.im.ui.activity.EditActivity;
 import com.moor.im.ui.activity.LoginActivity;
+import com.moor.im.ui.activity.MobileAssitantActivity;
 import com.moor.im.ui.activity.UpdateActivity;
 import com.moor.im.ui.activity.UserInfoActivity;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
@@ -67,7 +69,8 @@ public class SetupFragment extends Fragment{
 	
 	RelativeLayout setup_ll_loginoff, setup_ll_update,
 			setup_ll_aboutme, setup_ll_icon,
-			setup_ll_edit_name, setup_ll_edit_email, setup_ll_edit_phone, setup_ll_kefu;
+			setup_ll_edit_name, setup_ll_edit_email,
+			setup_ll_edit_phone, setup_ll_kefu, setup_ll_mobile;
 	
 	TextView user_detail_tv_name, user_detail_tv_num, user_detail_tv_email, user_detail_tv_phone;
 
@@ -213,6 +216,10 @@ public class SetupFragment extends Fragment{
 		setup_ll_kefu = (RelativeLayout) view.findViewById(R.id.setup_ll_kefu);
 		setup_ll_kefu.setOnClickListener(clickListener);
 
+
+		setup_ll_mobile = (RelativeLayout) view.findViewById(R.id.setup_ll_mobile);
+		setup_ll_mobile.setOnClickListener(clickListener);
+
 		loadingFragmentDialog = new LoadingFragmentDialog();
 
 		return view;
@@ -303,6 +310,21 @@ public class SetupFragment extends Fragment{
 				}else {
 					startKFService();
 				}
+				break;
+			case R.id.setup_ll_mobile:
+				Intent mobileIntent = new Intent(SetupFragment.this.getActivity(), MobileAssitantActivity.class);
+				startActivity(mobileIntent);
+//				MobileHttpManager.getCdr(user._id, new TextHttpResponseHandler() {
+//					@Override
+//					public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
+//						System.out.println("获取cdr失败返回数据:" + s);
+//					}
+//
+//					@Override
+//					public void onSuccess(int i, Header[] headers, String s) {
+//						System.out.println("获取cdr成功返回数据:" + s);
+//					}
+//				});
 				break;
 			}
 		}

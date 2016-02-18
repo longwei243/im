@@ -18,4 +18,12 @@ public class NullUtil {
                 return "";
             }
     }
+
+    public static Integer checkNull(Integer i) {
+        if(i != null) {
+            return i;
+        }else {
+            return -1;
+        }
+    }
 }

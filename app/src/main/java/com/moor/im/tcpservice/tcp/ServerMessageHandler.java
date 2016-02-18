@@ -112,7 +112,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		} else if ("400".equals(result)) {
 			//登录失败，用户名或密码错误
 			//发送登录失败的事件
-			MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "false", 99);
+			MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "false", 9);
 			LoginManager.getInstance(MobileApplication.getInstance()).setIsStoreUsernamePasswordRight(false);
 			EventBus.getDefault().post(LoginEvent.LOGIN_FAILED);
 			SocketManager.getInstance(MobileApplication.getInstance()).setStatus(SocketManagerStatus.CONNECTED);
@@ -120,6 +120,9 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			String connectionid = result.replace("200", "");
 			editor.putString("connecTionId", connectionid + "");
 			editor.commit();
+
+			MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "true", 9);
+
 			//发送登录成功的事件
 			Intent intnet = new Intent("com.moor.im.LOGIN_SUCCESS_FOR_RECEIVER");
 			intnet.putExtra("connecTionId", connectionid + "");

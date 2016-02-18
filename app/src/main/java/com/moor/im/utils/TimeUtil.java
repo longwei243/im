@@ -21,7 +21,7 @@ public class TimeUtil {
 		long dxTime = currentTime - time;
 		if(dxTime < 60 * 1000) {
 			//几秒前
-			str = (int)(dxTime / 1000) + "秒前";
+			str = "刚刚";
 		}else if(60 * 1000 < dxTime && dxTime < 60*60*1000){
 			//几分钟前
 			str = (int)(dxTime / (60*1000)) + "分钟前";
@@ -105,5 +105,19 @@ public class TimeUtil {
 			time = min +"分"+sec;
 		}
 		return time;
+	}
+
+	public static String getShortTime(String time) {
+		String _d= time.substring(0, 10);
+		String _t= time.substring(11,16);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		String now = sdf.format(date);
+		String d = now.substring(0, 10);
+		if(_d.equals(d)) {
+			return _t;
+		}else {
+			return _d;
+		}
 	}
 }

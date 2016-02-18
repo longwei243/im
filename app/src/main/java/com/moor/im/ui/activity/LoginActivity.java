@@ -245,8 +245,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 				myeditor.putInt("loginCount", myPreferences.getInt("loginCount", 0) + 1);
 				myeditor.commit();
 
-				MobileApplication.cacheUtil.put(CacheKey.CACHE_CHANGED_PASSWORD, "true", 99);
-
 				// 跳转到首页
 				Intent main = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(main);

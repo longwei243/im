@@ -389,9 +389,9 @@ public class DialFragment extends BaseLazyFragment {
 		// 回拨
 		LinearLayout mCallReturn = (LinearLayout) myDialogView
 				.findViewById(R.id.call_return_linear);
-		if("zj".equals(user.product)) {
-			mCallReturn.setVisibility(View.GONE);
-		}
+//		if("zj".equals(user.product)) {
+//			mCallReturn.setVisibility(View.GONE);
+//		}
 		mCallReturn.setOnClickListener(new OnClickListener() {
 
 			@Override

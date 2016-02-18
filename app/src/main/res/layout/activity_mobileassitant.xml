@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_48"
+        android:background="@color/maincolor"
+        >
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/ma_viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </android.support.v4.view.ViewPager>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/lightgrey" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="#ffffff"
+            android:orientation="horizontal" >
+            <com.moor.im.ui.view.ChangeColorTabItem
+                android:id="@+id/id_ma_mycall"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:padding="5dp"
+                app:tabicon="@drawable/ic_message_grey600_36dp"
+                app:text="我的通话"
+                app:text_size="12sp" />
+            <com.moor.im.ui.view.ChangeColorTabItem
+                android:id="@+id/id_ma_allcall"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:padding="5dp"
+                app:tabicon="@drawable/ic_perm_identity_grey600_36dp"
+                app:text="所有通话"
+                app:text_size="12sp" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
