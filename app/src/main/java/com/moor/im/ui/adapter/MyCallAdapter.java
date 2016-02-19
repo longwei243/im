@@ -78,7 +78,11 @@ public class MyCallAdapter extends BaseAdapter{
 
         viewHolder.tv_customName.setText(NullUtil.checkNull(maCallLog.customName));
 
-        viewHolder.tv_shortCallTimeLength.setText(NullUtil.checkNull(maCallLog.shortCallTimeLength));
+        if("0秒".equals(NullUtil.checkNull(maCallLog.shortCallTimeLength))) {
+            viewHolder.tv_shortCallTimeLength.setVisibility(View.GONE);
+        }else {
+            viewHolder.tv_shortCallTimeLength.setText(NullUtil.checkNull(maCallLog.shortCallTimeLength));
+        }
         viewHolder.tv_agentDesc.setText(NullUtil.checkNull(maCallLog.agent));
         viewHolder.tv_queueDesc.setText(NullUtil.checkNull(maCallLog.queue));
 

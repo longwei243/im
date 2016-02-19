@@ -71,6 +71,16 @@
     <string name="title_activity_add_gourp">创建群</string>
     <string name="title_activity_gourp">群组</string>
 
+    <string name="mobileAssistant">mobileAssistant</string>
 
+    <string-array name="mycall">
+        <item>全部</item>
+        <item>已接听</item>
+        <item>振铃未接</item>
+        <item>排队放弃</item>
+        <item>已留言</item>
+        <item>IVR</item>
+        <item>黑名单</item>
+    </string-array>
 
 </resources>

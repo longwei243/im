@@ -3,6 +3,67 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_48"
+        android:background="@color/maincolor"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/mycall_tv_hignquery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="高级搜索"
+            android:textSize="14sp"
+            android:textColor="@color/all_white"/>
+
+        <LinearLayout
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/all_white"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+            <EditText
+                android:id="@+id/mycall_et_numquery"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="phone"
+                android:hint="输入主叫或被叫查询"
+                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:paddingLeft="4dp"
+                />
+            <ImageButton
+                android:id="@+id/mycall_ib_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search_grey600_36dp"
+
+                />
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/mycall_sp_quickquery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            />
+
+
+    </LinearLayout>
+
     <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/my_ptl"
         android:layout_width="match_parent"

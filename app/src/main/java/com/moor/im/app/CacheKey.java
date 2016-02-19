@@ -30,4 +30,8 @@ public class CacheKey {
 	 * 技能组缓存
 	 */
 	public static final String CACHE_MAQueue = "cache_maqueue";
+	/**
+	 * 我的通话查询条件缓存
+	 */
+	public static final String CACHE_MyCallQueryData = "cache_myCallQueryData";
 }
