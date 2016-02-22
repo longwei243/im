@@ -67,6 +67,7 @@ import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Discussion;
 import com.moor.im.model.entity.Group;
 import com.moor.im.model.entity.MAAgent;
+import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.MAQueue;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
@@ -254,6 +255,10 @@ public class MainActivity extends FragmentActivity implements
 		if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null) {
 			MobileHttpManager.getQueueCache(user._id, new GetQueueResponseHandler());
 		}
+
+		if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
+			MobileHttpManager.getOptionCache(user._id, new GetOptionResponseHandler());
+		}
 	}
 
 	class GetAgentResponseHandler extends TextHttpResponseHandler {
@@ -302,6 +307,30 @@ public class MainActivity extends FragmentActivity implements
 				}
 			}
 		}
+
+	class GetOptionResponseHandler extends TextHttpResponseHandler {
+		@Override
+		public void onFailure(int statusCode, Header[] headers,
+							  String responseString, Throwable throwable) {
+		}
+
+		@Override
+		public void onSuccess(int statusCode, Header[] headers,
+							  String responseString) {
+			try {
+				JSONObject o = new JSONObject(responseString);
+				if(o.getBoolean("success")) {
+					List<MAOption> options = MobileAssitantParser.getOptions(responseString);
+					HashMap<String, MAOption> optionDatas = MobileAssitantParser.transformOptionData(options);
+					MobileApplication.cacheUtil.put(CacheKey.CACHE_MAOption, optionDatas);
+					System.out.println("options数据缓存了");
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	protected void onResume() {

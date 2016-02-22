@@ -19,26 +19,6 @@ import java.util.Map;
 public class MobileHttpManager {
 
     /**
-     * 获取我的通话记录
-     */
-    public static void getCdr(String sessionId,
-                              ResponseHandlerInterface responseHandler) {
-
-        AsyncHttpClient httpclient = MobileApplication.httpclient;
-        JSONObject json = new JSONObject();
-        try {
-            json.put("sessionId", Utils.replaceBlank(sessionId));
-            json.put("action", "mobileAssistant.getCdr");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        RequestParams params = new RequestParams();
-        params.add("data", json + "");
-        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
-    }
-
-    /**
      * 获取通话记录
      */
     public static void queryCdr(String sessionId, HashMap<String, String> datas,
@@ -94,6 +74,27 @@ public class MobileHttpManager {
             json.put("sessionId", Utils.replaceBlank(sessionId));
             json.put("action", "common.getDicCache");
             json.put("type", "queues");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取技能组缓存
+     */
+    public static void getOptionCache(String sessionId,
+                                     ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "common.getDicCache");
+            json.put("type", "options");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

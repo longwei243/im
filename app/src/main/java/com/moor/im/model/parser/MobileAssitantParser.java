@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MACallLog;
 import com.moor.im.model.entity.MACallLogData;
+import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.MAQueue;
 import com.moor.im.utils.MobileAssitantCache;
 import com.moor.im.utils.NullUtil;
@@ -180,5 +181,41 @@ public class MobileAssitantParser {
             }
         }
         return queueDatas;
+    }
+
+    /**
+     * 解析option
+     * @param responseString
+     * @return
+     */
+    public static List<MAOption> getOptions(String responseString) {
+        List<MAOption> options = new ArrayList<>();
+
+        try {
+            JSONObject o = new JSONObject(responseString);
+            if(o.getBoolean("success")) {
+                JSONArray o1 = o.getJSONArray("data");
+
+                Gson gson = new Gson();
+                // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+                options = gson.fromJson(o1.toString(),
+                        new TypeToken<List<MAOption>>() {
+                        }.getType());
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return options;
+    }
+
+    public static HashMap<String, MAOption> transformOptionData(List<MAOption> options) {
+        HashMap<String, MAOption> optionDatas = new HashMap<>();
+        if(options != null) {
+            for(int i=0; i<options.size(); i++) {
+                optionDatas.put(options.get(i).name, options.get(i));
+            }
+        }
+        return optionDatas;
     }
 }

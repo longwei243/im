@@ -37,6 +37,7 @@ import com.moor.im.ui.adapter.MyCallAdapter;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshBase;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshListView;
+import com.moor.im.utils.CacheUtils;
 
 import org.apache.http.Header;
 
@@ -110,7 +111,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "number");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                     loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
                 } else {
                     Toast.makeText(getActivity(), "请输入号码后查询", Toast.LENGTH_SHORT).show();
@@ -156,7 +157,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }else if(position == 2) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
@@ -164,7 +165,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }else if(position == 3) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
@@ -172,7 +173,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }else if(position == 4) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
@@ -180,7 +181,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }else if(position == 5) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
@@ -188,7 +189,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }else if(position == 6) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
@@ -196,7 +197,7 @@ public class MyCallFragment extends Fragment{
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                 }
                 loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
             }
@@ -362,7 +363,7 @@ public class MyCallFragment extends Fragment{
                 MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                 myCallEditor.putString(MYCALLQUERYTYPE, "high");
                 myCallEditor.commit();
-                MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas);
+                MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
             }
         }
     }

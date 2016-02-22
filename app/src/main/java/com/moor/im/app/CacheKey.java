@@ -31,6 +31,10 @@ public class CacheKey {
 	 */
 	public static final String CACHE_MAQueue = "cache_maqueue";
 	/**
+	 * option缓存
+	 */
+	public static final String CACHE_MAOption = "cache_option";
+	/**
 	 * 我的通话查询条件缓存
 	 */
 	public static final String CACHE_MyCallQueryData = "cache_myCallQueryData";
