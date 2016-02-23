@@ -1,6 +1,8 @@
 package com.moor.im.ui.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +12,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.moor.im.R;
 import com.moor.im.app.CacheKey;
@@ -25,8 +29,11 @@ import com.moor.im.model.entity.QueryData;
 import com.moor.im.ui.adapter.SPAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -37,10 +44,12 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
     private EditText mycall_high_query_et_CALL_NO, mycall_high_query_et_CALLED_NO,
             mycall_high_query_et_CALL_TIME_LENGTH_BEGIN, mycall_high_query_et_CALL_TIME_LENGTH_END;
 
+    private EditText mycall_high_query_et_BEGIN_TIME, mycall_high_query_et_END_TIME;
     private Button mycall_high_query_btn_reset, mycall_high_query_btn_confirm;
 
     private Spinner mycall_high_query_sp_CONNECT_TYPE, mycall_high_query_sp_STATUS,mycall_high_query_sp_CUSTOMER_NAME,
             mycall_high_query_sp_DISPOSAL_AGENT, mycall_high_query_sp_ERROR_MEMO, mycall_high_query_sp_INVESTIGATE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +149,11 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
         }
         SPAdapter investigateAdapter = new SPAdapter(MYCallHighQueryActivity.this, investigateDatas);
         mycall_high_query_sp_INVESTIGATE.setAdapter(investigateAdapter);
+
+        mycall_high_query_et_BEGIN_TIME = (EditText) findViewById(R.id.mycall_high_query_et_BEGIN_TIME);
+        mycall_high_query_et_BEGIN_TIME.setOnClickListener(this);
+        mycall_high_query_et_END_TIME = (EditText) findViewById(R.id.mycall_high_query_et_END_TIME);
+        mycall_high_query_et_END_TIME.setOnClickListener(this);
     }
 
     private void initConnectTypeDatas(List<QueryData> connectTypeDatas) {
@@ -227,7 +241,143 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
             case R.id.mycall_high_query_btn_confirm:
                 submitQuery();
                 break;
+            case R.id.mycall_high_query_et_BEGIN_TIME:
+                showBeginDatePiker();
+                break;
+            case R.id.mycall_high_query_et_END_TIME:
+                showEndDatePiker();
+                break;
         }
+    }
+
+    private void showBeginDatePiker() {
+        Calendar d = Calendar.getInstance(Locale.CHINA);
+        //创建一个日历引用d，通过静态方法getInstance() 从指定时区 Locale.CHINA 获得一个日期实例
+        Date myDate = new Date();
+        //创建一个Date实例
+        d.setTime(myDate);
+        //设置日历的时间，把一个新建Date实例myDate传入
+        int year = d.get(Calendar.YEAR);
+        int month = d.get(Calendar.MONTH);
+        int day = d.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dpd = new DatePickerDialog(MYCallHighQueryActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String monthStr  = "";
+                if((monthOfYear+1) < 10) {
+                    monthStr = "0"+(monthOfYear+1);
+                }else {
+                    monthStr = (monthOfYear+1) + "";
+                }
+                String dayStr  = "";
+                if(dayOfMonth < 10) {
+                    dayStr = "0"+dayOfMonth;
+                }else {
+                    dayStr = dayOfMonth + "";
+                }
+                final String data = year+"-"+monthStr+"-"+dayStr;
+                Calendar d = Calendar.getInstance(Locale.CHINA);
+                int hour = d.get(Calendar.HOUR_OF_DAY);
+                int minute = d.get(Calendar.MINUTE);
+                TimePickerDialog tpd = new TimePickerDialog(MYCallHighQueryActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String hourStr  = "";
+                        if(hourOfDay < 10) {
+                            hourStr = "0"+hourOfDay;
+                        }else {
+                            hourStr = hourOfDay + "";
+                        }
+                        String minuteStr  = "";
+                        if(minute < 10) {
+                            minuteStr = "0"+minute;
+                        }else {
+                            minuteStr = minute + "";
+                        }
+                        String time = hourStr + ":" + minuteStr;
+                        String result = data + " " + time;
+                        mycall_high_query_et_BEGIN_TIME.setText(result);
+                    }
+                }, hour, minute, true) {
+                    @Override
+                    protected void onStop() {
+//                        super.onStop();
+                    }
+                };
+                tpd.show();
+            }
+        }, year, month, day) {
+            @Override
+            protected void onStop() {
+//                super.onStop();
+            }
+        };
+        dpd.show();
+    }
+
+    private void showEndDatePiker() {
+        Calendar d = Calendar.getInstance(Locale.CHINA);
+        //创建一个日历引用d，通过静态方法getInstance() 从指定时区 Locale.CHINA 获得一个日期实例
+        Date myDate = new Date();
+        //创建一个Date实例
+        d.setTime(myDate);
+        //设置日历的时间，把一个新建Date实例myDate传入
+        int year = d.get(Calendar.YEAR);
+        int month = d.get(Calendar.MONTH);
+        int day = d.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dpd = new DatePickerDialog(MYCallHighQueryActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String monthStr  = "";
+                if((monthOfYear+1) < 10) {
+                    monthStr = "0"+(monthOfYear+1);
+                }else {
+                    monthStr = (monthOfYear+1) + "";
+                }
+                String dayStr  = "";
+                if(dayOfMonth < 10) {
+                    dayStr = "0"+dayOfMonth;
+                }else {
+                    dayStr = dayOfMonth + "";
+                }
+                final String data = year+"-"+monthStr+"-"+dayStr;
+                Calendar d = Calendar.getInstance(Locale.CHINA);
+                int hour = d.get(Calendar.HOUR_OF_DAY);
+                int minute = d.get(Calendar.MINUTE);
+                TimePickerDialog tpd = new TimePickerDialog(MYCallHighQueryActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String hourStr  = "";
+                        if(hourOfDay < 10) {
+                            hourStr = "0"+hourOfDay;
+                        }else {
+                            hourStr = hourOfDay + "";
+                        }
+                        String minuteStr  = "";
+                        if(minute < 10) {
+                            minuteStr = "0"+minute;
+                        }else {
+                            minuteStr = minute + "";
+                        }
+                        String time = hourStr + ":" + minuteStr;
+                        String result = data + " " + time;
+                        mycall_high_query_et_END_TIME.setText(result);
+                    }
+                }, hour, minute, true) {
+                    @Override
+                    protected void onStop() {
+//                        super.onStop();
+                    }
+                };
+                tpd.show();
+            }
+        }, year, month, day) {
+            @Override
+            protected void onStop() {
+//                super.onStop();
+            }
+        };
+        dpd.show();
     }
 
     private void resetAllView() {
@@ -235,6 +385,16 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
         mycall_high_query_et_CALLED_NO.setText("");
         mycall_high_query_et_CALL_TIME_LENGTH_BEGIN.setText("");
         mycall_high_query_et_CALL_TIME_LENGTH_END.setText("");
+
+        mycall_high_query_et_BEGIN_TIME.setText("");
+        mycall_high_query_et_END_TIME.setText("");
+
+        mycall_high_query_sp_CONNECT_TYPE.setSelection(0);
+        mycall_high_query_sp_STATUS.setSelection(0);
+//        mycall_high_query_sp_DISPOSAL_AGENT.setSelection(0);
+        mycall_high_query_sp_ERROR_MEMO.setSelection(0);
+        mycall_high_query_sp_INVESTIGATE.setSelection(0);
+        mycall_high_query_sp_CUSTOMER_NAME.setSelection(0);
     }
 
     private void submitQuery() {
@@ -297,6 +457,16 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
             if(!"".equals(customerqueryData.getValue())) {
                 datas.put("CUSTOMER_NAME", customerqueryData.getValue());
             }
+        }
+
+        String beginData = mycall_high_query_et_BEGIN_TIME.getText().toString();
+        if(!"".equals(beginData)) {
+            datas.put("BEGIN_TIME", beginData);
+        }
+
+        String endData = mycall_high_query_et_END_TIME.getText().toString();
+        if(!"".equals(endData)) {
+            datas.put("END_TIME", endData);
         }
 
         Intent dataIntent = new Intent();

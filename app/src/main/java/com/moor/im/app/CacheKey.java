@@ -38,4 +38,8 @@ public class CacheKey {
 	 * 我的通话查询条件缓存
 	 */
 	public static final String CACHE_MyCallQueryData = "cache_myCallQueryData";
+	/**
+	 * 所有通话查询条件缓存
+	 */
+	public static final String CACHE_AllCallQueryData = "cache_allCallQueryData";
 }

@@ -74,6 +74,7 @@
     <string name="mobileAssistant">mobileAssistant</string>
 
     <string-array name="mycall">
+        <item>快速查询</item>
         <item>全部</item>
         <item>已接听</item>
         <item>振铃未接</item>

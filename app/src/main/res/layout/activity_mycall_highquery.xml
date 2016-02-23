@@ -62,6 +62,7 @@
                         android:id="@+id/mycall_high_query_et_CALL_NO"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:inputType="phone"
                         />
                 </LinearLayout>
@@ -80,6 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
+                        android:singleLine="true"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -260,6 +262,7 @@
                         android:layout_toLeftOf="@id/tv_zhi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:editable="false"
                         android:layout_alignParentLeft="true"/>
 
                     <EditText
@@ -267,6 +270,7 @@
                         android:layout_toRightOf="@id/tv_zhi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:editable="false"
                         android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -303,6 +307,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:singleLine="true"
                         android:layout_alignParentLeft="true"/>
 
                     <EditText
@@ -311,6 +316,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:singleLine="true"
                         android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>

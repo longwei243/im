@@ -14,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +24,13 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
-import com.moor.im.db.dao.ContactsDao;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.MobileHttpManager;
-import com.moor.im.model.entity.MACallLog;
+import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MACallLogData;
+import com.moor.im.model.entity.MAOption;
+import com.moor.im.model.entity.MAQueue;
+import com.moor.im.model.entity.Option;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.model.parser.MobileAssitantParser;
@@ -38,10 +40,9 @@ import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshBase;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshListView;
 import com.moor.im.utils.CacheUtils;
+import com.moor.im.utils.MobileAssitantCache;
 
 import org.apache.http.Header;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,14 +74,18 @@ public class MyCallFragment extends Fragment{
     private SharedPreferences myCallSp;
     private SharedPreferences.Editor myCallEditor;
 
+    private TextView mycall_tv_queryitem;
+    private ImageView mycall_btn_queryitem;
+    private RelativeLayout mycall_rl_queryitem;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_mycall, null);
         myCallSp = getActivity().getSharedPreferences(getResources().getString(R.string.mobileAssistant), 0);
         myCallEditor = myCallSp.edit();
-//        myCallEditor.clear();
-//        myCallEditor.commit();
+        myCallEditor.clear();
+        myCallEditor.commit();
         initViews(view);
         return view;
     }
@@ -113,6 +118,7 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
                     loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getActivity(), "请输入号码后查询", Toast.LENGTH_SHORT).show();
                 }
@@ -144,13 +150,15 @@ public class MyCallFragment extends Fragment{
         mycall_sp_quickquery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0) {
+                if (position == 1) {
                     myCallEditor.clear();
                     myCallEditor.commit();
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
-                }else if(position == 1) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 2) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "dealing");
@@ -158,7 +166,9 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                }else if(position == 2) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 3) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "notDeal");
@@ -166,7 +176,9 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                }else if(position == 3) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 4) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "queueLeak");
@@ -174,7 +186,9 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                }else if(position == 4) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 5) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "voicemail");
@@ -182,7 +196,9 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                }else if(position == 5) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 6) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "leak");
@@ -190,7 +206,9 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                }else if(position == 6) {
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
+                } else if (position == 7) {
                     HashMap<String, String> datas = new HashMap<>();
                     datas.put("DISPOSAL_AGENT", user._id);
                     datas.put("STATUS", "blackList");
@@ -198,8 +216,10 @@ public class MyCallFragment extends Fragment{
                     myCallEditor.putString(MYCALLQUERYTYPE, "quick");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
+                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    mycall_rl_queryitem.setVisibility(View.GONE);
                 }
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+
             }
 
             @Override
@@ -207,6 +227,28 @@ public class MyCallFragment extends Fragment{
 
             }
         });
+
+        mycall_rl_queryitem = (RelativeLayout) view.findViewById(R.id.mycall_rl_queryitem);
+        mycall_tv_queryitem = (TextView) view.findViewById(R.id.mycall_tv_queryitem);
+        mycall_btn_queryitem = (ImageView) view.findViewById(R.id.mycall_btn_queryitem);
+        mycall_btn_queryitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mycall_rl_queryitem.setVisibility(View.GONE);
+                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                myCallEditor.clear();
+                myCallEditor.commit();
+                HashMap<String, String> datas = new HashMap<>();
+                datas.put("DISPOSAL_AGENT", user._id);
+                MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
+
+            }
+        });
+
+        HashMap<String, String> datas = new HashMap<>();
+        datas.put("DISPOSAL_AGENT", user._id);
+        MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
 
     }
 
@@ -358,7 +400,10 @@ public class MyCallFragment extends Fragment{
         if(requestCode == 0x999 && resultCode == Activity.RESULT_OK) {
             if(data.getSerializableExtra("highQueryData") != null) {
                 loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                mycall_sp_quickquery.setSelection(0);
                 HashMap<String, String> datas = (HashMap<String, String>) data.getSerializableExtra("highQueryData");
+                //显示查询的条件
+                showQueryItem(datas);
                 datas.put("DISPOSAL_AGENT", user._id);
                 MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
                 myCallEditor.putString(MYCALLQUERYTYPE, "high");
@@ -366,5 +411,81 @@ public class MyCallFragment extends Fragment{
                 MobileApplication.cacheUtil.put(CacheKey.CACHE_MyCallQueryData, datas, CacheUtils.TIME_HOUR * 2);
             }
         }
+    }
+
+    private void showQueryItem(HashMap<String, String> datas) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("查询条件:");
+        for(String key : datas.keySet()) {
+            sb.append(" ");
+            if("CONNECT_TYPE".equals(key)) {
+                String connectType = "";
+                if("normal".equals(datas.get(key))) {
+                    connectType = "普通来电";
+                }else if("normal".equals(datas.get(key))) {
+                    connectType = "外呼去电";
+                }else if("transfer".equals(datas.get(key))) {
+                    connectType = "来电转接";
+                }else if("dialTransfer".equals(datas.get(key))) {
+                    connectType = "外呼转接";
+                }
+                sb.append(connectType);
+                continue;
+            }
+            if("STATUS".equals(key)) {
+                String status = "";
+                if("leak".equals(datas.get(key))) {
+                    status = "IVR";
+                }else if("dealing".equals(datas.get(key))) {
+                    status = "已接听";
+                }else if("notDeal".equals(datas.get(key))) {
+                    status = "振铃未接听";
+                }else if("queueLeak".equals(datas.get(key))) {
+                    status = "排队放弃";
+                }else if("voicemail".equals(datas.get(key))) {
+                    status = "已留言";
+                }else if("blackList".equals(datas.get(key))) {
+                    status = "黑名单";
+                }
+                sb.append(status);
+                continue;
+            }
+
+            if("DISPOSAL_AGENT".equals(key)) {
+                MAAgent agent = MobileAssitantCache.getInstance().getAgentById(datas.get(key));
+                String agentName = agent.displayName;
+                sb.append(agentName);
+                continue;
+            }
+
+            if("ERROR_MEMO".equals(key)) {
+                MAQueue queue = MobileAssitantCache.getInstance().getQueueByExten(datas.get(key));
+                String queueName = queue.DisplayName;
+                sb.append(queueName);
+                continue;
+            }
+
+            if("INVESTIGATE".equals(key)) {
+                if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
+                    HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
+                    for(String optionKey : optionMap.keySet()) {
+                        if("满意度调查选项".equals(optionKey)) {
+                            List<Option> investigates = optionMap.get(optionKey).options;
+                            for(int i=0; i<investigates.size(); i++) {
+                                if(datas.get(key).equals(investigates.get(i).options.get(0).name)) {
+                                    String investigateName = investigates.get(i).name;
+                                    sb.append(investigateName);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                continue;
+            }
+            sb.append(datas.get(key));
+        }
+        mycall_rl_queryitem.setVisibility(View.VISIBLE);
+        mycall_tv_queryitem.setText(sb.toString());
     }
 }

@@ -1,11 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/allcall_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_48"
+        android:background="@color/maincolor"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/allcall_tv_hignquery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="高级搜索"
+            android:textSize="14sp"
+            android:textColor="@color/all_white"/>
+
+        <LinearLayout
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/all_white"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+            <EditText
+                android:id="@+id/allcall_et_numquery"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="phone"
+                android:hint="输入主叫或被叫查询"
+                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:paddingLeft="4dp"
+                />
+            <ImageButton
+                android:id="@+id/allcall_ib_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search_grey600_36dp"
+
+                />
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/allcall_sp_quickquery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            />
+
+
+    </LinearLayout>
+
+    <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
+        android:layout_below="@id/allcall_ll_title"
+        android:id="@+id/all_ptl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#19000000"
+        android:dividerHeight="1dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true" />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/allcall_rl_queryitem"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="all call"
-        android:id="@+id/textView" />
-</LinearLayout>
+        android:background="@color/halftrans"
+        >
+        <ImageView
+            android:id="@+id/allcall_btn_queryitem"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_clear_white_36dp"/>
+        <TextView
+            android:layout_toLeftOf="@id/allcall_btn_queryitem"
+            android:id="@+id/allcall_tv_queryitem"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/all_white"/>
+    </RelativeLayout>
+</RelativeLayout>
