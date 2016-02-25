@@ -35,6 +35,7 @@ import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.model.parser.MobileAssitantParser;
 import com.moor.im.ui.activity.AllCallHighQueryActivity;
+import com.moor.im.ui.activity.MACallDetailActivity;
 import com.moor.im.ui.adapter.MyCallAdapter;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshBase;
@@ -311,6 +312,17 @@ public class AllCallFragment extends Fragment{
             }
 
             page = 2;
+            mPullRefreshListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    MACallLogData maCallLogData = (MACallLogData) parent.getAdapter().getItem(position);
+                    if (maCallLogData != null) {
+                        Intent intent = new Intent(getActivity(), MACallDetailActivity.class);
+                        intent.putExtra("calllogdata", maCallLogData);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 

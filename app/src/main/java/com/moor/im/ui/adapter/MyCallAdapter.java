@@ -81,6 +81,7 @@ public class MyCallAdapter extends BaseAdapter{
         if("0秒".equals(NullUtil.checkNull(maCallLog.shortCallTimeLength))) {
             viewHolder.tv_shortCallTimeLength.setVisibility(View.GONE);
         }else {
+            viewHolder.tv_shortCallTimeLength.setVisibility(View.VISIBLE);
             viewHolder.tv_shortCallTimeLength.setText(NullUtil.checkNull(maCallLog.shortCallTimeLength));
         }
         viewHolder.tv_agentDesc.setText(NullUtil.checkNull(maCallLog.agent));

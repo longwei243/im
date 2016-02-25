@@ -39,5 +39,6 @@ public class MACallLog {
         public String DISTRICT;
         public String DISTRICT_CODE;
         public int CALL_TIME_LENGTH;
+        public String INVESTIGATE;
 
 }

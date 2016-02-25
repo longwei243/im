@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/all_black"
+    android:id="@+id/mp3player_rl"
+    >
+
+    <ImageView
+        android:layout_marginLeft="4dp"
+        android:id="@+id/mp3player_iv_play"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play_arrow_white_36dp"
+        />
+    <TextView
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/mp3player_tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/all_white"
+        android:text="0:0"/>
+    <SeekBar
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@id/mp3player_tv_time"
+        android:layout_toRightOf="@id/mp3player_iv_play"
+        android:id="@+id/mp3player_seekbar"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

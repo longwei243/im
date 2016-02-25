@@ -297,6 +297,10 @@
             android:name=".ui.activity.AllCallHighQueryActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.activity.MACallDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <receiver
             android:name=".receiver.NetWorkReceiver"

@@ -4,11 +4,15 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.moor.im.app.CacheKey;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MACallLog;
 import com.moor.im.model.entity.MACallLogData;
 import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.MAQueue;
+import com.moor.im.model.entity.Option;
+import com.moor.im.model.entity.QueryData;
 import com.moor.im.utils.MobileAssitantCache;
 import com.moor.im.utils.NullUtil;
 import com.moor.im.utils.TimeUtil;
@@ -54,6 +58,8 @@ public class MobileAssitantParser {
                     dialType="inbound";
                 }
                 maCallLogData.callNo = callNo;
+                maCallLogData.CALLED_NO = maCallLog.CALLED_NO;
+                maCallLogData.CALL_NO = maCallLog.CALL_NO;
                 maCallLogData.dialType = dialType;
                 String city = (NullUtil.checkNull(maCallLog.PROVINCE).equals(NullUtil.checkNull(maCallLog.DISTRICT)))?NullUtil.checkNull(maCallLog.PROVINCE):NullUtil.checkNull(maCallLog.PROVINCE)+"-"+NullUtil.checkNull(maCallLog.DISTRICT);
                 city = "["+city+"]";
@@ -99,6 +105,30 @@ public class MobileAssitantParser {
                     cls="success";
                 }
                 maCallLogData.statusClass=cls;
+
+
+                maCallLogData.PROVINCE=maCallLog.PROVINCE;
+                maCallLogData.DISTRICT=maCallLog.DISTRICT;
+                maCallLogData.OFFERING_TIME=maCallLog.OFFERING_TIME;
+                maCallLogData.BEGIN_TIME=maCallLog.BEGIN_TIME;
+                maCallLogData.FILE_SERVER=maCallLog.FILE_SERVER;
+                maCallLogData.RECORD_FILE_NAME=maCallLog.RECORD_FILE_NAME;
+
+                if(maCallLog.INVESTIGATE != null) {
+                    if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
+                        HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
+                        for(String key : optionMap.keySet()) {
+                            if("满意度调查选项".equals(key)) {
+                                List<Option> investigates = optionMap.get(key).options;
+                                for(int m=0; m<investigates.size(); m++) {
+                                    maCallLogData.INVESTIGATE = investigates.get(m).name;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
 
                 maCallLogDatas.add(maCallLogData);
 
