@@ -47,7 +47,7 @@ public class MACallDetailActivity extends Activity{
             mycalldetail_tv_statusdesc, mycalldetail_tv_agent,mycalldetail_tv_queue,
             mycalldetail_tv_status;
 
-    private ImageView mycalldetail_iv_status;
+    private ImageView mycalldetail_iv_status, title_btn_back;
 
     private Button mycalldetail_btn_call;
 
@@ -104,6 +104,14 @@ public class MACallDetailActivity extends Activity{
 
         mycalldetail_mp3player = (MP3PlayerView) findViewById(R.id.mycalldetail_mp3player);
         mycalldetail_btn_call = (Button) findViewById(R.id.mycalldetail_btn_call);
+
+        title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
+        title_btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
     }

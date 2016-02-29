@@ -6,8 +6,8 @@
     <LinearLayout
         android:id="@+id/allcall_ll_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin_48"
-        android:background="@color/maincolor"
+        android:layout_height="@dimen/margin_40"
+        android:background="@color/halftrans"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         >
@@ -23,8 +23,8 @@
             android:textColor="@color/all_white"/>
 
         <LinearLayout
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -42,6 +42,7 @@
                 android:singleLine="true"
                 android:inputType="phone"
                 android:hint="输入主叫或被叫查询"
+                android:layout_gravity="center"
                 android:textSize="14sp"
                 android:textColor="@color/grey"
                 android:paddingLeft="4dp"
@@ -59,7 +60,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:background="@drawable/spinner_bg"
             />
 
 

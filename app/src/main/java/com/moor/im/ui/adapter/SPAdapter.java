@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.moor.im.R;
@@ -44,10 +45,19 @@ public class SPAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        convertView = LayoutInflater.from(context).inflate(R.layout.spinner_simple_layout,
+                parent, false);
+        TextView tv_name = (TextView) convertView.findViewById(R.id.spinner_simple_label);
+        tv_name.setText(datas.get(position).getName());
+        return convertView;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if(convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.spinner_item_layout,
-                    null);
+                    parent, false);
             holder = new ViewHolder();
             holder.tv_name = (TextView) convertView.findViewById(R.id.spinner_item_label);
 

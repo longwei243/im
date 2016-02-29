@@ -44,6 +44,9 @@ import com.moor.im.utils.CacheUtils;
 import com.moor.im.utils.MobileAssitantCache;
 
 import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -246,11 +249,107 @@ public class MyCallFragment extends Fragment{
             }
         });
 
-        HashMap<String, String> datas = new HashMap<>();
-        datas.put("DISPOSAL_AGENT", user._id);
-        MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
-        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        initCache();
+    }
 
+    /**
+     * 初始化缓存
+     */
+    private void initCache() {
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
+            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+            MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
+        }else {
+            HashMap<String, String> datas = new HashMap<>();
+            datas.put("DISPOSAL_AGENT", user._id);
+            MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
+            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        }
+    }
+
+    class GetAgentResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAAgent> agents = MobileAssitantParser.getAgents(responseString);
+                    HashMap<String, MAAgent> agentDatas = MobileAssitantParser.transformAgentData(agents);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAAgent, agentDatas, CacheUtils.TIME_DAY);
+                    //缓存坐席数据
+                    MobileHttpManager.getQueueCache(user._id, new GetQueueResponseHandler());
+
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetQueueResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAQueue> queues = MobileAssitantParser.getQueues(responseString);
+                    HashMap<String, MAQueue> queueDatas = MobileAssitantParser.transformQueueData(queues);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAQueue, queueDatas, CacheUtils.TIME_DAY);
+                    //缓存option数据
+                    MobileHttpManager.getOptionCache(user._id, new GetOptionResponseHandler());
+
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetOptionResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAOption> options = MobileAssitantParser.getOptions(responseString);
+                    HashMap<String, MAOption> optionDatas = MobileAssitantParser.transformOptionData(options);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAOption, optionDatas, CacheUtils.TIME_DAY);
+                    //请求列表数据
+                    HashMap<String, String> datas = new HashMap<>();
+                    datas.put("DISPOSAL_AGENT", user._id);
+                    MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     class QueryCdrResponseHandler extends TextHttpResponseHandler {

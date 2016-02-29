@@ -84,7 +84,7 @@ public class MobileHttpManager {
     }
 
     /**
-     * 获取技能组缓存
+     * 获取缓存
      */
     public static void getOptionCache(String sessionId,
                                      ResponseHandlerInterface responseHandler) {

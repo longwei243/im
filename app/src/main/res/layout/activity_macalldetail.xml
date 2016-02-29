@@ -61,6 +61,7 @@
                     android:layout_centerVertical="true"
                     />
                 <TextView
+                    android:visibility="gone"
                     android:layout_toRightOf="@id/mycalldetail_iv_status"
                     android:layout_marginLeft="8dp"
                     android:layout_centerVertical="true"
@@ -74,7 +75,7 @@
 
                     <com.moor.im.ui.view.MP3PlayerView
                         android:visibility="gone"
-                        android:layout_toRightOf="@id/mycalldetail_tv_status"
+                        android:layout_toRightOf="@id/mycalldetail_iv_status"
                         android:id="@+id/mycalldetail_mp3player"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
@@ -83,71 +84,57 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@color/all_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 >
-
-                <View
-                    android:id="@+id/split_view"
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/grey"
-                    />
-                <RelativeLayout
+                <TextView
                     android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/split_view"
-                    android:layout_width="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:id="@+id/mycalldetail_tv_zhu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/all_black"
-                        android:textSize="18sp"
-                        android:text="主叫"/>
-                    <TextView
-                        android:id="@+id/mycalldetail_tv_callno"
-                        android:layout_toRightOf="@id/mycalldetail_tv_zhu"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey"
-                        android:textSize="18sp"
-                        android:text="12345"/>
-                </RelativeLayout>
-                <RelativeLayout
+                    android:textColor="@color/all_black"
+                    android:textSize="18sp"
+                    android:text="主叫号码"/>
+                <TextView
+                    android:id="@+id/mycalldetail_tv_callno"
                     android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@id/split_view"
-                    android:layout_width="match_parent"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:id="@+id/mycalldetail_tv_bei"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/all_black"
-                        android:textSize="18sp"
-                        android:text="被叫"/>
-                    <TextView
-                        android:id="@+id/mycalldetail_tv_calledno"
-                        android:layout_toRightOf="@id/mycalldetail_tv_bei"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey"
-                        android:textSize="18sp"
-                        android:text="7890"/>
-                </RelativeLayout>
+                    android:textColor="@color/grey"
+                    android:textSize="18sp"
+                    />
             </RelativeLayout>
-
+            <RelativeLayout
+                android:layout_marginTop="1dp"
+                android:background="@color/all_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/all_black"
+                    android:textSize="18sp"
+                    android:text="被叫号码"/>
+                <TextView
+                    android:id="@+id/mycalldetail_tv_calledno"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:textSize="18sp"
+                    />
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_marginTop="16dp"
                 android:background="@color/all_white"
@@ -392,6 +379,8 @@
                 android:id="@+id/mycalldetail_btn_call"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/login_btn_selector"
                 android:textColor="@color/all_white"
                 android:text="拨号"/>

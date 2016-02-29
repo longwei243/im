@@ -35,6 +35,12 @@ public class MobileAssitantActivity extends FragmentActivity implements
         setContentView(R.layout.activity_mobileassitant);
 
         mViewPager = (ViewPager) findViewById(R.id.ma_viewpager);
+        findViewById(R.id.chat_btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         initDatas();
 

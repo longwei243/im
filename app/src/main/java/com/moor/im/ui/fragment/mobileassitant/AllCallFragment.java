@@ -37,6 +37,7 @@ import com.moor.im.model.parser.MobileAssitantParser;
 import com.moor.im.ui.activity.AllCallHighQueryActivity;
 import com.moor.im.ui.activity.MACallDetailActivity;
 import com.moor.im.ui.adapter.MyCallAdapter;
+import com.moor.im.ui.base.BaseLazyFragment;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshBase;
 import com.moor.im.ui.view.pulltorefresh.PullToRefreshListView;
@@ -51,7 +52,7 @@ import java.util.List;
 /**
  * Created by longwei on 2016/2/17.
  */
-public class AllCallFragment extends Fragment{
+public class AllCallFragment extends BaseLazyFragment{
     private static final String ALLCALLQUERYTYPE = "allCallQueryType";
 
     private List<MACallLogData> maCallLogs;
@@ -87,8 +88,13 @@ public class AllCallFragment extends Fragment{
         allCallEditor = allCallSp.edit();
         allCallEditor.clear();
         allCallEditor.commit();
-        initViews(view);
+
         return view;
+    }
+
+    @Override
+    public void onFirstUserVisible() {
+        initViews(view);
     }
 
     private void initViews(View view) {

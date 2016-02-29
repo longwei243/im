@@ -54,8 +54,10 @@
                     android:layout_weight="1"
                     >
                     <TextView
+                        android:layout_marginLeft="16dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:text="主叫"
                         />
                     <EditText
@@ -74,6 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:text="被叫"
                         />
                     <EditText
@@ -82,6 +85,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:singleLine="true"
+                        android:layout_marginRight="16dp"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -96,17 +100,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="呼叫类型"/>
 
                 <Spinner
+
                     android:id="@+id/mycall_high_query_sp_CONNECT_TYPE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -120,10 +132,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="处理状态"/>
 
                 <Spinner
@@ -131,6 +146,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -145,17 +164,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="坐席"/>
 
                 <Spinner
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:id="@+id/mycall_high_query_sp_DISPOSAL_AGENT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -169,17 +195,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="技能组"/>
 
                 <Spinner
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:id="@+id/mycall_high_query_sp_ERROR_MEMO"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -193,17 +226,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="满意度"/>
 
                 <Spinner
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:id="@+id/mycall_high_query_sp_INVESTIGATE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -217,17 +257,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 >
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="定位客户"/>
 
                 <Spinner
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:id="@+id/mycall_high_query_sp_CUSTOMER_NAME"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/mycall"
+                    android:background="@null"
                     />
             </LinearLayout>
 
@@ -242,9 +289,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="呼叫时间"
+                    android:textSize="16sp"
                     />
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -263,6 +312,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
+                        android:singleLine="true"
+                        android:layout_marginLeft="16dp"
                         android:layout_alignParentLeft="true"/>
 
                     <EditText
@@ -270,7 +321,9 @@
                         android:layout_toRightOf="@id/tv_zhi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:editable="false"
+                        android:layout_marginRight="16dp"
                         android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -286,9 +339,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="通话时长"
+                    android:textSize="16sp"
                     />
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -302,14 +357,16 @@
                         />
 
                     <EditText
+                        android:layout_marginLeft="16dp"
                         android:id="@+id/mycall_high_query_et_CALL_TIME_LENGTH_BEGIN"
                         android:layout_toLeftOf="@id/tv_zi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:singleLine="true"
+                        android:hint="请输入秒数"
+                        android:textSize="14sp"
                         android:layout_alignParentLeft="true"/>
-
                     <EditText
                         android:id="@+id/mycall_high_query_et_CALL_TIME_LENGTH_END"
                         android:layout_toRightOf="@id/tv_zi"
@@ -317,7 +374,12 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:singleLine="true"
-                        android:layout_alignParentRight="true"/>
+                        android:hint="请输入秒数"
+                        android:textSize="14sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        />
+
                 </RelativeLayout>
             </LinearLayout>
             <View
@@ -328,15 +390,25 @@
 
             <Button
                 android:id="@+id/mycall_high_query_btn_reset"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
                 android:text="重置"
                 />
             <Button
                 android:id="@+id/mycall_high_query_btn_confirm"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="确认"
+                android:textColor="@color/all_white"
+                android:background="@drawable/login_btn_selector"
                 />
 
         </LinearLayout>

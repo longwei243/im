@@ -59,6 +59,14 @@ public class MYCallHighQueryActivity extends Activity implements View.OnClickLis
     }
 
     private void initViews() {
+
+        findViewById(R.id.title_btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mycall_high_query_et_CALL_NO = (EditText) findViewById(R.id.mycall_high_query_et_CALL_NO);
         mycall_high_query_et_CALLED_NO = (EditText) findViewById(R.id.mycall_high_query_et_CALLED_NO);
         mycall_high_query_et_CALL_TIME_LENGTH_BEGIN = (EditText) findViewById(R.id.mycall_high_query_et_CALL_TIME_LENGTH_BEGIN);
