@@ -7,6 +7,10 @@ import com.google.gson.reflect.TypeToken;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.model.entity.MAAgent;
+import com.moor.im.model.entity.MABusiness;
+import com.moor.im.model.entity.MABusinessField;
+import com.moor.im.model.entity.MABusinessFlow;
+import com.moor.im.model.entity.MABusinessStep;
 import com.moor.im.model.entity.MACallLog;
 import com.moor.im.model.entity.MACallLogData;
 import com.moor.im.model.entity.MAOption;
@@ -248,4 +252,181 @@ public class MobileAssitantParser {
         }
         return optionDatas;
     }
+
+    /**
+     * 获取工单列表数据
+     * @param responseString
+     * @return
+     */
+    public static List<MABusiness> getBusiness(String responseString) {
+        List<MABusiness> businesses = new ArrayList<>();
+        List<MABusiness> busDatas = new ArrayList<>();
+        try {
+            JSONObject o = new JSONObject(responseString);
+            if(o.getBoolean("Succeed")) {
+                JSONArray o1 = o.getJSONArray("list");
+
+                Gson gson = new Gson();
+                // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+                businesses = gson.fromJson(o1.toString(),
+                        new TypeToken<List<MABusiness>>() {
+                        }.getType());
+
+                for (int i=0; i<businesses.size(); i++) {
+                    MABusiness b = new MABusiness();
+                    b._id = businesses.get(i)._id;
+                    MAAgent agent = MobileAssitantCache.getInstance().getAgentById(NullUtil.checkNull(businesses.get(i).createUser));
+                    if(agent != null) {
+                        b.createUser = agent.displayName;
+                    }else {
+                        b.createUser = "";
+                    }
+                    MABusinessStep step = MobileAssitantCache.getInstance().getBusinessStep(NullUtil.checkNull(businesses.get(i).step));
+                    if(step != null) {
+                        b.step = step.name;
+                    }else {
+                        b.step = "";
+                    }
+                    MABusinessFlow flow = MobileAssitantCache.getInstance().getBusinessFlow(NullUtil.checkNull(businesses.get(i).flow));
+                    if(flow != null) {
+                        b.flow = flow.name;
+                    }else {
+                        b.flow = "";
+                    }
+
+                    b.name = businesses.get(i).name;
+                    b.lastUpdateTime = businesses.get(i).lastUpdateTime;
+                    if(businesses.get(i).master != null && "".equals(businesses.get(i).master)) {
+                        MAAgent master = MobileAssitantCache.getInstance().getAgentById(NullUtil.checkNull(businesses.get(i).master));
+                        if(master != null) {
+                            b.master = master.displayName;
+                        }else {
+                            b.master = "";
+                        }
+                    }
+                    busDatas.add(b);
+                }
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return busDatas;
+    }
+
+    /**
+     * 获取工单流程
+     * @param responseString
+     * @return
+     */
+    public static List<MABusinessFlow> getBusinessFlow(String responseString) {
+        List<MABusinessFlow> businessFlows = new ArrayList<>();
+
+        try {
+            JSONObject o = new JSONObject(responseString);
+            if(o.getBoolean("success")) {
+                JSONArray o1 = o.getJSONArray("data");
+
+                Gson gson = new Gson();
+                // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+                businessFlows = gson.fromJson(o1.toString(),
+                        new TypeToken<List<MABusinessFlow>>() {
+                        }.getType());
+
+
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return businessFlows;
+    }
+
+    public static HashMap<String, MABusinessFlow> transformBusinessFlowData(List<MABusinessFlow> businessFlows) {
+        HashMap<String, MABusinessFlow> businessFlowsMap = new HashMap<>();
+        if(businessFlows != null) {
+            for(int i=0; i<businessFlows.size(); i++) {
+                businessFlowsMap.put(businessFlows.get(i)._id, businessFlows.get(i));
+            }
+        }
+        return businessFlowsMap;
+    }
+
+    /**
+     * 获取工单步骤
+     * @param responseString
+     * @return
+     */
+    public static List<MABusinessStep> getBusinessStep(String responseString) {
+        List<MABusinessStep> businessSteps = new ArrayList<>();
+
+        try {
+            JSONObject o = new JSONObject(responseString);
+            if(o.getBoolean("success")) {
+                JSONArray o1 = o.getJSONArray("data");
+
+                Gson gson = new Gson();
+                // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+                businessSteps = gson.fromJson(o1.toString(),
+                        new TypeToken<List<MABusinessStep>>() {
+                        }.getType());
+
+
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return businessSteps;
+    }
+
+    public static HashMap<String, MABusinessStep> transformBusinessStepData(List<MABusinessStep> businessSteps) {
+        HashMap<String, MABusinessStep> businessStepMap = new HashMap<>();
+        if(businessSteps != null) {
+            for(int i=0; i<businessSteps.size(); i++) {
+                businessStepMap.put(businessSteps.get(i)._id, businessSteps.get(i));
+            }
+        }
+        return businessStepMap;
+    }
+
+    /**
+     * 获取工单字段
+     * @param responseString
+     * @return
+     */
+    public static List<MABusinessField> getBusinessField(String responseString) {
+        List<MABusinessField> businessFields = new ArrayList<>();
+
+        try {
+            JSONObject o = new JSONObject(responseString);
+            if(o.getBoolean("success")) {
+                JSONArray o1 = o.getJSONArray("data");
+
+                Gson gson = new Gson();
+                // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+                businessFields = gson.fromJson(o1.toString(),
+                        new TypeToken<List<MABusinessField>>() {
+                        }.getType());
+
+
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return businessFields;
+    }
+
+    public static HashMap<String, MABusinessField> transformBusinessFieldData(List<MABusinessField> businessFields) {
+        HashMap<String, MABusinessField> businessStepMap = new HashMap<>();
+        if(businessFields != null) {
+            for(int i=0; i<businessFields.size(); i++) {
+                businessStepMap.put(businessFields.get(i)._id, businessFields.get(i));
+            }
+        }
+        return businessStepMap;
+    }
+
+
 }

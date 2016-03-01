@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by longwei on 2016/2/17.
  */
-public class MobileAssitantActivity extends FragmentActivity implements
+public class MACdrActivity extends FragmentActivity implements
         ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private ViewPager mViewPager;

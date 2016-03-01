@@ -84,7 +84,7 @@ public class MobileHttpManager {
     }
 
     /**
-     * 获取缓存
+     * 获取option缓存
      */
     public static void getOptionCache(String sessionId,
                                      ResponseHandlerInterface responseHandler) {
@@ -95,6 +95,117 @@ public class MobileHttpManager {
             json.put("sessionId", Utils.replaceBlank(sessionId));
             json.put("action", "common.getDicCache");
             json.put("type", "options");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取工单流程缓存
+     */
+    public static void getBusinessFlow(String sessionId,
+                                      ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "common.getDicCache");
+            json.put("type", "businessFlow");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取工单步骤缓存
+     */
+    public static void getBusinessStep(String sessionId,
+                                       ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "common.getDicCache");
+            json.put("type", "businessFlowStep");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取工单字段缓存
+     */
+    public static void getBusinessField(String sessionId,
+                                       ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "common.getDicCache");
+            json.put("type", "businessFlowField");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取待领取工单
+     */
+    public static void queryRoleUnDealOrder(String sessionId, HashMap<String, String> datas,
+                                      ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "getRoleUnDealBusiness");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 领取工单
+     */
+    public static void haveThisOrder(String sessionId, HashMap<String, String> datas,
+                                            ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "setTaskToMe");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

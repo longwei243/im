@@ -149,8 +149,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		// ===========完了删了
 //		mLoginName.setText("8029@7moor");
 //		mLoginPass.setText("8029");
-//		mLoginName.setText("8001@phoneTest");
-//		mLoginPass.setText("8001");
+		mLoginName.setText("8001@phoneTest");
+		mLoginPass.setText("8001");
 		// ====================
 
 		String name = sp.getString("loginName", "");

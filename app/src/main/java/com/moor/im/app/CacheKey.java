@@ -35,6 +35,18 @@ public class CacheKey {
 	 */
 	public static final String CACHE_MAOption = "cache_option";
 	/**
+	 * 工单流程缓存
+	 */
+	public static final String CACHE_MABusinessFlow = "cache_businessflow";
+	/**
+	 * 工单步骤缓存
+	 */
+	public static final String CACHE_MABusinessStep = "cache_businessstep";
+	/**
+	 * 工单字段缓存
+	 */
+	public static final String CACHE_MABusinessField = "cache_businessfield";
+	/**
 	 * 我的通话查询条件缓存
 	 */
 	public static final String CACHE_MyCallQueryData = "cache_myCallQueryData";

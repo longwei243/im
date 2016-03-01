@@ -313,7 +313,6 @@
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:singleLine="true"
-                        android:layout_marginLeft="16dp"
                         android:layout_alignParentLeft="true"/>
 
                     <EditText
@@ -323,7 +322,6 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:editable="false"
-                        android:layout_marginRight="16dp"
                         android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -357,7 +355,6 @@
                         />
 
                     <EditText
-                        android:layout_marginLeft="16dp"
                         android:id="@+id/mycall_high_query_et_CALL_TIME_LENGTH_BEGIN"
                         android:layout_toLeftOf="@id/tv_zi"
                         android:layout_width="match_parent"
@@ -377,7 +374,6 @@
                         android:hint="请输入秒数"
                         android:textSize="14sp"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="16dp"
                         />
 
                 </RelativeLayout>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/roalundeal_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_40"
+        android:background="@color/halftrans"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/roalundeal_tv_hignquery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:text="高级搜索"
+            android:textSize="14sp"
+            android:textColor="@color/all_white"/>
+
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/all_white"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+            <EditText
+                android:id="@+id/roalundeal_et_numquery"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="phone"
+                android:hint="输入主叫或被叫查询"
+                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:paddingLeft="4dp"
+                />
+            <ImageButton
+                android:id="@+id/roalundeal_ib_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search_grey600_36dp"
+
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:background="@null"
+            />
+
+
+    </LinearLayout>
+
+    <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
+        android:layout_below="@id/roalundeal_ll_title"
+        android:id="@+id/roalundeal_ptl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#19000000"
+        android:dividerHeight="1dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true" />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/roalundeal_rl_queryitem"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/halftrans"
+        >
+        <ImageView
+            android:id="@+id/roalundeal_btn_queryitem"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_clear_white_36dp"/>
+        <TextView
+            android:layout_toLeftOf="@id/roalundeal_btn_queryitem"
+            android:id="@+id/roalundeal_tv_queryitem"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/all_white"/>
+    </RelativeLayout>
+</RelativeLayout>

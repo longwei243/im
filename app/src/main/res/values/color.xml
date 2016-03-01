@@ -26,4 +26,6 @@
     <color name="setting_text_bg">#7e7f81</color>
     <color name="call_green">#67d234</color>
     <color name="call_red">#fa5f5f</color>
+    <color name="flow_bg">#898989</color>
+    <color name="step_bg">#F57474</color>
 </resources>

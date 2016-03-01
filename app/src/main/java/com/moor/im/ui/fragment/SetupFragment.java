@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +30,6 @@ import com.bumptech.glide.Glide;
 import com.csipsimple.api.SipProfile;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.m7.imkfsdk.chat.ChatActivity;
-import com.m7.imkfsdk.chat.OfflineMessageDialog;
-import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.moor.im.R;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
@@ -41,7 +38,6 @@ import com.moor.im.db.dao.NewMessageDao;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.UserIconUpdate;
 import com.moor.im.http.HttpManager;
-import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.tcpservice.manager.LoginManager;
@@ -52,16 +48,13 @@ import com.moor.im.ui.activity.AboutMeActivity;
 import com.moor.im.ui.activity.ClipImageViewActivity;
 import com.moor.im.ui.activity.EditActivity;
 import com.moor.im.ui.activity.LoginActivity;
-import com.moor.im.ui.activity.MobileAssitantActivity;
+import com.moor.im.ui.activity.MACdrActivity;
+import com.moor.im.ui.activity.MAErpActivity;
 import com.moor.im.ui.activity.UpdateActivity;
-import com.moor.im.ui.activity.UserInfoActivity;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.ui.dialog.LoginOffDialog;
-import com.moor.im.ui.view.RoundImageView;
-import com.moor.im.utils.LogUtil;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.InitListener;
-import com.moor.imkf.OnSessionBeginListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -70,7 +63,7 @@ public class SetupFragment extends Fragment{
 	RelativeLayout setup_ll_loginoff, setup_ll_update,
 			setup_ll_aboutme, setup_ll_icon,
 			setup_ll_edit_name, setup_ll_edit_email,
-			setup_ll_edit_phone, setup_ll_kefu, setup_ll_mobile;
+			setup_ll_edit_phone, setup_ll_kefu, setup_ll_mobile, setup_ll_mobile_erp;
 	
 	TextView user_detail_tv_name, user_detail_tv_num, user_detail_tv_email, user_detail_tv_phone;
 
@@ -220,6 +213,9 @@ public class SetupFragment extends Fragment{
 		setup_ll_mobile = (RelativeLayout) view.findViewById(R.id.setup_ll_mobile);
 		setup_ll_mobile.setOnClickListener(clickListener);
 
+		setup_ll_mobile_erp = (RelativeLayout) view.findViewById(R.id.setup_ll_mobile_erp);
+		setup_ll_mobile_erp.setOnClickListener(clickListener);
+
 		loadingFragmentDialog = new LoadingFragmentDialog();
 
 		return view;
@@ -312,19 +308,12 @@ public class SetupFragment extends Fragment{
 				}
 				break;
 			case R.id.setup_ll_mobile:
-				Intent mobileIntent = new Intent(SetupFragment.this.getActivity(), MobileAssitantActivity.class);
+				Intent mobileIntent = new Intent(SetupFragment.this.getActivity(), MACdrActivity.class);
 				startActivity(mobileIntent);
-//				MobileHttpManager.getCdr(user._id, new TextHttpResponseHandler() {
-//					@Override
-//					public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
-//						System.out.println("获取cdr失败返回数据:" + s);
-//					}
-//
-//					@Override
-//					public void onSuccess(int i, Header[] headers, String s) {
-//						System.out.println("获取cdr成功返回数据:" + s);
-//					}
-//				});
+				break;
+			case R.id.setup_ll_mobile_erp:
+				Intent erpIntent = new Intent(SetupFragment.this.getActivity(), MAErpActivity.class);
+				startActivity(erpIntent);
 				break;
 			}
 		}

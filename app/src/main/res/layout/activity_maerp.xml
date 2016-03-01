@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/all_white"
-            android:text="通话记录"
+            android:text="工单助手"
             android:textSize="@dimen/size_18" />
 
     </RelativeLayout>
@@ -58,8 +58,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:padding="5dp"
-                app:tabicon="@drawable/ic_contacts_grey600_36dp"
-                app:text="我的通话"
+                app:tabicon="@drawable/ic_today_grey600_36dp"
+                app:text="待领取"
                 app:text_size="12sp" />
             <com.moor.im.ui.view.ChangeColorTabItem
                 android:id="@+id/id_ma_allcall"
@@ -67,8 +67,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:padding="5dp"
-                app:tabicon="@drawable/ic_quick_contacts_dialer_grey600_36dp"
-                app:text="所有通话"
+                app:tabicon="@drawable/ic_announcement_grey600_36dp"
+                app:text="待处理"
                 app:text_size="12sp" />
         </LinearLayout>
     </FrameLayout>

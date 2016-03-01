@@ -12,6 +12,8 @@ import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MAAgent;
+import com.moor.im.model.entity.MABusinessFlow;
+import com.moor.im.model.entity.MABusinessStep;
 import com.moor.im.model.entity.MACallLog;
 import com.moor.im.model.entity.MAQueue;
 import com.moor.im.model.entity.User;
@@ -55,7 +57,7 @@ public class MobileAssitantCache {
             agent = agentMap.get(id);
             return agent;
         }else {
-            MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
+//            MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
         }
         return null;
     }
@@ -66,6 +68,30 @@ public class MobileAssitantCache {
             HashMap<String, MAQueue> queueMap = (HashMap<String, MAQueue>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue);
             queue = queueMap.get(id);
             return queue;
+        }else {
+
+        }
+        return null;
+    }
+
+    public MABusinessStep getBusinessStep(String id) {
+        MABusinessStep step;
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) != null) {
+            HashMap<String, MABusinessStep> stepMap = (HashMap<String, MABusinessStep>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep);
+            step = stepMap.get(id);
+            return step;
+        }else {
+
+        }
+        return null;
+    }
+
+    public MABusinessFlow getBusinessFlow(String id) {
+        MABusinessFlow flow;
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) != null) {
+            HashMap<String, MABusinessFlow> flowMap = (HashMap<String, MABusinessFlow>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow);
+            flow = flowMap.get(id);
+            return flow;
         }else {
 
         }

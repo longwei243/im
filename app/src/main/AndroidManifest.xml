@@ -286,7 +286,7 @@
         </activity>
         <!--手机助手-->
         <activity
-            android:name=".ui.activity.MobileAssitantActivity"
+            android:name=".ui.activity.MACdrActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -299,6 +299,10 @@
         </activity>
         <activity
             android:name=".ui.activity.MACallDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.MAErpActivity"
             android:screenOrientation="portrait" >
         </activity>
 
