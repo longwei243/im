@@ -84,4 +84,11 @@
         <item>黑名单</item>
     </string-array>
 
+    <string-array name="userundeal">
+        <item>快速查询</item>
+        <item>我的代办</item>
+        <item>我参与的</item>
+        <item>我创建的</item>
+    </string-array>
+
 </resources>

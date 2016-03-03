@@ -294,9 +294,10 @@ public class MobileAssitantParser {
                         b.flow = "";
                     }
 
-                    b.name = businesses.get(i).name;
-                    b.lastUpdateTime = businesses.get(i).lastUpdateTime;
-                    if(businesses.get(i).master != null && "".equals(businesses.get(i).master)) {
+                    b.name = NullUtil.checkNull(businesses.get(i).name);
+
+                    b.lastUpdateTime = TimeUtil.getShortTime(NullUtil.checkNull(businesses.get(i).lastUpdateTime));
+                    if(businesses.get(i).master != null && !"".equals(businesses.get(i).master)) {
                         MAAgent master = MobileAssitantCache.getInstance().getAgentById(NullUtil.checkNull(businesses.get(i).master));
                         if(master != null) {
                             b.master = master.displayName;

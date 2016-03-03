@@ -11,11 +11,15 @@ import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.MobileHttpManager;
+import com.moor.im.model.entity.MAAction;
 import com.moor.im.model.entity.MAAgent;
+import com.moor.im.model.entity.MABusinessField;
 import com.moor.im.model.entity.MABusinessFlow;
 import com.moor.im.model.entity.MABusinessStep;
 import com.moor.im.model.entity.MACallLog;
+import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.MAQueue;
+import com.moor.im.model.entity.Option;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.model.parser.MobileAssitantParser;
@@ -86,6 +90,24 @@ public class MobileAssitantCache {
         return null;
     }
 
+    public MAAction getBusinessStepAction(String stepId, String actionId) {
+        MABusinessStep step;
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) != null) {
+            HashMap<String, MABusinessStep> stepMap = (HashMap<String, MABusinessStep>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep);
+            step = stepMap.get(stepId);
+            List<MAAction> actions = step.actions;
+            for(int i=0; i<actions.size(); i++) {
+                if(actions.get(i)._id.equals(actionId)) {
+                    return actions.get(i);
+                }
+            }
+
+        }else {
+
+        }
+        return null;
+    }
+
     public MABusinessFlow getBusinessFlow(String id) {
         MABusinessFlow flow;
         if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) != null) {
@@ -96,6 +118,59 @@ public class MobileAssitantCache {
 
         }
         return null;
+    }
+
+    public MABusinessField getBusinessField(String id) {
+        MABusinessField field;
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) != null) {
+            HashMap<String, MABusinessField> fieldMap = (HashMap<String, MABusinessField>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField);
+            field = fieldMap.get(id);
+            return field;
+        }else {
+
+        }
+        return null;
+    }
+
+    public String getDicById(String id) {
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
+            HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
+            for(String key : optionMap.keySet()) {
+                if(optionMap.get(key)._id.equals(id)) {
+                    return optionMap.get(key).name;
+                }
+                List<Option> options = optionMap.get(key).options;
+                if(options != null && options.size() > 0) {
+                    String result = getDic(id, options);
+                    if(!"".equals(result)) {
+                        return result;
+                    }
+                }
+
+            }
+        }else {
+
+        }
+        return "";
+    }
+
+    private String getDic(String key, List<Option> options) {
+
+        for(int i=0; i<options.size(); i++) {
+            Option opt = options.get(i);
+            if(key.equals(opt.key)) {
+                return opt.name;
+            }
+            List<Option> opts = opt.options;
+            if(opts != null && opts.size() > 0) {
+                String result = getDic(key, opts);
+                if(result != null && !"".equals(result)) {
+                    return result;
+                }
+            }
+
+        }
+        return "";
     }
 
     class GetAgentResponseHandler extends TextHttpResponseHandler {

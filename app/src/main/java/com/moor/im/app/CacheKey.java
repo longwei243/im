@@ -54,4 +54,12 @@ public class CacheKey {
 	 * 所有通话查询条件缓存
 	 */
 	public static final String CACHE_AllCallQueryData = "cache_allCallQueryData";
+	/**
+	 * 待领取工单查询条件缓存
+	 */
+	public static final String CACHE_DlqQueryData = "cache_dlqQueryData";
+	/**
+	 * 待办工单查询条件缓存
+	 */
+	public static final String CACHE_DclQueryData = "cache_dclQueryData";
 }

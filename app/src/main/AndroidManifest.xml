@@ -305,6 +305,14 @@
             android:name=".ui.activity.MAErpActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.activity.ErpHighQueryActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.ErpDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <receiver
             android:name=".receiver.NetWorkReceiver"

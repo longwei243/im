@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/roalundeal_ll_title"
+        android:id="@+id/userundeal_ll_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_40"
         android:background="@color/halftrans"
@@ -13,7 +13,7 @@
         >
 
         <TextView
-            android:id="@+id/roalundeal_tv_hignquery"
+            android:id="@+id/userundeal_tv_hignquery"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -34,7 +34,7 @@
             android:focusableInTouchMode="true"
             >
             <EditText
-                android:id="@+id/roalundeal_et_numquery"
+                android:id="@+id/userundeal_et_numquery"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -47,29 +47,29 @@
                 android:paddingLeft="4dp"
                 />
             <ImageButton
-                android:id="@+id/roalundeal_ib_search"
+                android:id="@+id/userundeal_ib_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_search_grey600_36dp"
 
                 />
         </LinearLayout>
-        <View
+        <Spinner
+            android:id="@+id/userundeal_sp_quickquery"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:layout_gravity="center"
-            android:background="@null"
+            android:background="@drawable/spinner_bg"
             />
-
 
     </LinearLayout>
 
     <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
-        android:layout_below="@id/roalundeal_ll_title"
-        android:id="@+id/roalundeal_ptl"
+        android:layout_below="@id/userundeal_ll_title"
+        android:id="@+id/userundeal_ptl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#00000000"
@@ -83,14 +83,14 @@
 
     <RelativeLayout
         android:visibility="gone"
-        android:id="@+id/roalundeal_rl_queryitem"
+        android:id="@+id/userundeal_rl_queryitem"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/halftrans"
         >
         <ImageView
-            android:id="@+id/roalundeal_btn_queryitem"
+            android:id="@+id/userundeal_btn_queryitem"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
@@ -98,8 +98,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_clear_white_36dp"/>
         <TextView
-            android:layout_toLeftOf="@id/roalundeal_btn_queryitem"
-            android:id="@+id/roalundeal_tv_queryitem"
+            android:layout_toLeftOf="@id/userundeal_btn_queryitem"
+            android:id="@+id/userundeal_tv_queryitem"
             android:layout_centerVertical="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

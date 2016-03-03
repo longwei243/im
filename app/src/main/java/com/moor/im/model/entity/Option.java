@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class Option implements Serializable{
 
+
+    public String _id;
     public String name;
     public String state;
     public String key;

@@ -192,6 +192,78 @@ public class MobileHttpManager {
     }
 
     /**
+     * 获取待处理工单
+     */
+    public static void queryUserUnDealOrder(String sessionId, HashMap<String, String> datas,
+                                            ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "getUnDealBusiness");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取参与的工单
+     */
+    public static void queryFollowedOrder(String sessionId, HashMap<String, String> datas,
+                                            ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "getFollowedBusiness");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取创建工单
+     */
+    public static void queryAssignedOrder(String sessionId, HashMap<String, String> datas,
+                                          ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "getAssignedBusiness");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
      * 领取工单
      */
     public static void haveThisOrder(String sessionId, HashMap<String, String> datas,
@@ -206,6 +278,29 @@ public class MobileHttpManager {
             for(String key : datas.keySet()) {
                 json.put(key, datas.get(key));
             }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取工单详情
+     */
+    public static void getBusinessDetailById(String sessionId, String busId,
+                                     ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "getBusinessDetailById");
+            json.put("_id", busId);
+
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
