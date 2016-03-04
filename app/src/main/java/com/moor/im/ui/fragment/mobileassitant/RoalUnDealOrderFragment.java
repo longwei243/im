@@ -236,7 +236,6 @@ public class RoalUnDealOrderFragment extends Fragment{
         @Override
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
-            System.out.println("获取待领取数据:" + responseString);
             try {
                 JSONObject o = new JSONObject(responseString);
                 if(o.getBoolean("Succeed")) {

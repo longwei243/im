@@ -11,6 +11,16 @@ public class FieldData implements Serializable{
     private String name;
     private String value;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
+
     public String getType() {
         return type;
     }

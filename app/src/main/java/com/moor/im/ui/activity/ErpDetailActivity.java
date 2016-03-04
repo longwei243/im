@@ -2,8 +2,15 @@ package com.moor.im.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -11,12 +18,18 @@ import com.moor.im.R;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.FieldData;
+import com.moor.im.model.entity.MAAction;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MABusinessField;
 import com.moor.im.model.entity.MABusinessFlow;
 import com.moor.im.model.entity.MABusinessStep;
+import com.moor.im.model.entity.MAErpDetail;
+import com.moor.im.model.entity.MAErpHistory;
+import com.moor.im.model.entity.QueryData;
 import com.moor.im.model.entity.User;
 import com.moor.im.model.parser.HttpParser;
+import com.moor.im.ui.adapter.SPAdapter;
+import com.moor.im.ui.dialog.LoadingFragmentDialog;
 import com.moor.im.utils.MobileAssitantCache;
 
 import org.apache.http.Header;
@@ -38,7 +51,11 @@ public class ErpDetailActivity extends Activity{
     private TextView erpdetail_tv_customerName, erpdetail_tv_flow, erpdetail_tv_step,
             erpdetail_tv_lastUpdateUser, erpdetail_tv_lastUpdateTime;
 
-    private LinearLayout erpdetail_ll_fields;
+    private LinearLayout erpdetail_ll_fields, erpdetail_ll_history;
+
+    private LoadingFragmentDialog loadingFragmentDialog;
+
+    private Spinner erpdetail_sp_action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +74,12 @@ public class ErpDetailActivity extends Activity{
         erpdetail_tv_lastUpdateTime = (TextView) findViewById(R.id.erpdetail_tv_lastUpdateTime);
 
         erpdetail_ll_fields = (LinearLayout) findViewById(R.id.erpdetail_ll_fields);
+        erpdetail_ll_history = (LinearLayout) findViewById(R.id.erpdetail_ll_history);
+
+        erpdetail_sp_action = (Spinner) findViewById(R.id.erpdetail_sp_action);
+
+        loadingFragmentDialog = new LoadingFragmentDialog();
+        loadingFragmentDialog.show(getFragmentManager(), "");
 
         MobileHttpManager.getBusinessDetailById(user._id, busId, new GetBusinessDetailResponseHandler());
     }
@@ -65,19 +88,155 @@ public class ErpDetailActivity extends Activity{
 
         @Override
         public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
-
+            loadingFragmentDialog.dismiss();
         }
 
         @Override
         public void onSuccess(int i, Header[] headers, String s) {
             String succeed = HttpParser.getSucceed(s);
             if ("true".equals(succeed)) {
-                initDatas(s);
+                BackTask backTask = new BackTask();
+                backTask.execute(s);
             }
         }
     }
 
-    private void initDatas(String data) {
+    class BackTask extends AsyncTask<String, Void, MAErpDetail> {
+
+        @Override
+        protected MAErpDetail doInBackground(String[] params) {
+            return initDatas(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(MAErpDetail detail) {
+            super.onPostExecute(detail);
+            initDetailViews(detail);
+
+        }
+    }
+
+    /**
+     * 填充数据视图
+     * @param detail
+     */
+    private void initDetailViews(MAErpDetail detail) {
+        erpdetail_tv_flow.setText(detail.flow);
+        erpdetail_tv_step.setText(detail.step);
+        erpdetail_tv_lastUpdateUser.setText(detail.lastUpdateUser);
+        erpdetail_tv_lastUpdateTime.setText(detail.lastUpdateTime);
+
+        //上面字段信息
+        List<FieldData> fdList = detail.fieldDatas;
+        LinearLayout parentLinearLayout = new LinearLayout(ErpDetailActivity.this);
+        parentLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        parentLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        for(int i=0; i<fdList.size(); i++) {
+            //填充布局
+            FieldData fd = fdList.get(i);
+            if("file".equals(fd.getType())) {
+                TextView tv_field_name = new TextView(ErpDetailActivity.this);
+                tv_field_name.setText(fd.getName());
+                tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
+                tv_field_name.setPadding(32, 0, 0, 0);
+                LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                parentLinearLayout.addView(tv_field_name, mLayoutParams);
+                TextView tv_field_value = new TextView(ErpDetailActivity.this);
+                tv_field_value.setText(fdList.get(i).getValue());
+                tv_field_value.setTextColor(getResources().getColor(R.color.abs__holo_blue_light));
+                tv_field_value.setPadding(32, 0, 0, 0);
+                parentLinearLayout.addView(tv_field_value, mLayoutParams);
+            }else {
+                TextView tv_field_name = new TextView(ErpDetailActivity.this);
+                tv_field_name.setText(fdList.get(i).getName());
+                tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
+                tv_field_name.setPadding(32, 0, 0, 0);
+                LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                parentLinearLayout.addView(tv_field_name, mLayoutParams);
+                TextView tv_field_value = new TextView(ErpDetailActivity.this);
+                tv_field_value.setText(fdList.get(i).getValue());
+                tv_field_value.setTextColor(getResources().getColor(R.color.grey));
+                tv_field_value.setPadding(32, 0, 0, 0);
+                parentLinearLayout.addView(tv_field_value, mLayoutParams);
+            }
+        }
+        erpdetail_ll_fields.addView(parentLinearLayout);
+
+        //历史
+        List<MAErpHistory> historyList = detail.historyList;
+        for (int h=0; h<historyList.size(); h++) {
+            MAErpHistory historyData = historyList.get(h);
+            View infoView = LayoutInflater.from(ErpDetailActivity.this).inflate(R.layout.erp_history_info, null);
+            TextView erp_history_tv_name = (TextView) infoView.findViewById(R.id.erp_history_tv_name);
+            erp_history_tv_name.setText(historyData.name);
+            TextView erp_history_tv_time = (TextView) infoView.findViewById(R.id.erp_history_tv_time);
+            erp_history_tv_time.setText(historyData.time);
+            TextView erp_history_tv_info = (TextView) infoView.findViewById(R.id.erp_history_tv_info);
+            erp_history_tv_info.setText(historyData.info);
+            erpdetail_ll_history.addView(infoView);
+
+            LinearLayout history_field_ll = new LinearLayout(ErpDetailActivity.this);
+            history_field_ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            history_field_ll.setOrientation(LinearLayout.VERTICAL);
+            List<FieldData> historyFieldDatas = historyData.historyData;
+            for(int f=0; f<historyFieldDatas.size(); f++) {
+                FieldData fd = historyFieldDatas.get(f);
+                if("file".equals(fd.getType())) {
+                    TextView tv_field_name = new TextView(ErpDetailActivity.this);
+                    tv_field_name.setText(fd.getName());
+                    tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
+                    tv_field_name.setPadding(32, 0, 0, 0);
+                    LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    history_field_ll.addView(tv_field_name, mLayoutParams);
+                    TextView tv_field_value = new TextView(ErpDetailActivity.this);
+                    tv_field_value.setText(fd.getValue());
+                    tv_field_value.setTextColor(getResources().getColor(R.color.abs__holo_blue_light));
+                    tv_field_value.setPadding(32, 0, 0, 0);
+                    history_field_ll.addView(tv_field_value, mLayoutParams);
+                }else {
+                    TextView tv_field_name = new TextView(ErpDetailActivity.this);
+                    tv_field_name.setText(fd.getName());
+                    tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
+                    tv_field_name.setPadding(32, 0, 0, 0);
+                    LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    history_field_ll.addView(tv_field_name, mLayoutParams);
+                    TextView tv_field_value = new TextView(ErpDetailActivity.this);
+                    tv_field_value.setText(fd.getValue());
+                    tv_field_value.setTextColor(getResources().getColor(R.color.grey));
+                    tv_field_value.setPadding(32, 0, 0, 0);
+                    history_field_ll.addView(tv_field_value, mLayoutParams);
+                }
+            }
+            erpdetail_ll_history.addView(history_field_ll);
+        }
+
+        //动作,注意角色权限控制
+        List<MAAction> actionList = detail.actions;
+        List<QueryData> actionDatas = new ArrayList<>();
+        QueryData qd = new QueryData();
+        qd.setName("开始操作");
+        qd.setValue("");
+        actionDatas.add(qd);
+        for (int c=0; c<actionList.size(); c++) {
+            MAAction action = actionList.get(c);
+            QueryData qd1 = new QueryData();
+            qd1.setName(action.name);
+            qd1.setValue(action._id);
+            actionDatas.add(qd1);
+        }
+        SPAdapter actionAdapter = new SPAdapter(ErpDetailActivity.this, actionDatas);
+        erpdetail_sp_action.setAdapter(actionAdapter);
+
+        loadingFragmentDialog.dismiss();
+    }
+
+
+    private MAErpDetail initDatas(String data) {
+        MAErpDetail detail = new MAErpDetail();
         try {
             JSONObject jo = new JSONObject(data);
             JSONObject jsonObject = jo.getJSONObject("data");
@@ -87,20 +246,71 @@ public class ErpDetailActivity extends Activity{
             String lastUpdateTime = jsonObject.getString("lastUpdateTime");
             MABusinessFlow flow = MobileAssitantCache.getInstance().getBusinessFlow(flowId);
             if(flow != null) {
-                erpdetail_tv_flow.setText(flow.name);
+                detail.flow = flow.name;
             }
             MABusinessStep step = MobileAssitantCache.getInstance().getBusinessStep(stepId);
             if(step != null) {
-                erpdetail_tv_step.setText(step.name);
+                detail.step = step.name;
             }
             MAAgent agent = MobileAssitantCache.getInstance().getAgentById(lastUpdateUserId);
             if(agent != null) {
-                erpdetail_tv_lastUpdateUser.setText(agent.displayName);
+                detail.lastUpdateUser = agent.displayName;
             }
-            erpdetail_tv_lastUpdateTime.setText(lastUpdateTime);
+            detail.lastUpdateTime = lastUpdateTime;
 
             //填充字段界面
-            List<FieldData> fdList = new ArrayList<>();
+            List<FieldData> fdList = initFieldData(jsonObject);
+            detail.fieldDatas = fdList;
+
+            List<MAAction> actionsList = step.actions;
+            detail.actions = actionsList;
+
+            //填充历史界面
+            List<MAErpHistory> historyList = new ArrayList<>();
+            JSONArray historyArray = jsonObject.getJSONArray("history");
+            for (int j=0; j<historyArray.length(); j++) {
+                MAErpHistory history = new MAErpHistory();
+                JSONObject historyItem = historyArray.getJSONObject(j);
+                String action = historyItem.getString("action");
+                if(action != null && "complete".equals(action)) {
+                    continue;
+                }
+                String historyMaster = historyItem.getString("master");
+                if(action != null && "backIn".equals(action)){
+                    historyMaster = historyItem.getString("excuteUser");
+                }
+                String time = historyItem.getString("time");
+                String username = MobileAssitantCache.getInstance().getAgentById(historyMaster).displayName;
+
+                history.name = username;
+                history.time = time;
+                //历史信息
+                String infoResult = initHistoryInfo(action, historyItem);
+                System.out.println("history info is:"+infoResult);
+                history.info = infoResult;
+                //历史字段
+                JSONObject excuteData = historyItem.getJSONObject("excuteData");
+                List<FieldData> historyDataList = initHistoryFieldData(excuteData, action);
+                history.historyData = historyDataList;
+                historyList.add(history);
+                for(int i=0; i<historyDataList.size(); i++) {
+                    System.out.println("history data type is:"+historyDataList.get(i).getType()+",history data name is:"+historyDataList.get(i).getName()+",history data value is:"+historyDataList.get(i).getValue());
+                }
+            }
+            detail.historyList = historyList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return detail;
+    }
+
+    /**
+     * 显示自定义字段
+     * @return
+     */
+    private List<FieldData> initFieldData(JSONObject jsonObject) {
+        List<FieldData> fdList = new ArrayList<>();
+        try{
             Iterator<String> iterator = jsonObject.keys();
             while(iterator.hasNext()) {
                 String key = iterator.next();
@@ -173,7 +383,17 @@ public class ErpDetailActivity extends Activity{
                             fdList.add(fd);
                         }
                     }else if ("file".equals(field.type)) {
-
+                        //数组
+                        JSONArray attachArray = jsonObject.getJSONArray(key);
+                        for(int i=0; i< attachArray.length(); i++) {
+                            JSONObject attach = attachArray.getJSONObject(i);
+                            FieldData fd = new FieldData();
+                            fd.setType("file");
+                            fd.setName(field.name);
+                            fd.setValue(attach.getString("name"));
+                            fd.setId(attach.getString("id"));
+                            fdList.add(fd);
+                        }
                     } else {
                         String type = "normal";
                         String name = field.name;
@@ -189,173 +409,181 @@ public class ErpDetailActivity extends Activity{
 
                 }
             }
-            for(int i=0; i<fdList.size(); i++) {
-                System.out.println("type is:"+fdList.get(i).getType()+",name is:"+fdList.get(i).getName()+",value is:"+fdList.get(i).getValue());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return fdList;
+    }
+
+
+    /**
+     * 历史操作信息
+     * @param action
+     * @param historyItem
+     * @return
+     */
+    private String initHistoryInfo(String action, JSONObject historyItem) {
+        String infoResult = "";
+        try{
+            if (action != null && "create".equals(action)) {
+                infoResult = "创建 工单！";
+            }else if(action != null && "transformIn".equals(action)) {
+                String stepStr = MobileAssitantCache.getInstance().getBusinessStep(historyItem.getString("step")).name;
+                String actionName = MobileAssitantCache.getInstance().getBusinessStepAction(historyItem.getString("fromStep"), historyItem.getString("excuteAction")).name;
+                infoResult = "执行动作【" + actionName + "】状态变更为【" + stepStr + "】";
+            }else if(action != null && "backIn".equals(action)) {
+                String stepStr = MobileAssitantCache.getInstance().getBusinessStep(historyItem.getString("step")).name;
+                infoResult = "执行动作【退回工单】状态变更为【" + stepStr + "】";
+            }else if(action != null && "recreate".equals(action)) {
+                infoResult = "重新提交 工单！";
+            }else if(action != null && "comment".equals(action)) {
+                infoResult = "添加 新的备注！";
+            }else if(action != null && "assign".equals(action)) {
+
+                String mastername = MobileAssitantCache.getInstance().getAgentById(historyItem.getJSONObject("excuteData").getString("master")).displayName;
+                if (mastername == null || "".equals(mastername)) {
+                    mastername = "自动分配";
+                }
+                infoResult = "变更 工单处理人为【" + mastername + "】";
+            }else {
+                infoResult = "未知的动作！";
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return infoResult;
+    }
 
-            //填充历史界面
-            JSONArray historyArray = jsonObject.getJSONArray("history");
-            for (int j=0; j<historyArray.length(); j++) {
-                JSONObject historyItem = historyArray.getJSONObject(j);
-                String action = historyItem.getString("action");
-                if(action != null && "complete".equals(action)) {
-                    continue;
+    /**
+     * 历史字段
+     * @param excuteData
+     * @param action
+     * @return
+     */
+    private List<FieldData> initHistoryFieldData(JSONObject excuteData, String action) {
+        List<FieldData> historyDataList = new ArrayList<>();
+        try{
+            Iterator<String> historyDataIterator = excuteData.keys();
+            while(historyDataIterator.hasNext()) {
+                String key = historyDataIterator.next();
+                String fieldKey = key;
+                if("_".equals(key.substring(key.length() - 2, key.length() - 1))) {
+                    fieldKey = key.substring(0, key.length() - 2);
                 }
-                String historyMaster = historyItem.getString("master");
-                if(action != null && "backIn".equals(action)){
-                    historyMaster = historyItem.getString("excuteUser");
-                }
-                String time = historyItem.getString("time");
-                String username = MobileAssitantCache.getInstance().getAgentById(historyMaster).displayName;
+                MABusinessField field = MobileAssitantCache.getInstance().getBusinessField(fieldKey);
+                if(field != null) {
+                    if ("dropdown".equals(field.type)) {
+                        //后面_1,_2的
+                        String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
+                        String type = "normal";
+                        String name = field.name;
 
-                String infoResult = "";
-                if (action != null && "create".equals(action)) {
-                    infoResult = "创建 工单！";
-                }else if(action != null && "transformIn".equals(action)) {
-                    String stepStr = MobileAssitantCache.getInstance().getBusinessStep(historyItem.getString("step")).name;
-                    String actionName = MobileAssitantCache.getInstance().getBusinessStepAction(historyItem.getString("fromStep"), historyItem.getString("excuteAction")).name;
-                    infoResult = "执行动作【" + actionName + "】状态变更为【" + stepStr + "】";
-                }else if(action != null && "backIn".equals(action)) {
-                    String stepStr = MobileAssitantCache.getInstance().getBusinessStep(historyItem.getString("step")).name;
-                    infoResult = "执行动作【退回工单】状态变更为【" + stepStr + "】";
-                }else if(action != null && "recreate".equals(action)) {
-                    infoResult = "重新提交 工单！";
-                }else if(action != null && "comment".equals(action)) {
-                    infoResult = "添加 新的备注！";
-                }else if(action != null && "assign".equals(action)) {
-
-                    String mastername = MobileAssitantCache.getInstance().getAgentById(historyItem.getJSONObject("excuteData").getString("master")).displayName;
-                    if (mastername == null || "".equals(mastername)) {
-                        mastername = "自动分配";
-                    }
-                    infoResult = "变更 工单处理人为【" + mastername + "】";
-                }else {
-                    infoResult = "未知的动作！";
-                }
-
-                System.out.println("history info is:"+infoResult);
-
-                JSONObject excuteData = historyItem.getJSONObject("excuteData");
-
-                List<FieldData> historyDataList = new ArrayList<>();
-                Iterator<String> historyDataIterator = excuteData.keys();
-                while(historyDataIterator.hasNext()) {
-                    String key = historyDataIterator.next();
-                    String fieldKey = key;
-                    if("_".equals(key.substring(key.length() - 2, key.length() - 1))) {
-                        fieldKey = key.substring(0, key.length() - 2);
-                    }
-                    MABusinessField field = MobileAssitantCache.getInstance().getBusinessField(fieldKey);
-                    if(field != null) {
-                        if ("dropdown".equals(field.type)) {
-                            //后面_1,_2的
-                            String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
-                            String type = "normal";
-                            String name = field.name;
-
-                            if(value != null && !"".equals(value)) {
+                        if(value != null && !"".equals(value)) {
+                            FieldData fd = new FieldData();
+                            fd.setType(type);
+                            fd.setName(name);
+                            fd.setValue(value);
+                            historyDataList.add(fd);
+                        }else {
+                            String defaultValue = excuteData.getString(key+"_default");
+                            if(defaultValue != null && !"".equals(defaultValue)) {
                                 FieldData fd = new FieldData();
                                 fd.setType(type);
                                 fd.setName(name);
-                                fd.setValue(value);
-                                historyDataList.add(fd);
-                            }else {
-                                String defaultValue = excuteData.getString(key+"_default");
-                                if(defaultValue != null && !"".equals(defaultValue)) {
-                                    FieldData fd = new FieldData();
-                                    fd.setType(type);
-                                    fd.setName(name);
-                                    fd.setValue(defaultValue);
-                                    historyDataList.add(fd);
-                                }
-                            }
-
-                        }else if ("checkbox".equals(field.type)) {
-                            //数组
-                            String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
-                            String type = "normal";
-                            String name = field.name;
-
-                            if(value != null && !"".equals(value)) {
-                                FieldData fd = new FieldData();
-                                fd.setType(type);
-                                fd.setName(name);
-                                fd.setValue(value);
-                                historyDataList.add(fd);
-                            }else {
-                                JSONArray defaultValue = excuteData.getJSONArray(key + "_default");
-                                if(defaultValue != null && defaultValue.length() > 0) {
-                                    StringBuilder sb = new StringBuilder();
-                                    for (int i=0; i<defaultValue.length(); i++) {
-                                        sb.append(defaultValue.getString(i)+" ");
-                                    }
-                                    FieldData fd = new FieldData();
-                                    fd.setType(type);
-                                    fd.setName(name);
-                                    fd.setValue(sb.toString());
-                                    historyDataList.add(fd);
-                                }
-                            }
-                        }else if ("radio".equals(field.type)) {
-                            //只有一个值
-                            String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
-                            String type = "normal";
-                            String name = field.name;
-
-                            if(value != null && !"".equals(value)) {
-                                FieldData fd = new FieldData();
-                                fd.setType(type);
-                                fd.setName(name);
-                                fd.setValue(value);
-                                historyDataList.add(fd);
-                            }
-                        }else if ("file".equals(field.type)) {
-
-                        } else {
-                            String type = "normal";
-                            String name = field.name;
-                            String value = excuteData.getString(key);
-                            if(value != null && !"".equals(value)) {
-                                FieldData fd = new FieldData();
-                                fd.setType(type);
-                                fd.setName(name);
-                                fd.setValue(value);
+                                fd.setValue(defaultValue);
                                 historyDataList.add(fd);
                             }
                         }
 
-                    }else if("number".equals(fieldKey)){
-                        FieldData fd = new FieldData();
-                        fd.setType("normal");
-                        fd.setName("工单编号");
-                        fd.setValue(excuteData.getString(key));
-                        historyDataList.add(fd);
+                    }else if ("checkbox".equals(field.type)) {
+                        //数组
+                        String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
+                        String type = "normal";
+                        String name = field.name;
+
+                        if(value != null && !"".equals(value)) {
+                            FieldData fd = new FieldData();
+                            fd.setType(type);
+                            fd.setName(name);
+                            fd.setValue(value);
+                            historyDataList.add(fd);
+                        }else {
+                            JSONArray defaultValue = excuteData.getJSONArray(key + "_default");
+                            if(defaultValue != null && defaultValue.length() > 0) {
+                                StringBuilder sb = new StringBuilder();
+                                for (int i=0; i<defaultValue.length(); i++) {
+                                    sb.append(defaultValue.getString(i)+" ");
+                                }
+                                FieldData fd = new FieldData();
+                                fd.setType(type);
+                                fd.setName(name);
+                                fd.setValue(sb.toString());
+                                historyDataList.add(fd);
+                            }
+                        }
+                    }else if ("radio".equals(field.type)) {
+                        //只有一个值
+                        String value = MobileAssitantCache.getInstance().getDicById(excuteData.getString(key));
+                        String type = "normal";
+                        String name = field.name;
+
+                        if(value != null && !"".equals(value)) {
+                            FieldData fd = new FieldData();
+                            fd.setType(type);
+                            fd.setName(name);
+                            fd.setValue(value);
+                            historyDataList.add(fd);
+                        }
+                    }else if ("file".equals(field.type)) {
+                        JSONArray attachArray = excuteData.getJSONArray(key);
+                        for(int i=0; i< attachArray.length(); i++) {
+                            JSONObject attach = attachArray.getJSONObject(i);
+                            FieldData fd = new FieldData();
+                            fd.setType("file");
+                            fd.setName(field.name);
+                            fd.setValue(attach.getString("name"));
+                            fd.setId(attach.getString("id"));
+                            historyDataList.add(fd);
+                        }
+                    } else {
+                        String type = "normal";
+                        String name = field.name;
+                        String value = excuteData.getString(key);
+                        if(value != null && !"".equals(value)) {
+                            FieldData fd = new FieldData();
+                            fd.setType(type);
+                            fd.setName(name);
+                            fd.setValue(value);
+                            historyDataList.add(fd);
+                        }
                     }
 
-                    if (action.equals("backIn")) {
-                        FieldData fd = new FieldData();
-                        fd.setType("normal");
-                        fd.setName("退回原因");
-                        fd.setValue(excuteData.getString("backInfo"));
-                        historyDataList.add(fd);
-                    } else if (action.equals("comment")) {
-                        FieldData fd = new FieldData();
-                        fd.setType("normal");
-                        fd.setName("备注内容");
-                        fd.setValue(excuteData.getString("backInfo"));
-                        historyDataList.add(fd);
-                    }
-                }
-                for(int i=0; i<historyDataList.size(); i++) {
-                    System.out.println("history data type is:"+historyDataList.get(i).getType()+",history data name is:"+historyDataList.get(i).getName()+",history data value is:"+historyDataList.get(i).getValue());
+                }else if("number".equals(fieldKey)){
+                    FieldData fd = new FieldData();
+                    fd.setType("normal");
+                    fd.setName("工单编号");
+                    fd.setValue(excuteData.getString(key));
+                    historyDataList.add(fd);
                 }
 
-
+                if (action.equals("backIn")) {
+                    FieldData fd = new FieldData();
+                    fd.setType("normal");
+                    fd.setName("退回原因");
+                    fd.setValue(excuteData.getString("backInfo"));
+                    historyDataList.add(fd);
+                } else if (action.equals("comment")) {
+                    FieldData fd = new FieldData();
+                    fd.setType("normal");
+                    fd.setName("备注内容");
+                    fd.setValue(excuteData.getString("backInfo"));
+                    historyDataList.add(fd);
+                }
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return historyDataList;
     }
 }
