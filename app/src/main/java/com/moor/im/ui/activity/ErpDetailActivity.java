@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
@@ -19,6 +21,7 @@ import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.FieldData;
 import com.moor.im.model.entity.MAAction;
+import com.moor.im.model.entity.MAActionFields;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MABusinessField;
 import com.moor.im.model.entity.MABusinessFlow;
@@ -27,6 +30,7 @@ import com.moor.im.model.entity.MAErpDetail;
 import com.moor.im.model.entity.MAErpHistory;
 import com.moor.im.model.entity.QueryData;
 import com.moor.im.model.entity.User;
+import com.moor.im.model.entity.UserRole;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.ui.adapter.SPAdapter;
 import com.moor.im.ui.dialog.LoadingFragmentDialog;
@@ -38,6 +42,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -120,7 +126,7 @@ public class ErpDetailActivity extends Activity{
      * 填充数据视图
      * @param detail
      */
-    private void initDetailViews(MAErpDetail detail) {
+    private void initDetailViews(final MAErpDetail detail) {
         erpdetail_tv_flow.setText(detail.flow);
         erpdetail_tv_step.setText(detail.step);
         erpdetail_tv_lastUpdateUser.setText(detail.lastUpdateUser);
@@ -135,6 +141,7 @@ public class ErpDetailActivity extends Activity{
             //填充布局
             FieldData fd = fdList.get(i);
             if("file".equals(fd.getType())) {
+                //附件
                 TextView tv_field_name = new TextView(ErpDetailActivity.this);
                 tv_field_name.setText(fd.getName());
                 tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
@@ -184,6 +191,7 @@ public class ErpDetailActivity extends Activity{
             for(int f=0; f<historyFieldDatas.size(); f++) {
                 FieldData fd = historyFieldDatas.get(f);
                 if("file".equals(fd.getType())) {
+                    //附件
                     TextView tv_field_name = new TextView(ErpDetailActivity.this);
                     tv_field_name.setText(fd.getName());
                     tv_field_name.setTextColor(getResources().getColor(R.color.all_black));
@@ -221,25 +229,124 @@ public class ErpDetailActivity extends Activity{
         qd.setName("开始操作");
         qd.setValue("");
         actionDatas.add(qd);
+        Collection<UserRole> userRoles = user.userRoles;
+        List<String> roles = new ArrayList<>();
+        if(userRoles != null && userRoles.size() > 0) {
+            for (UserRole ur : userRoles) {
+                roles.add(ur.role);
+            }
+        }
+
         for (int c=0; c<actionList.size(); c++) {
             MAAction action = actionList.get(c);
-            QueryData qd1 = new QueryData();
-            qd1.setName(action.name);
-            qd1.setValue(action._id);
-            actionDatas.add(qd1);
+
+            if(arrayContainsStr(roles, action.actionRole)) {
+                QueryData qd1 = new QueryData();
+                qd1.setName(action.name);
+                qd1.setValue(action._id);
+                actionDatas.add(qd1);
+            }
         }
         SPAdapter actionAdapter = new SPAdapter(ErpDetailActivity.this, actionDatas);
         erpdetail_sp_action.setAdapter(actionAdapter);
+        erpdetail_sp_action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                QueryData queryData = (QueryData) parent.getAdapter().getItem(position);
+
+                String actionId = queryData.getValue();
+                MAErpDetail business = detail;
+                String stepId = business.stepId;
+                MAAction action = MobileAssitantCache.getInstance().getBusinessStepAction(stepId, actionId);
+
+                if(action != null) {
+                    String nextStepId = action.jumpTo;
+                    MABusinessStep nextStep = MobileAssitantCache.getInstance().getBusinessStep(nextStepId);
+                    if("sys".equals(nextStep.type)) {
+                        //下一步是系统步骤且没有配置界面，直接执行
+                        MABusinessStep step = MobileAssitantCache.getInstance().getBusinessStep(stepId);
+                        MAAction act = getFlowStepActionById(step.actions, actionId);
+                        if(act != null) {
+                            List<MAActionFields> actionFields = act.actionFields;
+                            if(actionFields.size() == 0) {
+                                //执行操作
+                                HashMap<String, String> datas = new HashMap<String, String>();
+                                datas.put("_id", business._id);
+                                datas.put("actionId", act._id);
+                                datas.put("master", "sys");
+
+//                                MobileHttpManager.excuteBusinessStepAction(user._id, datas, new ExcuteBusinessStepActionHandler());
+                            }else {
+                                Intent intent = new Intent(ErpDetailActivity.this, ErpActionProcessActivity.class);
+                                intent.putExtra("actionId", actionId);
+                                intent.putExtra("business", business);
+                                startActivity(intent);
+                            }
+                        }
+                    }else {
+                        Intent intent = new Intent(ErpDetailActivity.this, ErpActionProcessActivity.class);
+                        intent.putExtra("actionId", actionId);
+                        intent.putExtra("business", business);
+                        startActivity(intent);
+                    }
+                }
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         loadingFragmentDialog.dismiss();
     }
 
+    class ExcuteBusinessStepActionHandler extends TextHttpResponseHandler {
+
+        @Override
+        public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onSuccess(int i, Header[] headers, String s) {
+            System.out.println("执行动作返回数据:" + s);
+        }
+    }
+
+    private MAAction getFlowStepActionById(List<MAAction> actions, String actionId) {
+        if(actions != null && actionId != null) {
+            for(int i=0; i<actions.size(); i++) {
+                MAAction a = actions.get(i);
+                if(actionId.equals(a._id)) {
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean arrayContainsStr(List<String> arr, String str) {
+
+        if(arr != null && arr.size() > 0 && str != null) {
+            for (int i=0; i<arr.size(); i++) {
+                if(arr.get(i).equals(str)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private MAErpDetail initDatas(String data) {
         MAErpDetail detail = new MAErpDetail();
         try {
             JSONObject jo = new JSONObject(data);
             JSONObject jsonObject = jo.getJSONObject("data");
+            String _id = jsonObject.getString("_id");
             String flowId = jsonObject.getString("flow");
             String stepId = jsonObject.getString("step");
             String lastUpdateUserId = jsonObject.getString("lastUpdateUser");
@@ -252,20 +359,24 @@ public class ErpDetailActivity extends Activity{
             if(step != null) {
                 detail.step = step.name;
             }
+            detail.flowId = flowId;
+            detail.stepId = stepId;
+
             MAAgent agent = MobileAssitantCache.getInstance().getAgentById(lastUpdateUserId);
             if(agent != null) {
                 detail.lastUpdateUser = agent.displayName;
             }
+            detail._id = _id;
             detail.lastUpdateTime = lastUpdateTime;
 
-            //填充字段界面
+            //填充字段
             List<FieldData> fdList = initFieldData(jsonObject);
             detail.fieldDatas = fdList;
 
             List<MAAction> actionsList = step.actions;
             detail.actions = actionsList;
 
-            //填充历史界面
+            //填充历史
             List<MAErpHistory> historyList = new ArrayList<>();
             JSONArray historyArray = jsonObject.getJSONArray("history");
             for (int j=0; j<historyArray.length(); j++) {

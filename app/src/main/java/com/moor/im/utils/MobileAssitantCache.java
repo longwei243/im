@@ -66,6 +66,19 @@ public class MobileAssitantCache {
         return null;
     }
 
+    public List<MAAgent> getAgents() {
+        List<MAAgent> agents = new ArrayList<>();
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) != null) {
+            HashMap<String, MAAgent> agentMap = (HashMap<String, MAAgent>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent);
+            for (String key : agentMap.keySet()) {
+                MAAgent agent = agentMap.get(key);
+                agents.add(agent);
+            }
+            return agents;
+        }
+        return agents;
+    }
+
     public MAQueue getQueueByExten(String id) {
         MAQueue queue;
         if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) != null) {
@@ -95,13 +108,16 @@ public class MobileAssitantCache {
         if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) != null) {
             HashMap<String, MABusinessStep> stepMap = (HashMap<String, MABusinessStep>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep);
             step = stepMap.get(stepId);
-            List<MAAction> actions = step.actions;
-            for(int i=0; i<actions.size(); i++) {
-                if(actions.get(i)._id.equals(actionId)) {
-                    return actions.get(i);
+            if(step != null) {
+                List<MAAction> actions = step.actions;
+                if(actions != null) {
+                    for(int i=0; i<actions.size(); i++) {
+                        if(actions.get(i)._id.equals(actionId)) {
+                            return actions.get(i);
+                        }
+                    }
                 }
             }
-
         }else {
 
         }
@@ -128,6 +144,18 @@ public class MobileAssitantCache {
             return field;
         }else {
 
+        }
+        return null;
+    }
+
+    public MAOption getMAOption(String dicId) {
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
+            HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
+            for(String key : optionMap.keySet()) {
+                if(optionMap.get(key)._id.equals(dicId)) {
+                    return optionMap.get(key);
+                }
+            }
         }
         return null;
     }

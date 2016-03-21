@@ -10,7 +10,7 @@ public class MAAction implements Serializable{
 
     public String _id;
     public String name;
-    public String jumpto;
+    public String jumpTo;
     public String actionRole;
     public List<MAActionFields> actionFields;
 }

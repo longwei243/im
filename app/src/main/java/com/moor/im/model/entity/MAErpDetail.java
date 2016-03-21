@@ -8,8 +8,11 @@ import java.util.List;
  */
 public class MAErpDetail implements Serializable{
 
+    public String _id;
     public String flow;
+    public String flowId;
     public String step;
+    public String stepId;
     public String lastUpdateUser;
     public String lastUpdateTime;
 

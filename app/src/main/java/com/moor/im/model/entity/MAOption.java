@@ -11,6 +11,7 @@ public class MAOption implements Serializable{
     public String _id;
     public String name;
     public String accountId;
-    public String cascade;
+    public Integer cascade;
+    public List<String> headers;
     public List<Option> options;
 }

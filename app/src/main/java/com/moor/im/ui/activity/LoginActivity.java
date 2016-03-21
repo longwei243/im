@@ -28,9 +28,11 @@ import com.moor.im.db.dao.ContactsDao;
 import com.moor.im.db.dao.MessageDao;
 import com.moor.im.db.dao.NewMessageDao;
 import com.moor.im.db.dao.UserDao;
+import com.moor.im.db.dao.UserRoleDao;
 import com.moor.im.event.LoginEvent;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.User;
+import com.moor.im.model.entity.UserRole;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.tcpservice.manager.SocketManager;
 import com.moor.im.tcpservice.service.IMService;
@@ -38,6 +40,9 @@ import com.moor.im.tcpservice.service.IMServiceConnector;
 import com.moor.im.ui.view.appmsg.AppMsg;
 import com.moor.im.utils.LogUtil;
 import com.moor.im.utils.NetUtils;
+
+import java.util.Collection;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -149,8 +154,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 		// ===========完了删了
 //		mLoginName.setText("8029@7moor");
 //		mLoginPass.setText("8029");
-		mLoginName.setText("8001@phoneTest");
-		mLoginPass.setText("8001");
+//		mLoginName.setText("8001@phoneTest");
+//		mLoginPass.setText("8001");
+		mLoginName.setText("8131@cgNewApp");
+		mLoginPass.setText("8131");
 		// ====================
 
 		String name = sp.getString("loginName", "");
@@ -228,12 +235,20 @@ public class LoginActivity extends Activity implements OnClickListener {
 				String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
 			String message = HttpParser.getMessage(responseString);
-			LogUtil.d("LoginActivity", "获取用户信息返回的数据是:"+responseString);
+			LogUtil.d("LoginActivity", "获取用户信息返回的数据是:" + responseString);
 			if ("true".equals(succeed)) {
 				User user = HttpParser.getUserInfo(responseString);
 				// 用户信息存入数据库
 				UserDao.getInstance().deleteUser();
+				UserRoleDao.getInstance().deleteUserRole();
 				UserDao.getInstance().insertUser(user);
+				List<String> userRoles = user.role;
+				for (String role : userRoles) {
+					UserRole ur = new UserRole();
+					ur.role = role;
+					ur.user = user;
+					UserRoleDao.getInstance().insertUserRole(ur);
+				}
 
 				if(!mLoginName.getText().toString().trim().equals(sp.getString("loginName", ""))) {
 					getContentResolver().delete(SipProfile.ACCOUNT_URI, "1", null);

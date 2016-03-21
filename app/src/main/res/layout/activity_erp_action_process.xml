@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        >
+
+        <RelativeLayout
+            android:id="@+id/erp_action_pro_agent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+        </RelativeLayout>
+
+        <LinearLayout
+
+            android:id="@+id/erp_action_pro_field"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/erp_action_pro_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="执行"
+            />
+    </LinearLayout>
+</ScrollView>

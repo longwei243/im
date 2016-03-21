@@ -309,4 +309,28 @@ public class MobileHttpManager {
         params.add("data", json + "");
         httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
     }
+
+    /**
+     * 执行动作操作
+     */
+    public static void excuteBusinessStepAction(String sessionId, HashMap<String, String> datas,
+                                     ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "excuteBusinessStepAction");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
 }

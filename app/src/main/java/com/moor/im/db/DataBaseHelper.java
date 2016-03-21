@@ -11,6 +11,7 @@ import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.FromToMessage;
 import com.moor.im.model.entity.NewMessage;
 import com.moor.im.model.entity.User;
+import com.moor.im.model.entity.UserRole;
 
 /**
  * 操作数据库的帮助类，使用了OrmLite框架
@@ -26,6 +27,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 	private Dao<Contacts, Integer> contactsDao = null;
 	private Dao<FromToMessage, Integer> fromToMessageDao = null;
 	private Dao<NewMessage, Integer> newMessageDao = null;
+	private Dao<UserRole, Integer> userRoleDao = null;
 
 	private DataBaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,10 +40,12 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Contacts.class);
 			TableUtils.createTable(connectionSource, FromToMessage.class);
 			TableUtils.createTable(connectionSource, NewMessage.class);
+			TableUtils.createTable(connectionSource, UserRole.class);
 			// contactsDao = getContactsDao();
 			userDao = getUserDao();
 			fromToMessageDao = getFromMessageDao();
 			newMessageDao = getNewMessageDao();
+			userRoleDao = getUserRoleDao();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,6 +59,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, User.class, true);
 			TableUtils.dropTable(connectionSource, FromToMessage.class, true);
 			TableUtils.dropTable(connectionSource, NewMessage.class, true);
+			TableUtils.dropTable(connectionSource, UserRole.class, true);
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,6 +116,13 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			newMessageDao = getDao(NewMessage.class);
 		}
 		return newMessageDao;
+	}
+
+	public Dao<UserRole, Integer> getUserRoleDao() throws SQLException {
+		if (userRoleDao == null) {
+			userRoleDao = getDao(UserRole.class);
+		}
+		return userRoleDao;
 	}
 
 	private static DataBaseHelper instance;
