@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <TextView
+        android:id="@+id/erp_field_file_upload_already_tv_filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:singleLine="true"
+        android:maxEms="10"
+        android:ellipsize="end"
+        android:textColor="@color/all_black"
+        android:textSize="20sp"
+        android:text="文件名"/>
+    <Button
+        android:layout_toRightOf="@+id/erp_field_file_upload_already_tv_filename"
+        android:id="@+id/erp_field_file_upload_already_btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:textColor="@color/all_white"
+        android:textSize="20sp"
+        android:text="删除"/>
+</RelativeLayout>

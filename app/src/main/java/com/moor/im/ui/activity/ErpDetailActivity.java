@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,14 +65,20 @@ public class ErpDetailActivity extends Activity{
 
     private Spinner erpdetail_sp_action;
 
+    private ScrollView erpdetail_sv;
+
+    String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_erpdetail);
 
         Intent intent = getIntent();
         String busId = intent.getStringExtra("busId");
         String customerName = intent.getStringExtra("customerName");
+        type = intent.getStringExtra("type");
+        erpdetail_sv = (ScrollView) findViewById(R.id.erpdetail_sv);
         erpdetail_tv_customerName = (TextView) findViewById(R.id.erpdetail_tv_customerName);
         erpdetail_tv_customerName.setText(customerName);
 
@@ -187,6 +195,7 @@ public class ErpDetailActivity extends Activity{
             LinearLayout history_field_ll = new LinearLayout(ErpDetailActivity.this);
             history_field_ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             history_field_ll.setOrientation(LinearLayout.VERTICAL);
+            history_field_ll.setPadding(80, 0, 0, 0);
             List<FieldData> historyFieldDatas = historyData.historyData;
             for(int f=0; f<historyFieldDatas.size(); f++) {
                 FieldData fd = historyFieldDatas.get(f);
@@ -220,6 +229,15 @@ public class ErpDetailActivity extends Activity{
                 }
             }
             erpdetail_ll_history.addView(history_field_ll);
+
+            if(h != historyList.size()-1) {
+                View v = new View(ErpDetailActivity.this);
+                LinearLayout.LayoutParams vlp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 2);
+                v.setBackgroundColor(getResources().getColor(R.color.grey));
+                v.setPadding(0,2,0,2);
+                erpdetail_ll_history.addView(v, vlp);
+            }
         }
 
         //动作,注意角色权限控制
@@ -259,16 +277,16 @@ public class ErpDetailActivity extends Activity{
                 String stepId = business.stepId;
                 MAAction action = MobileAssitantCache.getInstance().getBusinessStepAction(stepId, actionId);
 
-                if(action != null) {
+                if (action != null) {
                     String nextStepId = action.jumpTo;
                     MABusinessStep nextStep = MobileAssitantCache.getInstance().getBusinessStep(nextStepId);
-                    if("sys".equals(nextStep.type)) {
+                    if ("sys".equals(nextStep.type)) {
                         //下一步是系统步骤且没有配置界面，直接执行
                         MABusinessStep step = MobileAssitantCache.getInstance().getBusinessStep(stepId);
                         MAAction act = getFlowStepActionById(step.actions, actionId);
-                        if(act != null) {
+                        if (act != null) {
                             List<MAActionFields> actionFields = act.actionFields;
-                            if(actionFields.size() == 0) {
+                            if (actionFields.size() == 0) {
                                 //执行操作
                                 HashMap<String, String> datas = new HashMap<String, String>();
                                 datas.put("_id", business._id);
@@ -276,21 +294,20 @@ public class ErpDetailActivity extends Activity{
                                 datas.put("master", "sys");
 
 //                                MobileHttpManager.excuteBusinessStepAction(user._id, datas, new ExcuteBusinessStepActionHandler());
-                            }else {
+                            } else {
                                 Intent intent = new Intent(ErpDetailActivity.this, ErpActionProcessActivity.class);
                                 intent.putExtra("actionId", actionId);
                                 intent.putExtra("business", business);
                                 startActivity(intent);
                             }
                         }
-                    }else {
+                    } else {
                         Intent intent = new Intent(ErpDetailActivity.this, ErpActionProcessActivity.class);
                         intent.putExtra("actionId", actionId);
                         intent.putExtra("business", business);
                         startActivity(intent);
                     }
                 }
-
 
 
             }
@@ -300,21 +317,19 @@ public class ErpDetailActivity extends Activity{
 
             }
         });
-
+        //判断是否需要显示动作操作
+        if("roalundeal".equals(type)) {
+            //隐藏
+            erpdetail_sp_action.setVisibility(View.GONE);
+        }else if("userundeal".equals(type)) {
+            erpdetail_sp_action.setVisibility(View.VISIBLE);
+            //已完成的也隐藏
+            if("complete".equals(detail.status) || "cancel".equals(detail.status)) {
+                erpdetail_sp_action.setVisibility(View.GONE);
+            }
+        }
+        erpdetail_sv.setVisibility(View.VISIBLE);
         loadingFragmentDialog.dismiss();
-    }
-
-    class ExcuteBusinessStepActionHandler extends TextHttpResponseHandler {
-
-        @Override
-        public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
-
-        }
-
-        @Override
-        public void onSuccess(int i, Header[] headers, String s) {
-            System.out.println("执行动作返回数据:" + s);
-        }
     }
 
     private MAAction getFlowStepActionById(List<MAAction> actions, String actionId) {
@@ -351,6 +366,7 @@ public class ErpDetailActivity extends Activity{
             String stepId = jsonObject.getString("step");
             String lastUpdateUserId = jsonObject.getString("lastUpdateUser");
             String lastUpdateTime = jsonObject.getString("lastUpdateTime");
+            String status = jsonObject.getString("status");
             MABusinessFlow flow = MobileAssitantCache.getInstance().getBusinessFlow(flowId);
             if(flow != null) {
                 detail.flow = flow.name;
@@ -361,6 +377,7 @@ public class ErpDetailActivity extends Activity{
             }
             detail.flowId = flowId;
             detail.stepId = stepId;
+            detail.status = status;
 
             MAAgent agent = MobileAssitantCache.getInstance().getAgentById(lastUpdateUserId);
             if(agent != null) {

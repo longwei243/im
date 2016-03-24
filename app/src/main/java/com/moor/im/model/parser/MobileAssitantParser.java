@@ -428,6 +428,4 @@ public class MobileAssitantParser {
         }
         return businessStepMap;
     }
-
-
 }

@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
-android:layout_height="match_parent">
+android:layout_height="wrap_content"
+    android:padding="8dp"
+    >
 
     <TextView
         android:id="@+id/erp_field_checkbox_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_centerVertical="true"
+        android:textSize="18sp"
         android:text="字段名"/>
 
     <com.moor.im.ui.view.GridViewInScrollView
@@ -18,11 +25,11 @@ android:layout_height="match_parent">
         android:fadingEdge="none"
         android:fadingEdgeLength="0dp"
         android:gravity="center_horizontal"
-        android:horizontalSpacing="6dp"
-        android:padding="5dp"
+        android:horizontalSpacing="3dp"
+        android:padding="4dp"
         android:scrollbars="none"
-        android:verticalSpacing="6dp"
-        android:numColumns="4"
+        android:verticalSpacing="3dp"
+        android:numColumns="3"
         >
 
     </com.moor.im.ui.view.GridViewInScrollView>

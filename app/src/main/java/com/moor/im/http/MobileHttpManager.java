@@ -5,8 +5,10 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.app.RequestUrl;
+import com.moor.im.ui.activity.ErpActionProcessActivity;
 import com.moor.im.utils.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -313,7 +315,7 @@ public class MobileHttpManager {
     /**
      * 执行动作操作
      */
-    public static void excuteBusinessStepAction(String sessionId, HashMap<String, String> datas,
+    public static void excuteBusinessStepAction(String sessionId, HashMap<String, String> datas,HashMap<String, JSONArray> jadata,
                                      ResponseHandlerInterface responseHandler) {
 
         AsyncHttpClient httpclient = MobileApplication.httpclient;
@@ -325,6 +327,10 @@ public class MobileHttpManager {
             for(String key : datas.keySet()) {
                 json.put(key, datas.get(key));
             }
+            for (String key : jadata.keySet()) {
+                json.put(key, jadata.get(key));
+            }
+
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -332,5 +338,20 @@ public class MobileHttpManager {
         RequestParams params = new RequestParams();
         params.add("data", json + "");
         httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    public static void getQiNiuToken(ResponseHandlerInterface responseHandler) {
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("Action", "app.weixin.getUptoken");
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobileQiNiu, params, responseHandler);
     }
 }

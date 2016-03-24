@@ -3,23 +3,37 @@ package com.moor.im.ui.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.RequestUrl;
+import com.moor.im.db.dao.MessageDao;
+import com.moor.im.db.dao.UserDao;
+import com.moor.im.http.HttpManager;
+import com.moor.im.http.MobileHttpManager;
+import com.moor.im.model.entity.FromToMessage;
 import com.moor.im.model.entity.MAAction;
 import com.moor.im.model.entity.MAActionFields;
 import com.moor.im.model.entity.MAAgent;
@@ -31,11 +45,22 @@ import com.moor.im.model.entity.MAErpDetail;
 import com.moor.im.model.entity.MAFields;
 import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.Option;
+import com.moor.im.model.entity.User;
+import com.moor.im.model.parser.HttpParser;
+import com.moor.im.model.parser.MobileAssitantParser;
+import com.moor.im.ui.adapter.ErpAgentSpAdapter;
 import com.moor.im.ui.adapter.ErpCBAdapter;
 import com.moor.im.ui.adapter.ErpSpAdapter;
+import com.moor.im.ui.dialog.UploadFileDialog;
 import com.moor.im.ui.view.GridViewInScrollView;
 import com.moor.im.utils.MobileAssitantCache;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,9 +79,15 @@ public class ErpActionProcessActivity extends Activity{
     private LinearLayout erp_action_pro_field;
     private Button erp_action_pro_btn;
 
+    private RelativeLayout erp_action_pro_agent;
+    private Spinner erp_action_pro_sp_agent;
+
+    private User user = UserDao.getInstance().getUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_erp_action_process);
 
         erp_action_pro_field = (LinearLayout) findViewById(R.id.erp_action_pro_field);
@@ -67,6 +98,9 @@ public class ErpActionProcessActivity extends Activity{
                 submitProcess();
             }
         });
+
+        erp_action_pro_agent = (RelativeLayout) findViewById(R.id.erp_action_pro_agent);
+        erp_action_pro_sp_agent = (Spinner) findViewById(R.id.erp_action_pro_sp_agent);
 
         Intent intent = getIntent();
         actionId = intent.getStringExtra("actionId");
@@ -83,6 +117,7 @@ public class ErpActionProcessActivity extends Activity{
         MABusinessStep nextStep = MobileAssitantCache.getInstance().getBusinessStep(nextStepId);
         if("sys".equals(nextStep.type)) {
             //隐藏坐席
+            erp_action_pro_agent.setVisibility(View.GONE);
         }else {
             //处理下一步坐席权限
             List<String> roles = new ArrayList<>();
@@ -107,7 +142,8 @@ public class ErpActionProcessActivity extends Activity{
                 }
             }
             //显示showAgents
-
+            erp_action_pro_agent.setVisibility(View.VISIBLE);
+            erp_action_pro_sp_agent.setAdapter(new ErpAgentSpAdapter(ErpActionProcessActivity.this, showAgents));
         }
         //显示自定义字段
         createFlowCustomFields(fields, flow.fields, business, erp_action_pro_field);
@@ -118,6 +154,7 @@ public class ErpActionProcessActivity extends Activity{
      */
     private void submitProcess() {
         HashMap<String, String> datas = new HashMap<>();
+        HashMap<String, JSONArray> jadatas = new HashMap<>();
         int childSize = erp_action_pro_field.getChildCount();
         for(int i=0; i<childSize; i++) {
             RelativeLayout childView = (RelativeLayout) erp_action_pro_field.getChildAt(i);
@@ -152,27 +189,31 @@ public class ErpActionProcessActivity extends Activity{
                     System.out.println("id_data is:"+id_data+","+"value_number is:"+value_data);
                     break;
                 case "radio":
-                    //有空指针问题
                     RadioGroup radioGroup = (RadioGroup) childView.getChildAt(1);
                     int selectId = radioGroup.getCheckedRadioButtonId();
-                    RadioButton rb = (RadioButton) radioGroup.findViewById(selectId);
-                    String id_radio = (String) radioGroup.getTag();
-                    String value_radio = (String) rb.getTag();
-
-                    System.out.println("id_radio is:"+id_radio+","+"value_radio is:"+value_radio);
+                    if(selectId != -1) {
+                        RadioButton rb = (RadioButton) radioGroup.findViewById(selectId);
+                        String id_radio = (String) radioGroup.getTag();
+                        String value_radio = (String) rb.getTag();
+                        datas.put(id_radio, value_radio);
+                        System.out.println("id_radio is:"+id_radio+","+"value_radio is:"+value_radio);
+                    }
                     break;
                 case "checkbox":
                     //数组
+                    JSONArray jsonArray = new JSONArray();
                     GridViewInScrollView gv = (GridViewInScrollView) childView.getChildAt(1);
+                    String cbFieldId = (String) gv.getTag();
                     List<Option> options = ((ErpCBAdapter)gv.getAdapter()).getOptions();
                     HashMap<Integer, Boolean> selected = ErpCBAdapter.getIsSelected();
                     for (int o = 0; o < selected.size(); o++) {
                         if(selected.get(o)) {
                             Option option = options.get(o);
+                            jsonArray.put(option.key);
                             System.out.println("checkbox name is:"+option.name);
                         }
                     }
-
+                    jadatas.put(cbFieldId, jsonArray);
                     break;
                 case "dropdown":
                     //后面_1,_2
@@ -183,38 +224,98 @@ public class ErpActionProcessActivity extends Activity{
                         Spinner sp1 = (Spinner) ((RelativeLayout)(ll.getChildAt(0))).getChildAt(1);
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
+                        datas.put(id_dropdown1, value_dropdown1);
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
                     }else if(ll_child_count == 2) {
                         Spinner sp1 = (Spinner) ((RelativeLayout)(ll.getChildAt(0))).getChildAt(1);
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
+                        datas.put(id_dropdown1, value_dropdown1);
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
 
                         Spinner sp2 = (Spinner) ((RelativeLayout)(ll.getChildAt(1))).getChildAt(1);
                         String id_dropdown2 = (String) sp2.getTag();
                         String value_dropdown2 = ((Option)sp2.getSelectedItem()).key;
+                        datas.put(id_dropdown2, value_dropdown2);
                         System.out.println("id_dropdown2 is:"+id_dropdown2+",value_dropdown2"+value_dropdown2);
                     }else if(ll_child_count == 3) {
                         Spinner sp1 = (Spinner) ((RelativeLayout)(ll.getChildAt(0))).getChildAt(1);
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
+                        datas.put(id_dropdown1, value_dropdown1);
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
 
                         Spinner sp2 = (Spinner) ((RelativeLayout)(ll.getChildAt(1))).getChildAt(1);
                         String id_dropdown2 = (String) sp2.getTag();
                         String value_dropdown2 = ((Option)sp2.getSelectedItem()).key;
+                        datas.put(id_dropdown2, value_dropdown2);
                         System.out.println("id_dropdown2 is:"+id_dropdown2+",value_dropdown2"+value_dropdown2);
 
                         Spinner sp3 = (Spinner) ((RelativeLayout)(ll.getChildAt(2))).getChildAt(1);
                         String id_dropdown3 = (String) sp3.getTag();
                         String value_dropdown3 = ((Option)sp3.getSelectedItem()).key;
+                        datas.put(id_dropdown3, value_dropdown3);
                         System.out.println("id_dropdown3 is:"+id_dropdown3+",value_dropdown3"+value_dropdown3);
 
                     }
                     break;
+                case "file":
+                    LinearLayout filell = (LinearLayout) childView.getChildAt(1);
+                    String fileFieldId = (String) filell.getTag();
+                    System.out.println("附件的字段id是:"+fileFieldId);
+                    int fileCount = filell.getChildCount();
+                    JSONArray ja = new JSONArray();
+                    for(int f=0; f<fileCount; f++) {
+                        JSONObject jb = new JSONObject();
+                        RelativeLayout rl = (RelativeLayout) filell.getChildAt(f);
+                        String filetype = (String) rl.getTag();
+                        TextView fileNameTv = (TextView) rl.getChildAt(0);
+                        String fileName = fileNameTv.getText().toString().trim();
+                        String fileKey = (String) fileNameTv.getTag();
+                        try {
+                            jb.put("id", fileKey);
+                            jb.put("name", fileName);
+                            jb.put("type", filetype);
+
+                            ja.put(jb);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("文件type is:"+filetype+",name is:"+fileName+",key is:"+fileKey);
+                    }
+
+                    jadatas.put(fileFieldId, ja);
+                    break;
             }
+        }
 
+        //提交坐席数据
+        MAAgent agent = (MAAgent) erp_action_pro_sp_agent.getSelectedItem();
+        if(agent != null) {
+            System.out.println("坐席名字是:"+agent.displayName);
+        }
 
+        datas.put("_id", business._id);
+        datas.put("actionId", actionId);
+        datas.put("master", "");
+        MobileHttpManager.excuteBusinessStepAction(user._id, datas, jadatas, new ExcuteBusHandler());
+    }
+
+    class ExcuteBusHandler extends TextHttpResponseHandler{
+
+        @Override
+        public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onSuccess(int i, Header[] headers, String s) {
+            System.out.println("执行动作返回结果:"+s);
+            String succeed = HttpParser.getSucceed(s);
+            if("true".equals(succeed)) {
+                //执行成功
+                finish();
+            }
         }
     }
 
@@ -275,6 +376,7 @@ public class ErpActionProcessActivity extends Activity{
                                 initRadioView(cacheField, pane);
                                 break;
                             case "file":
+                                initFileView(cacheField, pane);
                                 break;
 
                         }
@@ -284,7 +386,8 @@ public class ErpActionProcessActivity extends Activity{
         }
     }
 
-    /**
+
+   /**
      * 下拉框界面
      * @param cacheField
      * @param pane
@@ -441,7 +544,6 @@ public class ErpActionProcessActivity extends Activity{
                 List<Option> options = maoption.options;
                 for (int i=0; i<options.size(); i++) {
                     Option o = options.get(i);
-                    System.out.println("checkbox name is :" + o.name);
                     checkbox_gv.setAdapter(new ErpCBAdapter(ErpActionProcessActivity.this, options));
                     checkbox_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -477,6 +579,9 @@ public class ErpActionProcessActivity extends Activity{
             MAOption maoption = MobileAssitantCache.getInstance().getMAOption(cacheField.dic);
             if(maoption != null) {
                 List<Option> options = maoption.options;
+                if(options.size() > 2) {
+                    radioGroup.setOrientation(RadioGroup.VERTICAL);
+                }
                 for (int i=0; i<options.size(); i++) {
                     Option o = options.get(i);
                     RadioButton rb = new RadioButton(ErpActionProcessActivity.this);
@@ -592,4 +697,123 @@ public class ErpActionProcessActivity extends Activity{
         return false;
     }
 
+    LinearLayout erp_field_file_ll_already;
+    /**
+     * 上传文件界面
+     * @param cacheField
+     * @param pane
+     */
+    private void initFileView(MABusinessField cacheField, LinearLayout pane) {
+        RelativeLayout fileView = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.erp_field_file, null);
+        fileView.setTag("file");
+
+        TextView erp_field_file_tv_name = (TextView) fileView.findViewById(R.id.erp_field_file_tv_name);
+        erp_field_file_tv_name.setText(cacheField.name);
+        erp_field_file_ll_already = (LinearLayout) fileView.findViewById(R.id.erp_field_file_ll_already);
+        erp_field_file_ll_already.setTag(cacheField._id);
+        Button erp_field_file_btn_uploadfile = (Button) fileView.findViewById(R.id.erp_field_file_btn_uploadfile);
+        erp_field_file_btn_uploadfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, 0x1111);
+            }
+        });
+
+        pane.addView(fileView);
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0x1111 && resultCode == Activity.RESULT_OK) {//是否选择，没选择就不会继续
+            Uri uri = data.getData();//得到uri，后面就是将uri转化成file的过程。
+            String path = "";
+            if ("content".equalsIgnoreCase(uri.getScheme())) {
+                String[] projection = { "_data" };
+                Cursor cursor = null;
+                try {
+                    cursor = getContentResolver().query(uri, projection,null, null, null);
+                    int column_index = cursor.getColumnIndexOrThrow("_data");
+                    if (cursor.moveToFirst()) {
+                        path =  cursor.getString(column_index);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+            else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                path =  uri.getPath();
+            }
+
+            File file = new File(path);
+            String fileSizeStr = "";
+            if(file.exists()) {
+                long fileSize = file.length();
+                System.out.println("文件大小为:" + fileSize);
+                if((fileSize / 1024 / 1024) > 10.0) {
+                    //大于10M不能上传
+                    Toast.makeText(ErpActionProcessActivity.this, "上传文件不能大于10M", Toast.LENGTH_SHORT).show();
+                }else {
+                    if(fileSize / 1024 < 1.0) {
+                        //B
+                        fileSizeStr = (int)(fileSize/1024) + "B";
+                    }else if(fileSize / 1024 > 1.0 && fileSize / 1024 / 1024 < 1.0) {
+                        //KB
+                        fileSizeStr = (int)(fileSize/1024) + "KB";
+                    }else if(fileSize / 1024 / 1024 < 10.0) {
+                        //MB
+                        fileSizeStr = (int)(fileSize/1024/1024) + "MB";
+                    }
+
+                    String fileName = path.substring(path.lastIndexOf("/") + 1);
+                    System.out.println("filename is:"+fileName);
+                    UploadFileDialog fileDialog = new UploadFileDialog();
+                    Bundle b = new Bundle();
+                    b.putString("fileName", fileName);
+                    b.putString("fileSize", fileSizeStr);
+                    b.putSerializable("file", file);
+                    fileDialog.setArguments(b);
+                    fileDialog.setOnFileUploadCompletedListener(fileUploadCompletedListener);
+                    fileDialog.show(getFragmentManager(), "");
+                }
+            }
+        }
+    }
+
+    public interface OnFileUploadCompletedListener {
+        void onCompleted(String fileName, String key);
+    }
+
+    OnFileUploadCompletedListener  fileUploadCompletedListener = new OnFileUploadCompletedListener() {
+
+        @Override
+        public void onCompleted(String fileName, String key) {
+            final RelativeLayout rl = (RelativeLayout) LayoutInflater.from(ErpActionProcessActivity.this).inflate(R.layout.erp_field_file_already, null);
+            String type = "other";
+            if(fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase().equals("png") ||
+                    fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase().equals("jpg") ||
+                    fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase().equals("jpeg") ||
+                    fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase().equals("gif") ||
+                    fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase().equals("bmp")) {
+                type = "img";
+            }
+            rl.setTag(type);
+            TextView erp_field_file_upload_already_tv_filename = (TextView) rl.findViewById(R.id.erp_field_file_upload_already_tv_filename);
+            erp_field_file_upload_already_tv_filename.setText(fileName);
+            erp_field_file_upload_already_tv_filename.setTag(key);
+
+            Button erp_field_file_upload_already_btn_delete = (Button) rl.findViewById(R.id.erp_field_file_upload_already_btn_delete);
+            erp_field_file_upload_already_btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //删除附件
+                    erp_field_file_ll_already.removeView(rl);
+                }
+            });
+
+            erp_field_file_ll_already.addView(rl);
+        }
+    };
 }
