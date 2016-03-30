@@ -136,6 +136,22 @@ public class MobileAssitantCache {
         return null;
     }
 
+    public List<MABusinessFlow> getBusinessFlows() {
+        List<MABusinessFlow> flows = new ArrayList<>();
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) != null) {
+            HashMap<String, MABusinessFlow> flowMap = (HashMap<String, MABusinessFlow>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow);
+            for (String key : flowMap.keySet()) {
+                MABusinessFlow flow = flowMap.get(key);
+                flows.add(flow);
+            }
+            return flows;
+        }else {
+
+        }
+        return null;
+    }
+
+
     public MABusinessField getBusinessField(String id) {
         MABusinessField field;
         if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) != null) {

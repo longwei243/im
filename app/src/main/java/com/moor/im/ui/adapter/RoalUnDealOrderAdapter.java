@@ -12,6 +12,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
+import com.moor.im.event.HaveOrderEvent;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MABusiness;
 import com.moor.im.model.entity.MABusinessField;
@@ -24,6 +25,8 @@ import org.apache.http.Header;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by longwei on 2016/2/29.
@@ -128,6 +131,7 @@ public class RoalUnDealOrderAdapter extends BaseAdapter{
             if ("true".equals(succeed)) {
                 maBusinesses.remove(position);
                 notifyDataSetChanged();
+                EventBus.getDefault().post(new HaveOrderEvent());
                 Toast.makeText(context, "领取成功", Toast.LENGTH_SHORT).show();
             }else if("此业务已被其他人领取".equals(msg)){
                 maBusinesses.remove(position);

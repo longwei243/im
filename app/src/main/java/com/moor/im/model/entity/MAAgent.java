@@ -25,4 +25,5 @@ public class MAAgent implements Serializable{
         public String loginName;
         public String pinyin;
         public String sipExten;
+        public String im_icon;
 }

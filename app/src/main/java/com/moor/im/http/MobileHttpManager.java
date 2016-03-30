@@ -354,4 +354,80 @@ public class MobileHttpManager {
         params.add("data", json + "");
         httpclient.post(RequestUrl.baseHttpMobileQiNiu, params, responseHandler);
     }
+
+    /**
+     * 保存备注
+     */
+    public static void saveBusinessBackInfo(String sessionId, String busId, String backInfo,
+                                             ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "addBusinessBackInfo");
+            json.put("_id", busId);
+            json.put("backInfo", backInfo);
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 退回工单
+     */
+    public static void excuteBusinessBackAction(String sessionId, String busId, String backInfo,
+                                            ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "excuteBusinessBackAction");
+            json.put("_id", busId);
+            json.put("backInfo", backInfo);
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 重新提交工单
+     */
+    public static void reSaveBusiness(String sessionId, HashMap<String, String> datas,HashMap<String, JSONArray> jadata,
+                                                ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "addBusinessTask");
+            for(String key : datas.keySet()) {
+                json.put(key, datas.get(key));
+            }
+            for (String key : jadata.keySet()) {
+                json.put(key, jadata.get(key));
+            }
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
 }

@@ -24,6 +24,8 @@ import com.moor.im.R;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
+import com.moor.im.event.ErpExcuteSuccess;
+import com.moor.im.event.HaveOrderEvent;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MABusiness;
 import com.moor.im.model.entity.MABusinessField;
@@ -48,6 +50,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by longwei on 2016/2/29.
@@ -90,6 +94,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         myCallEditor = myCallSp.edit();
         myCallEditor.clear();
         myCallEditor.commit();
+        EventBus.getDefault().register(this);
         return view;
     }
     @Override
@@ -430,5 +435,31 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         }
         userundeal_rl_queryitem.setVisibility(View.VISIBLE);
         userundeal_tv_queryitem.setText(sb.toString());
+    }
+
+    public void onEventMainThread(HaveOrderEvent event) {
+        userundeal_sp_quickquery.setSelection(0);
+        myCallEditor.clear();
+        myCallEditor.commit();
+        HashMap<String, String> datas = new HashMap<>();
+        MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        userundeal_rl_queryitem.setVisibility(View.GONE);
+    }
+
+    public void onEventMainThread(ErpExcuteSuccess event) {
+        userundeal_sp_quickquery.setSelection(0);
+        myCallEditor.clear();
+        myCallEditor.commit();
+        HashMap<String, String> datas = new HashMap<>();
+        MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        userundeal_rl_queryitem.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

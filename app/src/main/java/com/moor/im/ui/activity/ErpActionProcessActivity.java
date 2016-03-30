@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -31,6 +33,7 @@ import com.moor.im.R;
 import com.moor.im.app.RequestUrl;
 import com.moor.im.db.dao.MessageDao;
 import com.moor.im.db.dao.UserDao;
+import com.moor.im.event.ErpExcuteSuccess;
 import com.moor.im.http.HttpManager;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.FromToMessage;
@@ -67,6 +70,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by longwei on 2016/3/16.
@@ -111,6 +116,10 @@ public class ErpActionProcessActivity extends Activity{
         MABusinessStep step = MobileAssitantCache.getInstance().getBusinessStep(business.stepId);
 
         MAAction action = getFlowStepActionById(step.actions, actionId);
+        TextView erp_action_process_tv_name = (TextView) findViewById(R.id.erp_action_process_tv_name);
+        erp_action_process_tv_name.setText("处理工单-"+action.name);
+
+
         List<MAActionFields> fields = action.actionFields;
 
         String nextStepId = action.jumpTo;
@@ -129,6 +138,10 @@ public class ErpActionProcessActivity extends Activity{
             List<MAAgent> agents = MobileAssitantCache.getInstance().getAgents();
             List<String> ids = new ArrayList<>();
             List<MAAgent> showAgents = new ArrayList<>();
+            MAAgent autoMaster = new MAAgent();
+            autoMaster.displayName = "自动分配";
+            autoMaster._id = "";
+            showAgents.add(autoMaster);
             for(int j=0; j<roles.size(); j++) {
                 String roleId = roles.get(j);
                 for(int k=0; k<agents.size(); k++) {
@@ -147,6 +160,13 @@ public class ErpActionProcessActivity extends Activity{
         }
         //显示自定义字段
         createFlowCustomFields(fields, flow.fields, business, erp_action_pro_field);
+
+        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -202,6 +222,7 @@ public class ErpActionProcessActivity extends Activity{
                 case "checkbox":
                     //数组
                     JSONArray jsonArray = new JSONArray();
+                    JSONArray jsonArray_default = new JSONArray();
                     GridViewInScrollView gv = (GridViewInScrollView) childView.getChildAt(1);
                     String cbFieldId = (String) gv.getTag();
                     List<Option> options = ((ErpCBAdapter)gv.getAdapter()).getOptions();
@@ -210,10 +231,12 @@ public class ErpActionProcessActivity extends Activity{
                         if(selected.get(o)) {
                             Option option = options.get(o);
                             jsonArray.put(option.key);
+                            jsonArray_default.put(option.name);
                             System.out.println("checkbox name is:"+option.name);
                         }
                     }
                     jadatas.put(cbFieldId, jsonArray);
+                    jadatas.put(cbFieldId+"_default", jsonArray_default);
                     break;
                 case "dropdown":
                     //后面_1,_2
@@ -225,36 +248,46 @@ public class ErpActionProcessActivity extends Activity{
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
                         datas.put(id_dropdown1, value_dropdown1);
+                        datas.put(id_dropdown1+"_default", ((Option)sp1.getSelectedItem()).name);
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
                     }else if(ll_child_count == 2) {
                         Spinner sp1 = (Spinner) ((RelativeLayout)(ll.getChildAt(0))).getChildAt(1);
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
                         datas.put(id_dropdown1, value_dropdown1);
+                        datas.put(id_dropdown1+"_default", ((Option)sp1.getSelectedItem()).name);
+
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
 
                         Spinner sp2 = (Spinner) ((RelativeLayout)(ll.getChildAt(1))).getChildAt(1);
                         String id_dropdown2 = (String) sp2.getTag();
                         String value_dropdown2 = ((Option)sp2.getSelectedItem()).key;
                         datas.put(id_dropdown2, value_dropdown2);
+                        datas.put(id_dropdown2+"_default", ((Option)sp2.getSelectedItem()).name);
                         System.out.println("id_dropdown2 is:"+id_dropdown2+",value_dropdown2"+value_dropdown2);
                     }else if(ll_child_count == 3) {
                         Spinner sp1 = (Spinner) ((RelativeLayout)(ll.getChildAt(0))).getChildAt(1);
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
                         datas.put(id_dropdown1, value_dropdown1);
+                        datas.put(id_dropdown1+"_default", ((Option)sp1.getSelectedItem()).name);
+
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
 
                         Spinner sp2 = (Spinner) ((RelativeLayout)(ll.getChildAt(1))).getChildAt(1);
                         String id_dropdown2 = (String) sp2.getTag();
                         String value_dropdown2 = ((Option)sp2.getSelectedItem()).key;
                         datas.put(id_dropdown2, value_dropdown2);
+                        datas.put(id_dropdown2+"_default", ((Option)sp2.getSelectedItem()).name);
+
                         System.out.println("id_dropdown2 is:"+id_dropdown2+",value_dropdown2"+value_dropdown2);
 
                         Spinner sp3 = (Spinner) ((RelativeLayout)(ll.getChildAt(2))).getChildAt(1);
                         String id_dropdown3 = (String) sp3.getTag();
                         String value_dropdown3 = ((Option)sp3.getSelectedItem()).key;
                         datas.put(id_dropdown3, value_dropdown3);
+                        datas.put(id_dropdown2+"_default", ((Option)sp2.getSelectedItem()).name);
+                        datas.put(id_dropdown3+"_default", ((Option)sp3.getSelectedItem()).name);
                         System.out.println("id_dropdown3 is:"+id_dropdown3+",value_dropdown3"+value_dropdown3);
 
                     }
@@ -269,7 +302,7 @@ public class ErpActionProcessActivity extends Activity{
                         JSONObject jb = new JSONObject();
                         RelativeLayout rl = (RelativeLayout) filell.getChildAt(f);
                         String filetype = (String) rl.getTag();
-                        TextView fileNameTv = (TextView) rl.getChildAt(0);
+                        TextView fileNameTv = (TextView) rl.getChildAt(1);
                         String fileName = fileNameTv.getText().toString().trim();
                         String fileKey = (String) fileNameTv.getTag();
                         try {
@@ -291,13 +324,14 @@ public class ErpActionProcessActivity extends Activity{
 
         //提交坐席数据
         MAAgent agent = (MAAgent) erp_action_pro_sp_agent.getSelectedItem();
+        String agentId = "";
         if(agent != null) {
-            System.out.println("坐席名字是:"+agent.displayName);
+            agentId = agent._id;
         }
 
         datas.put("_id", business._id);
         datas.put("actionId", actionId);
-        datas.put("master", "");
+        datas.put("master", agentId);
         MobileHttpManager.excuteBusinessStepAction(user._id, datas, jadatas, new ExcuteBusHandler());
     }
 
@@ -314,7 +348,12 @@ public class ErpActionProcessActivity extends Activity{
             String succeed = HttpParser.getSucceed(s);
             if("true".equals(succeed)) {
                 //执行成功
+                EventBus.getDefault().post(new ErpExcuteSuccess());
                 finish();
+            }else if("403".equals(HttpParser.getErrorCode(s))) {
+                Toast.makeText(ErpActionProcessActivity.this, "该工单步骤已被执行或您已无权限执行", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(ErpActionProcessActivity.this, "执行失败", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -715,9 +754,14 @@ public class ErpActionProcessActivity extends Activity{
         erp_field_file_btn_uploadfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");//设置类型
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                Intent intent = null;
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");//设置类型
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                }else {
+                    intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                }
                 startActivityForResult(intent, 0x1111);
             }
         });
@@ -804,7 +848,7 @@ public class ErpActionProcessActivity extends Activity{
             erp_field_file_upload_already_tv_filename.setText(fileName);
             erp_field_file_upload_already_tv_filename.setTag(key);
 
-            Button erp_field_file_upload_already_btn_delete = (Button) rl.findViewById(R.id.erp_field_file_upload_already_btn_delete);
+            ImageView erp_field_file_upload_already_btn_delete = (ImageView) rl.findViewById(R.id.erp_field_file_upload_already_btn_delete);
             erp_field_file_upload_already_btn_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

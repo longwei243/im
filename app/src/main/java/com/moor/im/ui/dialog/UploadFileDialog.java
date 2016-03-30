@@ -104,7 +104,7 @@ public class UploadFileDialog  extends DialogFragment {
             UploadManager uploadManager = new UploadManager();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
             String date = sdf.format(new Date());
-            final String fileKey = user.account+"/business/"+date + "/"+ System.currentTimeMillis()+"/"+ UUID.randomUUID();
+            final String fileKey = user.account+"/business/"+date + "/"+ System.currentTimeMillis()+"/"+ fileName;
 
             uploadManager.put(file, fileKey, upToken,
                     new UpCompletionHandler() {

@@ -24,6 +24,7 @@ import com.moor.im.R;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
+import com.moor.im.event.ErpExcuteSuccess;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MABusiness;
@@ -55,6 +56,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by longwei on 2016/2/29.
@@ -95,6 +98,7 @@ public class RoalUnDealOrderFragment extends Fragment{
         myCallEditor = myCallSp.edit();
         myCallEditor.clear();
         myCallEditor.commit();
+        EventBus.getDefault().register(this);
         initViews(view);
         return view;
     }
@@ -431,5 +435,17 @@ public class RoalUnDealOrderFragment extends Fragment{
         }
         roalundeal_rl_queryitem.setVisibility(View.VISIBLE);
         roalundeal_tv_queryitem.setText(sb.toString());
+    }
+
+    public void onEventMainThread(ErpExcuteSuccess event) {
+        HashMap<String, String> datas = new HashMap<>();
+        MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

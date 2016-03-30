@@ -5,13 +5,13 @@
     android:layout_margin="3dp"
     >
 
-    <ImageView
+    <com.moor.im.ui.view.RoundImageView
         android:layout_alignParentLeft="true"
         android:id="@+id/erp_history_iv_imicon"
-        android:layout_marginLeft="4dp"
+        android:layout_margin="8dp"
         android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@drawable/ic_person_grey600_48dp"/>
 
     <LinearLayout
@@ -20,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="4dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -31,6 +30,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/grey"
                 android:text="name"
                 />
             <TextView
@@ -39,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
+                android:textColor="@color/grey"
                 android:text="time"
                 />
         </RelativeLayout>

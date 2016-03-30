@@ -317,6 +317,10 @@
             android:name=".ui.activity.ErpActionProcessActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.activity.ErpActionBackActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <receiver
             android:name=".receiver.NetWorkReceiver"

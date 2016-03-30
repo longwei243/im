@@ -63,6 +63,24 @@ public class HttpParser {
 		return message;
 	}
 	/**
+	 * 获取返回错误码
+	 *
+	 * @param responseString
+	 * @return
+	 */
+	public static String getErrorCode(String responseString) {
+		String message = "";
+		try {
+			JSONObject o = new JSONObject(responseString);
+			message = o.getString("ErrorCode");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return message;
+	}
+	/**
 	 * 获取大量消息的id
 	 * 
 	 * @param responseString

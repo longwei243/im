@@ -60,6 +60,103 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/erp_detail_start_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="12dp"
+                        android:text="工单类型"
+                        />
+                    <Spinner
+                        android:id="@+id/erp_detail_start_sp_type"
+                        android:background="@null"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/erp_detail_start_ll_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="vertical">
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="12dp"
+                        android:text="下一步处理"
+                        />
+                    <Spinner
+                        android:id="@+id/erp_detail_start_sp_nextstep"
+                        android:background="@null"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="12dp"
+                        android:text="处理人"
+                        />
+                    <Spinner
+                        android:id="@+id/erp_detail_start_sp_nextagent"
+                        android:background="@null"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <Button
+                    android:id="@+id/erp_detail_start_btn_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/all_white"
+                    android:background="@drawable/login_btn_selector"
+                    android:text="提交"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/erp_detail_field_bg"
@@ -158,13 +255,13 @@
                             android:textSize="14sp"
                             android:text="时间"/>
                     </LinearLayout>
-                    <ImageView
+                    <com.moor.im.ui.view.RoundImageView
                         android:id="@+id/erpdetail_iv_imicon"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="8dp"
+                        android:layout_margin="8dp"
                         android:layout_toLeftOf="@id/erpdetail_ll_r"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_person_grey600_48dp"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -177,21 +274,38 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:layout_margin="12dp"
+                android:paddingBottom="4dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:background="@drawable/erpdetail_backinfo_bg"
+                    android:layout_margin="1dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     >
-                    <Button
+                    <TextView
                         android:id="@+id/erpdetail_btn_save"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/maincolor"
+                        android:textSize="18sp"
                         android:text="保存"/>
                     <EditText
+                        android:id="@+id/erpdetail_et_backinfo"
                         android:layout_toLeftOf="@id/erpdetail_btn_save"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/layout_bg"
+                        android:singleLine="true"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="4dp"
+                        android:hint="添加备注"
+                        android:textSize="16sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </RelativeLayout>
