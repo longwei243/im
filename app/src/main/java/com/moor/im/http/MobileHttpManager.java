@@ -430,4 +430,48 @@ public class MobileHttpManager {
         params.add("data", json + "");
         httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
     }
+
+    /**
+     * 客户详情
+     */
+    public static void getCustomerDetails(String sessionId, String customerId,
+                                                ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "mobileAssistant.doBusiness");
+            json.put("real_action", "queryCustInfo");
+            json.put("_id", customerId);
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
+
+    /**
+     * 获取客户缓存
+     */
+    public static void getCustCache(String sessionId,
+                                      ResponseHandlerInterface responseHandler) {
+
+        AsyncHttpClient httpclient = MobileApplication.httpclient;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sessionId", Utils.replaceBlank(sessionId));
+            json.put("action", "common.getDicCache");
+            json.put("type", "custTmpls");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams();
+        params.add("data", json + "");
+        httpclient.post(RequestUrl.baseHttpMobile, params, responseHandler);
+    }
 }

@@ -15,4 +15,5 @@ public class MABusiness implements Serializable{
     public String createUser;
     public String lastUpdateTime;
     public String master;
+    public String customer;
 }

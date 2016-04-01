@@ -300,6 +300,7 @@ public class RoalUnDealOrderFragment extends Fragment{
                         Intent intent = new Intent(getActivity(), ErpDetailActivity.class);
                         intent.putExtra("busId", business._id);
                         intent.putExtra("customerName", business.name);
+                        intent.putExtra("customerId", business.customer);
                         intent.putExtra("type", "roalundeal");
                         startActivity(intent);
                     }

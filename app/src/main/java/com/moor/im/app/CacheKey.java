@@ -35,6 +35,10 @@ public class CacheKey {
 	 */
 	public static final String CACHE_MAOption = "cache_option";
 	/**
+	 * cust缓存
+	 */
+	public static final String CACHE_MACust = "cache_cust";
+	/**
 	 * 工单流程缓存
 	 */
 	public static final String CACHE_MABusinessFlow = "cache_businessflow";

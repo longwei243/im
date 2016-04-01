@@ -287,6 +287,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                         Intent intent = new Intent(getActivity(), ErpDetailActivity.class);
                         intent.putExtra("busId", business._id);
                         intent.putExtra("customerName", business.name);
+                        intent.putExtra("customerId", business.customer);
                         intent.putExtra("type", "userundeal");
                         startActivity(intent);
                     }

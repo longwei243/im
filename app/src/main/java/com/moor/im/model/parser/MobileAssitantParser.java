@@ -295,6 +295,7 @@ public class MobileAssitantParser {
                     }
 
                     b.name = NullUtil.checkNull(businesses.get(i).name);
+                    b.customer = NullUtil.checkNull(businesses.get(i).customer);
 
                     b.lastUpdateTime = TimeUtil.getShortTime(NullUtil.checkNull(businesses.get(i).lastUpdateTime));
                     if(businesses.get(i).master != null && !"".equals(businesses.get(i).master)) {

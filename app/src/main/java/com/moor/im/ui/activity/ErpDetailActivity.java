@@ -113,6 +113,7 @@ public class ErpDetailActivity extends Activity{
         Intent intent = getIntent();
         String busId = intent.getStringExtra("busId");
         String customerName = intent.getStringExtra("customerName");
+        final String customerId = intent.getStringExtra("customerId");
         type = intent.getStringExtra("type");
         erpdetail_sv = (ScrollView) findViewById(R.id.erpdetail_sv);
         erpdetail_tv_customerName = (TextView) findViewById(R.id.erpdetail_tv_customerName);
@@ -138,9 +139,9 @@ public class ErpDetailActivity extends Activity{
             @Override
             public void onClick(View v) {
                 String backInfoStr = erpdetail_et_backinfo.getText().toString().trim();
-                if(!"".equals(backInfoStr)) {
+                if (!"".equals(backInfoStr)) {
                     saveBackInfo(backInfoStr);
-                }else {
+                } else {
                     Toast.makeText(ErpDetailActivity.this, "请输入备注内容", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -152,6 +153,17 @@ public class ErpDetailActivity extends Activity{
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+
+        RelativeLayout erpdetail_rl_customer = (RelativeLayout) findViewById(R.id.erpdetail_rl_customer);
+        erpdetail_rl_customer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent customerIntent = new Intent(ErpDetailActivity.this, ErpCustomerDetailActivity.class);
+                customerIntent.putExtra("customerId", customerId);
+                startActivity(customerIntent);
             }
         });
     }

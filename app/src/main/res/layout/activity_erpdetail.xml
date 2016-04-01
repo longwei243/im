@@ -164,6 +164,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/erpdetail_rl_customer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="4dp"
