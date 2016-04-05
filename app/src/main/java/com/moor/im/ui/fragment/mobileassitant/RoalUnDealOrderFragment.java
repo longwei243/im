@@ -105,6 +105,7 @@ public class RoalUnDealOrderFragment extends Fragment{
 
     private void initViews(View view) {
         footerView = LayoutInflater.from(getActivity()).inflate(R.layout.footer, null);
+        mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.roalundeal_ptl);
 
         roalundeal_tv_hignquery = (TextView) view.findViewById(R.id.roalundeal_tv_hignquery);
         roalundeal_tv_hignquery.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +159,10 @@ public class RoalUnDealOrderFragment extends Fragment{
     }
 
     private void initCache() {
-        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) == null) {
+        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
+            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+            MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
+        }else if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) == null) {
             loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
             MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
         }else {
@@ -170,10 +174,99 @@ public class RoalUnDealOrderFragment extends Fragment{
 
     }
 
+    class GetAgentResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAAgent> agents = MobileAssitantParser.getAgents(responseString);
+                    HashMap<String, MAAgent> agentDatas = MobileAssitantParser.transformAgentData(agents);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAAgent, agentDatas, CacheUtils.TIME_DAY);
+                    //缓存坐席数据
+                    MobileHttpManager.getQueueCache(user._id, new GetQueueResponseHandler());
+
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetQueueResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAQueue> queues = MobileAssitantParser.getQueues(responseString);
+                    HashMap<String, MAQueue> queueDatas = MobileAssitantParser.transformQueueData(queues);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAQueue, queueDatas, CacheUtils.TIME_DAY);
+                    //缓存option数据
+                    MobileHttpManager.getOptionCache(user._id, new GetOptionResponseHandler());
+
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetOptionResponseHandler extends TextHttpResponseHandler {
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            try {
+                JSONObject o = new JSONObject(responseString);
+                if(o.getBoolean("success")) {
+                    List<MAOption> options = MobileAssitantParser.getOptions(responseString);
+                    HashMap<String, MAOption> optionDatas = MobileAssitantParser.transformOptionData(options);
+                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAOption, optionDatas, CacheUtils.TIME_DAY);
+
+                    MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
     class GetBusinessFlowResponseHandler extends TextHttpResponseHandler {
         @Override
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -193,6 +286,9 @@ public class RoalUnDealOrderFragment extends Fragment{
         @Override
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -212,6 +308,9 @@ public class RoalUnDealOrderFragment extends Fragment{
         @Override
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
+            loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
+            Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -234,6 +333,7 @@ public class RoalUnDealOrderFragment extends Fragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -266,7 +366,6 @@ public class RoalUnDealOrderFragment extends Fragment{
         protected void onPostExecute(List<MABusiness> businessList) {
             super.onPostExecute(businessList);
 
-            mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.roalundeal_ptl);
             mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
             mPullRefreshListView.getRefreshableView().removeFooterView(footerView);
             mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {

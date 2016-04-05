@@ -96,6 +96,7 @@ public class MyCallFragment extends Fragment{
 
     private void initViews(View view) {
         footerView = LayoutInflater.from(getActivity()).inflate(R.layout.footer, null);
+        mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.my_ptl);
 
         mycall_tv_hignquery = (TextView) view.findViewById(R.id.mycall_tv_hignquery);
         mycall_tv_hignquery.setOnClickListener(new View.OnClickListener() {
@@ -272,6 +273,7 @@ public class MyCallFragment extends Fragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -300,6 +302,7 @@ public class MyCallFragment extends Fragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -328,6 +331,7 @@ public class MyCallFragment extends Fragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -357,6 +361,7 @@ public class MyCallFragment extends Fragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "请检查您的网络问题！！！", Toast.LENGTH_SHORT).show();
         }
 
@@ -386,7 +391,6 @@ public class MyCallFragment extends Fragment{
         protected void onPostExecute(List<MACallLogData> maCallLogDatas) {
             super.onPostExecute(maCallLogDatas);
             loadingFragmentDialog.dismiss();
-            mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.my_ptl);
             mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
 
             mPullRefreshListView.getRefreshableView().removeFooterView(footerView);
@@ -600,4 +604,5 @@ public class MyCallFragment extends Fragment{
         mycall_rl_queryitem.setVisibility(View.VISIBLE);
         mycall_tv_queryitem.setText(sb.toString());
     }
+
 }

@@ -104,6 +104,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
 
     private void initViews(View view) {
         footerView = LayoutInflater.from(getActivity()).inflate(R.layout.footer, null);
+        mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.userundeal_ptl);
 
         userundeal_tv_hignquery = (TextView) view.findViewById(R.id.userundeal_tv_hignquery);
         userundeal_tv_hignquery.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +223,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "网络异常，数据加载失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -254,7 +256,6 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         protected void onPostExecute(List<MABusiness> businessList) {
             super.onPostExecute(businessList);
 
-            mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.userundeal_ptl);
             mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
             mPullRefreshListView.getRefreshableView().removeFooterView(footerView);
             mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {

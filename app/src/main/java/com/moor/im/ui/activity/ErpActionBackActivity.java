@@ -74,6 +74,7 @@ public class ErpActionBackActivity extends Activity{
         public void onSuccess(int i, Header[] headers, String s) {
             String succeed = HttpParser.getSucceed(s);
             if ("true".equals(succeed)) {
+                Toast.makeText(ErpActionBackActivity.this, "退回成功", Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new ErpExcuteSuccess());
                 finish();
             }

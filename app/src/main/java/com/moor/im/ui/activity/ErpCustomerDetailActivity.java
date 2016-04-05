@@ -124,7 +124,6 @@ public class ErpCustomerDetailActivity extends Activity{
 
         @Override
         public void onSuccess(int i, Header[] headers, String s) {
-            System.out.println("客户缓存数据："+s);
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if("true".equals(jsonObject.getString("success"))) {
@@ -148,7 +147,6 @@ public class ErpCustomerDetailActivity extends Activity{
 
         @Override
         public void onSuccess(int i, Header[] headers, String s) {
-            System.out.println("客户详细信息数据："+s);
             try {
                 JSONObject jsonObject1 = new JSONObject(s);
                 if("true".equals(jsonObject1.getString("Succeed"))) {
@@ -282,9 +280,6 @@ public class ErpCustomerDetailActivity extends Activity{
                     erp_customer_ll_fields.addView(rl);
                 }
             }
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

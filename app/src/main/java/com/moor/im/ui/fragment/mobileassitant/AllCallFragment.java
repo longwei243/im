@@ -109,6 +109,7 @@ public class AllCallFragment extends BaseLazyFragment{
             }
         });
 
+        mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.all_ptl);
 
         allcall_et_numquery = (EditText) view.findViewById(R.id.allcall_et_numquery);
         allcall_ib_search = (ImageButton) view.findViewById(R.id.allcall_ib_search);
@@ -264,6 +265,7 @@ public class AllCallFragment extends BaseLazyFragment{
         public void onFailure(int statusCode, Header[] headers,
                               String responseString, Throwable throwable) {
             loadingFragmentDialog.dismiss();
+            mPullRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
             Toast.makeText(getActivity(), "请检查您的网络问题！！！", Toast.LENGTH_SHORT).show();
         }
 
@@ -293,7 +295,6 @@ public class AllCallFragment extends BaseLazyFragment{
         protected void onPostExecute(List<MACallLogData> maCallLogDatas) {
             super.onPostExecute(maCallLogDatas);
             loadingFragmentDialog.dismiss();
-            mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.all_ptl);
             mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
 
             mPullRefreshListView.getRefreshableView().removeFooterView(footerView);

@@ -348,6 +348,7 @@ public class ErpActionProcessActivity extends Activity{
             String succeed = HttpParser.getSucceed(s);
             if("true".equals(succeed)) {
                 //执行成功
+                Toast.makeText(ErpActionProcessActivity.this, "执行成功", Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new ErpExcuteSuccess());
                 finish();
             }else if("403".equals(HttpParser.getErrorCode(s))) {
