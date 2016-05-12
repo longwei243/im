@@ -43,6 +43,7 @@ import com.moor.im.ui.activity.ChatActivity;
 import com.moor.im.ui.activity.DepartmentAddActivity;
 import com.moor.im.ui.activity.DepartmentUpdateActivity;
 import com.moor.im.ui.activity.LoginActivity;
+import com.moor.im.ui.activity.MAActivity;
 import com.moor.im.ui.activity.SystemActivity;
 import com.moor.im.ui.activity.WebActivity;
 import com.moor.im.ui.adapter.MessageAdapter;
@@ -195,12 +196,12 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 				R.id.all_unreadcount);
 
 		fragment_message_gongdan = (LinearLayout) mView.findViewById(R.id.fragment_message_gongdan);
-//		boolean ischeck = myPreferences.getBoolean("gongdan", true);
-//		if(ischeck) {
-//			fragment_message_gongdan.setVisibility(View.VISIBLE);
-//		}else {
-//			fragment_message_gongdan.setVisibility(View.GONE);
-//		}
+		boolean ischeck = myPreferences.getBoolean("gongdan", true);
+		if(ischeck) {
+			fragment_message_gongdan.setVisibility(View.VISIBLE);
+		}else {
+			fragment_message_gongdan.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -221,8 +222,8 @@ public class MessageFragment extends Fragment implements OnItemClickListener {
 		fragment_message_gongdan.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent webIntent = new Intent(getActivity(), WebActivity.class);
-				startActivity(webIntent);
+				Intent maIntent = new Intent(getActivity(), MAActivity.class);
+				startActivity(maIntent);
 			}
 		});
 

@@ -468,7 +468,7 @@ public class ErpDetailActivity extends Activity{
                                 datas.put("actionId", act._id);
                                 datas.put("master", "sys");
 
-//                                MobileHttpManager.excuteBusinessStepAction(user._id, datas, new ExcuteBusinessStepActionHandler());
+                                MobileHttpManager.excuteBusinessStepAction(user._id, datas, new HashMap<String, JSONArray>(),new ExcuteBusHandler());
                             } else {
                                 Intent intent = new Intent(ErpDetailActivity.this, ErpActionProcessActivity.class);
                                 intent.putExtra("actionId", actionId);

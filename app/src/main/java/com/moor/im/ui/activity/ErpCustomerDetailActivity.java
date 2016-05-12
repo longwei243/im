@@ -83,6 +83,10 @@ public class ErpCustomerDetailActivity extends Activity{
         setContentView(R.layout.activity_erp_customer_detail);
 
         customerId = getIntent().getStringExtra("customerId");
+        if("".equals(customerId)) {
+            Toast.makeText(ErpCustomerDetailActivity.this, "该客户不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
         loadingFragmentDialog = new LoadingFragmentDialog();
         erp_customer_tv_name = (TextView) findViewById(R.id.erp_customer_tv_name);
         erp_customer_tv_source = (TextView) findViewById(R.id.erp_customer_tv_source);
@@ -129,6 +133,8 @@ public class ErpCustomerDetailActivity extends Activity{
                 if("true".equals(jsonObject.getString("success"))) {
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MACust, s);
                     MobileHttpManager.getCustomerDetails(user._id, customerId, new GetCustomerHandler());
+                }else {
+                    loadingFragmentDialog.dismiss();
                 }
             }catch (JSONException e) {
 
@@ -148,6 +154,7 @@ public class ErpCustomerDetailActivity extends Activity{
         @Override
         public void onSuccess(int i, Header[] headers, String s) {
             try {
+                System.out.println("获取客户详细数据:"+s);
                 JSONObject jsonObject1 = new JSONObject(s);
                 if("true".equals(jsonObject1.getString("Succeed"))) {
                     JSONObject jsonObject = jsonObject1.getJSONObject("data");
@@ -160,8 +167,8 @@ public class ErpCustomerDetailActivity extends Activity{
                     String lastUpdateTime = jsonObject.getString("lastUpdateTime");
                     erp_customer_tv_lastUpdateTime.setText(lastUpdateTime);
 
-                    String batchNo = jsonObject.getString("batchNo");
-                    erp_customer_tv_batchNo.setText(batchNo);
+//                    String batchNo = jsonObject.getString("batchNo");
+//                    erp_customer_tv_batchNo.setText(batchNo);
 
                     String agentId = jsonObject.getString("owner");
                     MAAgent agent = MobileAssitantCache.getInstance().getAgentById(agentId);
@@ -186,9 +193,13 @@ public class ErpCustomerDetailActivity extends Activity{
                         loadingFragmentDialog.dismiss();
                         erp_customer_sv.setVisibility(View.VISIBLE);
                     }
+                }else {
+                    loadingFragmentDialog.dismiss();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                loadingFragmentDialog.dismiss();
+                Toast.makeText(ErpCustomerDetailActivity.this, "数据格式错误", Toast.LENGTH_SHORT).show();
             }
 
         }

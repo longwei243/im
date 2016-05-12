@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.event.LoginEvent;
+import com.moor.im.event.NewOrderEvent;
 import com.moor.im.event.SocketEvent;
 import com.moor.im.tcpservice.manager.LoginManager;
 import com.moor.im.tcpservice.manager.SocketManager;
@@ -130,7 +131,10 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 			SocketManager.getInstance(MobileApplication.getInstance()).setStatus(SocketManagerStatus.LOGINED);
 			MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "登陆成功了：connecTionId被保存起来了：" + connectionid);
-		} else {
+		}else if("800".equals(result)) {
+			//有新的工单
+			EventBus.getDefault().post(new NewOrderEvent());
+		}else {
 			MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "ServerMessageHandler，服务器返回的数据是："+ result+" 未知的标示");
 		}
 	}

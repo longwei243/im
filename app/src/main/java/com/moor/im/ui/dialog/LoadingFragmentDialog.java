@@ -28,6 +28,7 @@ public class LoadingFragmentDialog extends DialogFragment{
         title.setText("请稍等...");
         Dialog dialog = new Dialog(getActivity(), R.style.dialog);
         dialog.setContentView(view);
+        dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
 

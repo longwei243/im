@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/roalundeal_ll_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin_40"
+        android:layout_height="40dp"
         android:background="@color/halftrans"
         android:orientation="horizontal"
         android:gravity="center_vertical"
@@ -69,8 +69,29 @@
 
     </LinearLayout>
 
-    <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
+    <RelativeLayout
         android:layout_below="@id/roalundeal_ll_title"
+        android:id="@+id/roalundeal_rl_neworder"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_bg"
+        android:layout_margin="4dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有新的工单，点击刷新"
+            android:textColor="@color/all_white"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
+    <com.moor.im.ui.view.pulltorefresh.PullToRefreshListView
+        android:layout_below="@id/roalundeal_rl_neworder"
         android:id="@+id/roalundeal_ptl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -82,6 +103,8 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true" />
+
+
 
     <RelativeLayout
         android:visibility="gone"

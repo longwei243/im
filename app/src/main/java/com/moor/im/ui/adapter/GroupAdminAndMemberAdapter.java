@@ -83,7 +83,7 @@ public class GroupAdminAndMemberAdapter extends BaseAdapter{
 
     private int getDepartmentFirstPosition() {
         for (int i = 0; i < groupAdminAndMembersList.size(); i++) {
-            if(groupAdminAndMembersList.get(i).getType() == "Admin") {
+            if(groupAdminAndMembersList.get(i).getType().equals("Admin")) {
                 return i;
             }
         }
@@ -91,7 +91,7 @@ public class GroupAdminAndMemberAdapter extends BaseAdapter{
     }
     private int getMemberFirstPosition() {
         for (int i = 0; i < groupAdminAndMembersList.size(); i++) {
-            if(groupAdminAndMembersList.get(i).getType() == "Member") {
+            if(groupAdminAndMembersList.get(i).getType().equals("Member")) {
                 return i;
             }
         }

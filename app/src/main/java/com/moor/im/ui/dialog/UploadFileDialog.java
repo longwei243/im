@@ -57,7 +57,7 @@ public class UploadFileDialog  extends DialogFragment {
 
         Dialog dialog = new Dialog(getActivity(), R.style.dialog);
         dialog.setContentView(uploadView);
-
+        dialog.setCanceledOnTouchOutside(false);
         MobileHttpManager.getQiNiuToken(
                             new UploadFileResponseHandler(fileName, file, erp_field_file_upload_tv_precent, tv_precent));
 

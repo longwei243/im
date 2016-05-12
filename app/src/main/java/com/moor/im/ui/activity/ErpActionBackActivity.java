@@ -73,10 +73,15 @@ public class ErpActionBackActivity extends Activity{
         @Override
         public void onSuccess(int i, Header[] headers, String s) {
             String succeed = HttpParser.getSucceed(s);
+
             if ("true".equals(succeed)) {
                 Toast.makeText(ErpActionBackActivity.this, "退回成功", Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new ErpExcuteSuccess());
                 finish();
+            }else if("403".equals(HttpParser.getErrorCode(s))) {
+                Toast.makeText(ErpActionBackActivity.this, "该工单步骤已被执行或您已无权限执行", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(ErpActionBackActivity.this, "退回失败", Toast.LENGTH_SHORT).show();
             }
         }
     }

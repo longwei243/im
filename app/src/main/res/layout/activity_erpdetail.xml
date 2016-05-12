@@ -225,6 +225,9 @@
                     android:id="@+id/erpdetail_ll_fields"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/all_white"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
                     android:orientation="vertical">
 
                 </LinearLayout>
@@ -316,6 +319,8 @@
                     android:id="@+id/erpdetail_ll_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/all_white"
+                    android:layout_margin="1dp"
                     android:orientation="vertical">
 
                 </LinearLayout>

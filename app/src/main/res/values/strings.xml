@@ -86,7 +86,7 @@
 
     <string-array name="userundeal">
         <item>快速查询</item>
-        <item>我的代办</item>
+        <item>我的待办</item>
         <item>我参与的</item>
         <item>我创建的</item>
     </string-array>

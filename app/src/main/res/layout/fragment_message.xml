@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/fragment_message_gongdan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +37,7 @@
                     android:textSize="18sp"
                     android:textColor="@color/all_black"
                     android:layout_weight="1"
-                    android:text="工单助手"
+                    android:text="客服助手"
                     />
 
                 <TextView
@@ -59,7 +58,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="查看工单信息" />
+                    android:text="查看通话记录,处理工单" />
 
                 <TextView
                     android:visibility="gone"

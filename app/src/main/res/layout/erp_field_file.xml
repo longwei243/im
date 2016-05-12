@@ -16,10 +16,10 @@ android:layout_height="wrap_content">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text="字段名"/>
 
         <Button
@@ -30,7 +30,7 @@ android:layout_height="wrap_content">
             android:textColor="@color/all_white"
             android:background="@drawable/login_btn_selector"
             android:layout_gravity="center_vertical"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="上传附件"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

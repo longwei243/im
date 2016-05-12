@@ -303,7 +303,8 @@
         </activity>
         <activity
             android:name=".ui.activity.MAErpActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
         </activity>
         <activity
             android:name=".ui.activity.ErpHighQueryActivity"
@@ -323,6 +324,10 @@
         </activity>
         <activity
             android:name=".ui.activity.ErpCustomerDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activity.MAActivity"
             android:screenOrientation="portrait" >
         </activity>
 
@@ -382,6 +387,7 @@
                 <action android:name="com.moor.im.LOGIN_SUCCESS_FOR_RECEIVER" />
                 <action android:name="com.moor.im.NEW_MSG" />
                 <action android:name="com.moor.im.LOGIN_FAILED" />
+                <action android:name="com.moor.im.NEW_ORDER" />
             </intent-filter>
         </receiver>
         <receiver

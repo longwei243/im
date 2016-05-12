@@ -71,5 +71,16 @@
                 app:text="待处理"
                 app:text_size="12sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/all_unreadcount"
+            android:layout_width="@dimen/margin_20"
+            android:layout_height="@dimen/margin_20"
+            android:layout_marginLeft="120dp"
+            android:background="@drawable/chat_unreadcount"
+            android:gravity="center"
+            android:textColor="@color/all_white"
+            android:textSize="@dimen/size_13"
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

@@ -582,6 +582,7 @@ public class MyCallFragment extends Fragment{
             }
 
             if("INVESTIGATE".equals(key)) {
+
                 if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
                     HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
                     for(String optionKey : optionMap.keySet()) {

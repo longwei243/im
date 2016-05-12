@@ -8,6 +8,7 @@ import android.os.Message;
 
 import com.moor.im.app.MobileApplication;
 import com.moor.im.event.LoginEvent;
+import com.moor.im.event.NewOrderEvent;
 import com.moor.im.ui.fragment.MessageFragment;
 import com.moor.im.utils.TimeUtil;
 
@@ -30,6 +31,9 @@ public class IMServiceReceiver extends BroadcastReceiver {
                 break;
             case "com.moor.im.LOGIN_FAILED":
                 EventBus.getDefault().postSticky(LoginEvent.LOGIN_FAILED);
+                break;
+            case "com.moor.im.NEW_ORDER":
+                EventBus.getDefault().post(new NewOrderEvent());
                 break;
         }
     }

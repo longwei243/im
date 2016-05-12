@@ -27,6 +27,7 @@ import com.moor.im.db.dao.MessageDao;
 import com.moor.im.db.dao.NewMessageDao;
 import com.moor.im.event.LoginEvent;
 import com.moor.im.event.NewMessgeEvent;
+import com.moor.im.event.NewOrderEvent;
 import com.moor.im.event.ReconnectEvent;
 import com.moor.im.event.SocketEvent;
 import com.moor.im.http.HttpManager;
@@ -42,6 +43,7 @@ import com.moor.im.tcpservice.manager.HeartBeatManager;
 import com.moor.im.tcpservice.manager.LoginManager;
 import com.moor.im.tcpservice.manager.SocketManager;
 import com.moor.im.tcpservice.tcp.SocketManagerStatus;
+import com.moor.im.ui.activity.MAErpActivity;
 import com.moor.im.ui.activity.MainActivity;
 import com.moor.im.ui.fragment.MessageFragment;
 import com.moor.im.utils.LogUtil;
@@ -155,6 +157,8 @@ public class IMService extends Service{
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		context = getApplicationContext();
+		this.notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 		//进行管理类的初始化
 		socketMgr = SocketManager.getInstance(context);
 		loginMgr = LoginManager.getInstance(context);
@@ -227,8 +231,7 @@ public class IMService extends Service{
 	 * 接收到新消息的处理
 	 */
 	private void onNewMessageReceived() {
-		this.notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
+
 		sp = context.getSharedPreferences("SP", 0);
 		//获取服务器的新消息
 		LogUtil.d("IMService", "接收到100，发送http请求获取新消息");
@@ -768,6 +771,49 @@ public class IMService extends Service{
 			} else {
 			}
 		}
+	}
+
+
+	/**
+	 * 新工单
+	 */
+	public void onEventMainThread(NewOrderEvent orderEvent){
+		LogUtil.d("IMService", "进入了收到新工单事件驱动的方法中，进行相应的处理");
+		if(isErpForground(this)) {
+			//工单页面在最上面
+			Intent intnet = new Intent("com.moor.im.NEW_ORDER");
+			context.sendBroadcast(intnet);
+		}else {
+			Notification notification = new Notification();
+			notification.icon = R.drawable.ic_launcher;
+			notification.defaults = Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND;
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			notification.when = System.currentTimeMillis();
+			notification.tickerText = "您有新的待处理工单";
+
+			Intent it = new Intent(context,
+					MAErpActivity.class);
+			it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			it.setAction(Intent.ACTION_MAIN);
+			it.addCategory(Intent.CATEGORY_LAUNCHER);
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 1,
+					it, PendingIntent.FLAG_UPDATE_CURRENT);
+			notification.setLatestEventInfo(context, "新工单", "",
+					contentIntent);
+			notificationManager.notify(1, notification);
+		}
+	}
+
+	public boolean isErpForground(Context mContext) {
+		ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+		if (!tasks.isEmpty()) {
+			ComponentName topActivity = tasks.get(0).topActivity;
+			if (!topActivity.getClassName().equals("com.moor.im.ui.activity.MAErpActivity")) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

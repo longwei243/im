@@ -25,6 +25,8 @@ import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.ErpExcuteSuccess;
+import com.moor.im.event.HaveOrderEvent;
+import com.moor.im.event.NewOrderEvent;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MAAgent;
 import com.moor.im.model.entity.MABusiness;
@@ -90,6 +92,10 @@ public class RoalUnDealOrderFragment extends Fragment{
     private TextView roalundeal_tv_queryitem;
     private ImageView roalundeal_btn_queryitem;
     private RelativeLayout roalundeal_rl_queryitem;
+
+    private TextView mAllUnreadcount;
+    private int unReadCount;
+    private RelativeLayout newOrderLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -154,6 +160,9 @@ public class RoalUnDealOrderFragment extends Fragment{
                 MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
             }
         });
+        //数量
+        mAllUnreadcount = (TextView) getActivity().findViewById(R.id.all_unreadcount);
+        newOrderLayout = (RelativeLayout) view.findViewById(R.id.roalundeal_rl_neworder);
 
         initCache();
     }
@@ -244,13 +253,14 @@ public class RoalUnDealOrderFragment extends Fragment{
         @Override
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
+            System.out.println("获取option缓存数据:"+responseString);
             try {
                 JSONObject o = new JSONObject(responseString);
                 if(o.getBoolean("success")) {
                     List<MAOption> options = MobileAssitantParser.getOptions(responseString);
                     HashMap<String, MAOption> optionDatas = MobileAssitantParser.transformOptionData(options);
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_MAOption, optionDatas, CacheUtils.TIME_DAY);
-
+                    System.out.println("option缓存数据被保存了");
                     MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
                 }
             } catch (JSONException e) {
@@ -405,6 +415,14 @@ public class RoalUnDealOrderFragment extends Fragment{
                     }
                 }
             });
+
+            if(businessList.size() > 0) {
+                mAllUnreadcount.setVisibility(View.VISIBLE);
+                unReadCount = businessList.size();
+                mAllUnreadcount.setText(unReadCount+"");
+            }else {
+                mAllUnreadcount.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -475,6 +493,14 @@ public class RoalUnDealOrderFragment extends Fragment{
                 mPullRefreshListView.onRefreshComplete();
                 page++;
             }
+
+            if(maBusinesses.size() > 0) {
+                mAllUnreadcount.setVisibility(View.VISIBLE);
+                unReadCount = maBusinesses.size();
+                mAllUnreadcount.setText(unReadCount + "");
+            }else {
+                mAllUnreadcount.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -541,6 +567,29 @@ public class RoalUnDealOrderFragment extends Fragment{
         HashMap<String, String> datas = new HashMap<>();
         MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
         loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+    }
+
+    public void onEventMainThread(NewOrderEvent event) {
+        //有新的工单
+        newOrderLayout.setVisibility(View.VISIBLE);
+        newOrderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newOrderLayout.setVisibility(View.GONE);
+                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                HashMap<String, String> datas = new HashMap<>();
+                MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
+            }
+        });
+    }
+    public void onEventMainThread(HaveOrderEvent event) {
+        //领取了工单
+        if(unReadCount-1 > 0) {
+            mAllUnreadcount.setVisibility(View.VISIBLE);
+            mAllUnreadcount.setText(unReadCount-1 + "");
+        }else {
+            mAllUnreadcount.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -214,10 +214,6 @@ public class HttpManager {
 
 	/**
 	 * 取消息
-	 * 
-	 * @param ConnectionId
-	 * @param ReceivedMsgIds
-	 * @param responseHandler
 	 */
 	public static void getMsg(String connectionId, ArrayList array,
 			ResponseHandlerInterface responseHandler) {

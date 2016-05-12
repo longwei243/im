@@ -124,21 +124,21 @@ public class AllCallHighQueryActivity  extends Activity implements View.OnClickL
         qd_null.setName("请选择");
         qd_null.setValue("");
         investigateDatas.add(qd_null);
-        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
-            HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
-            for(String key : optionMap.keySet()) {
-                if("满意度调查选项".equals(key)) {
-                    List<Option> investigates = optionMap.get(key).options;
-                    for(int i=0; i<investigates.size(); i++) {
-                        QueryData qd = new QueryData();
-                        qd.setName(investigates.get(i).name);
-                        qd.setValue(investigates.get(i).options.get(0).name);
-                        investigateDatas.add(qd);
-                    }
-                }
-
-            }
-        }
+//        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) != null) {
+//            HashMap<String, MAOption> optionMap = (HashMap<String, MAOption>) MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption);
+//            for(String key : optionMap.keySet()) {
+//                if("满意度调查选项".equals(key)) {
+//                    List<Option> investigates = optionMap.get(key).options;
+//                    for(int i=0; i<investigates.size(); i++) {
+//                        QueryData qd = new QueryData();
+//                        qd.setName(investigates.get(i).name);
+//                        qd.setValue(investigates.get(i).options.get(0).name);
+//                        investigateDatas.add(qd);
+//                    }
+//                }
+//
+//            }
+//        }
         SPAdapter investigateAdapter = new SPAdapter(AllCallHighQueryActivity.this, investigateDatas);
         mycall_high_query_sp_INVESTIGATE.setAdapter(investigateAdapter);
 

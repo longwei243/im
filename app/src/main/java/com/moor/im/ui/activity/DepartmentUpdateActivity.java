@@ -105,7 +105,6 @@ public class DepartmentUpdateActivity extends Activity implements OnClickListene
 		
 		adapter = new GVContactAdapter(DepartmentUpdateActivity.this, contacts);
 		department_update_gv_members.setAdapter(adapter);
-		
 
 	}
 

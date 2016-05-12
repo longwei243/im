@@ -63,7 +63,7 @@ public class SetupFragment extends Fragment{
 	RelativeLayout setup_ll_loginoff, setup_ll_update,
 			setup_ll_aboutme, setup_ll_icon,
 			setup_ll_edit_name, setup_ll_edit_email,
-			setup_ll_edit_phone, setup_ll_kefu, setup_ll_mobile, setup_ll_mobile_erp;
+			setup_ll_edit_phone, setup_ll_kefu;
 	
 	TextView user_detail_tv_name, user_detail_tv_num, user_detail_tv_email, user_detail_tv_phone;
 
@@ -209,13 +209,6 @@ public class SetupFragment extends Fragment{
 		setup_ll_kefu = (RelativeLayout) view.findViewById(R.id.setup_ll_kefu);
 		setup_ll_kefu.setOnClickListener(clickListener);
 
-
-		setup_ll_mobile = (RelativeLayout) view.findViewById(R.id.setup_ll_mobile);
-		setup_ll_mobile.setOnClickListener(clickListener);
-
-		setup_ll_mobile_erp = (RelativeLayout) view.findViewById(R.id.setup_ll_mobile_erp);
-		setup_ll_mobile_erp.setOnClickListener(clickListener);
-
 		loadingFragmentDialog = new LoadingFragmentDialog();
 
 		return view;
@@ -307,14 +300,6 @@ public class SetupFragment extends Fragment{
 					startKFService();
 				}
 				break;
-			case R.id.setup_ll_mobile:
-				Intent mobileIntent = new Intent(SetupFragment.this.getActivity(), MACdrActivity.class);
-				startActivity(mobileIntent);
-				break;
-			case R.id.setup_ll_mobile_erp:
-				Intent erpIntent = new Intent(SetupFragment.this.getActivity(), MAErpActivity.class);
-				startActivity(erpIntent);
-				break;
 			}
 		}
 	};
@@ -354,6 +339,7 @@ public class SetupFragment extends Fragment{
 				NewMessageDao.getInstance().deleteAllMsgs();
 				UserDao.getInstance().deleteUser();
 				ContactsDao.getInstance().clear();
+				MobileApplication.cacheUtil.clear();
 				
 				Intent intent = new Intent(getActivity(), LoginActivity.class);
 				startActivity(intent);

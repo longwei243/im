@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.app.CacheKey;
@@ -173,6 +174,7 @@ public class MobileAssitantCache {
                 }
             }
         }
+
         return null;
     }
 
@@ -215,28 +217,5 @@ public class MobileAssitantCache {
 
         }
         return "";
-    }
-
-    class GetAgentResponseHandler extends TextHttpResponseHandler {
-        @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
-        }
-
-        @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
-            try {
-                JSONObject o = new JSONObject(responseString);
-                if(o.getBoolean("success")) {
-                    List<MAAgent> agents = MobileAssitantParser.getAgents(responseString);
-                    HashMap<String, MAAgent> agentDatas = MobileAssitantParser.transformAgentData(agents);
-                    MobileApplication.cacheUtil.put(CacheKey.CACHE_MAAgent, agentDatas);
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -3,6 +3,7 @@ package com.moor.im.model.parser;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.moor.im.app.CacheKey;
 import com.moor.im.app.MobileApplication;
@@ -129,13 +130,10 @@ public class MobileAssitantParser {
                                     break;
                                 }
                             }
-
                         }
                     }
                 }
-
                 maCallLogDatas.add(maCallLogData);
-
             }
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -224,19 +222,19 @@ public class MobileAssitantParser {
      */
     public static List<MAOption> getOptions(String responseString) {
         List<MAOption> options = new ArrayList<>();
-
+        System.out.println("获取option数据:"+responseString);
         try {
             JSONObject o = new JSONObject(responseString);
             if(o.getBoolean("success")) {
                 JSONArray o1 = o.getJSONArray("data");
 
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().serializeNulls().create();
                 // TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
                 options = gson.fromJson(o1.toString(),
                         new TypeToken<List<MAOption>>() {
                         }.getType());
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -296,6 +294,9 @@ public class MobileAssitantParser {
 
                     b.name = NullUtil.checkNull(businesses.get(i).name);
                     b.customer = NullUtil.checkNull(businesses.get(i).customer);
+                    if("".equals(b.name)) {
+                        b.name = "已删除客户";
+                    }
 
                     b.lastUpdateTime = TimeUtil.getShortTime(NullUtil.checkNull(businesses.get(i).lastUpdateTime));
                     if(businesses.get(i).master != null && !"".equals(businesses.get(i).master)) {

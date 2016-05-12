@@ -26,6 +26,7 @@ import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.ErpExcuteSuccess;
 import com.moor.im.event.HaveOrderEvent;
+import com.moor.im.event.NewOrderEvent;
 import com.moor.im.http.MobileHttpManager;
 import com.moor.im.model.entity.MABusiness;
 import com.moor.im.model.entity.MABusinessField;
@@ -86,6 +87,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
     private TextView userundeal_tv_queryitem;
     private ImageView userundeal_btn_queryitem;
     private RelativeLayout userundeal_rl_queryitem;
+    private RelativeLayout userundeal_rl_neworder;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,7 +116,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                 startActivityForResult(intent, 0x666);
             }
         });
-
+        userundeal_rl_neworder = (RelativeLayout) view.findViewById(R.id.userundeal_rl_neworder);
 
         userundeal_et_numquery = (EditText) view.findViewById(R.id.userundeal_et_numquery);
         userundeal_ib_search = (ImageButton) view.findViewById(R.id.userundeal_ib_search);
@@ -457,6 +459,26 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
         loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
         userundeal_rl_queryitem.setVisibility(View.GONE);
+    }
+
+    public void onEventMainThread(NewOrderEvent event) {
+        userundeal_rl_neworder.setVisibility(View.VISIBLE);
+        userundeal_rl_neworder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userundeal_rl_neworder.setVisibility(View.GONE);
+                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                userundeal_sp_quickquery.setSelection(0);
+                myCallEditor.clear();
+                myCallEditor.commit();
+                HashMap<String, String> datas = new HashMap<>();
+                MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
+                userundeal_rl_queryitem.setVisibility(View.GONE);
+            }
+        });
+
+
+
     }
 
     @Override

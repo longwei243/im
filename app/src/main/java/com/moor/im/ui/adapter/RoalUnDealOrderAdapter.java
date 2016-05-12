@@ -133,7 +133,7 @@ public class RoalUnDealOrderAdapter extends BaseAdapter{
                 notifyDataSetChanged();
                 EventBus.getDefault().post(new HaveOrderEvent());
                 Toast.makeText(context, "领取成功", Toast.LENGTH_SHORT).show();
-            }else if("此业务已被其他人领取".equals(msg)){
+            }else if("此业务已被其他人领取。".equals(msg)){
                 maBusinesses.remove(position);
                 notifyDataSetChanged();
                 Toast.makeText(context, "此业务已被其他人领取", Toast.LENGTH_SHORT).show();
