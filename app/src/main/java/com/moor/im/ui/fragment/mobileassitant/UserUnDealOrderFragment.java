@@ -32,7 +32,9 @@ import com.moor.im.model.entity.MABusiness;
 import com.moor.im.model.entity.MABusinessField;
 import com.moor.im.model.entity.MABusinessFlow;
 import com.moor.im.model.entity.MABusinessStep;
+import com.moor.im.model.entity.RoalOrderLayoutRefresh;
 import com.moor.im.model.entity.User;
+import com.moor.im.model.entity.UserOrderLayoutRefresh;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.model.parser.MobileAssitantParser;
 import com.moor.im.ui.activity.ErpDetailActivity;
@@ -131,7 +133,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                     myCallEditor.putString(USERUNDEALQUERYTYPE, "number");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_DclQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    showLoadingDialog();
                     userundeal_rl_queryitem.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getActivity(), "请输入客户名称后查询", Toast.LENGTH_SHORT).show();
@@ -169,7 +171,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                     myCallEditor.commit();
                     HashMap<String, String> datas = new HashMap<>();
                     MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
-                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    showLoadingDialog();
                     userundeal_rl_queryitem.setVisibility(View.GONE);
                 } else if (position == 2) {
                     HashMap<String, String> datas = new HashMap<>();
@@ -177,7 +179,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                     myCallEditor.putString(USERUNDEALQUERYTYPE, "quick");
                     myCallEditor.putString("type", "follow");
                     myCallEditor.commit();
-                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    showLoadingDialog();
                     userundeal_rl_queryitem.setVisibility(View.GONE);
                 }else if (position == 3) {
                     HashMap<String, String> datas = new HashMap<>();
@@ -185,7 +187,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
                     myCallEditor.putString(USERUNDEALQUERYTYPE, "quick");
                     myCallEditor.putString("type", "assign");
                     myCallEditor.commit();
-                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    showLoadingDialog();
                     userundeal_rl_queryitem.setVisibility(View.GONE);
                 }
 
@@ -205,7 +207,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
             @Override
             public void onClick(View v) {
                 userundeal_rl_queryitem.setVisibility(View.GONE);
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 myCallEditor.clear();
                 myCallEditor.commit();
 
@@ -216,7 +218,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
 
         HashMap<String, String> datas = new HashMap<>();
         MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
-        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        showLoadingDialog();
 
     }
 
@@ -387,7 +389,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0x666 && resultCode == Activity.RESULT_OK) {
             if(data.getSerializableExtra("highQueryData") != null) {
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 userundeal_sp_quickquery.setSelection(0);
                 HashMap<String, String> datas = (HashMap<String, String>) data.getSerializableExtra("highQueryData");
                 //显示查询的条件
@@ -447,7 +449,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         myCallEditor.commit();
         HashMap<String, String> datas = new HashMap<>();
         MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
-        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        showLoadingDialog();
         userundeal_rl_queryitem.setVisibility(View.GONE);
     }
 
@@ -457,7 +459,7 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
         myCallEditor.commit();
         HashMap<String, String> datas = new HashMap<>();
         MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
-        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        showLoadingDialog();
         userundeal_rl_queryitem.setVisibility(View.GONE);
     }
 
@@ -467,23 +469,34 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
             @Override
             public void onClick(View view) {
                 userundeal_rl_neworder.setVisibility(View.GONE);
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 userundeal_sp_quickquery.setSelection(0);
                 myCallEditor.clear();
                 myCallEditor.commit();
                 HashMap<String, String> datas = new HashMap<>();
                 MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
                 userundeal_rl_queryitem.setVisibility(View.GONE);
+                EventBus.getDefault().post(new UserOrderLayoutRefresh());
             }
         });
-
-
-
+    }
+    public void onEventMainThread(RoalOrderLayoutRefresh event) {
+        userundeal_rl_neworder.setVisibility(View.GONE);
+        userundeal_sp_quickquery.setSelection(0);
+        myCallEditor.clear();
+        myCallEditor.commit();
+        HashMap<String, String> datas = new HashMap<>();
+        MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
+        userundeal_rl_queryitem.setVisibility(View.GONE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void showLoadingDialog() {
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
     }
 }

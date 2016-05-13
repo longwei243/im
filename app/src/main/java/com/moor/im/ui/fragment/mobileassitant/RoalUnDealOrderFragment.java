@@ -37,7 +37,9 @@ import com.moor.im.model.entity.MACallLogData;
 import com.moor.im.model.entity.MAOption;
 import com.moor.im.model.entity.MAQueue;
 import com.moor.im.model.entity.Option;
+import com.moor.im.model.entity.RoalOrderLayoutRefresh;
 import com.moor.im.model.entity.User;
+import com.moor.im.model.entity.UserOrderLayoutRefresh;
 import com.moor.im.model.parser.HttpParser;
 import com.moor.im.model.parser.MobileAssitantParser;
 import com.moor.im.ui.activity.ErpDetailActivity;
@@ -136,7 +138,7 @@ public class RoalUnDealOrderFragment extends Fragment{
                     myCallEditor.putString(ROALUNDEALQUERYTYPE, "number");
                     myCallEditor.commit();
                     MobileApplication.cacheUtil.put(CacheKey.CACHE_DlqQueryData, datas, CacheUtils.TIME_HOUR * 2);
-                    loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                    showLoadingDialog();
                     roalundeal_rl_queryitem.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getActivity(), "请输入客户名称后查询", Toast.LENGTH_SHORT).show();
@@ -152,7 +154,7 @@ public class RoalUnDealOrderFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 roalundeal_rl_queryitem.setVisibility(View.GONE);
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 myCallEditor.clear();
                 myCallEditor.commit();
 
@@ -169,15 +171,15 @@ public class RoalUnDealOrderFragment extends Fragment{
 
     private void initCache() {
         if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
-            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+            showLoadingDialog();
             MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
         }else if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) == null) {
-            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+            showLoadingDialog();
             MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
         }else {
             HashMap<String, String> datas = new HashMap<>();
             MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
-            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+            showLoadingDialog();
         }
 
 
@@ -510,7 +512,7 @@ public class RoalUnDealOrderFragment extends Fragment{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0x777 && resultCode == Activity.RESULT_OK) {
             if(data.getSerializableExtra("highQueryData") != null) {
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 HashMap<String, String> datas = (HashMap<String, String>) data.getSerializableExtra("highQueryData");
                 //显示查询的条件
                 showQueryItem(datas);
@@ -566,7 +568,7 @@ public class RoalUnDealOrderFragment extends Fragment{
     public void onEventMainThread(ErpExcuteSuccess event) {
         HashMap<String, String> datas = new HashMap<>();
         MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
-        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+        showLoadingDialog();
     }
 
     public void onEventMainThread(NewOrderEvent event) {
@@ -576,9 +578,10 @@ public class RoalUnDealOrderFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 newOrderLayout.setVisibility(View.GONE);
-                loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+                showLoadingDialog();
                 HashMap<String, String> datas = new HashMap<>();
                 MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
+                EventBus.getDefault().post(new RoalOrderLayoutRefresh());
             }
         });
     }
@@ -592,9 +595,22 @@ public class RoalUnDealOrderFragment extends Fragment{
         }
     }
 
+    public void onEventMainThread(UserOrderLayoutRefresh event) {
+        //有新的工单
+        newOrderLayout.setVisibility(View.GONE);
+        HashMap<String, String> datas = new HashMap<>();
+        MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
+        EventBus.getDefault().post(new RoalOrderLayoutRefresh());
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void showLoadingDialog() {
+        loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+
     }
 }

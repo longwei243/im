@@ -33,4 +33,8 @@ public class LoadingFragmentDialog extends DialogFragment{
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+    }
 }

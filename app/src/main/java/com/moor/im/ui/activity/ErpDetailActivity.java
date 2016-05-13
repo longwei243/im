@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.app.RequestUrl;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.ErpExcuteSuccess;
@@ -214,9 +215,9 @@ public class ErpDetailActivity extends Activity{
 
                 RoundImageView erp_history_iv_imicon = (RoundImageView) backInfoView.findViewById(R.id.erp_history_iv_imicon);
                 if(user.im_icon != null && !"".equals(user.im_icon)) {
-                    Glide.with(ErpDetailActivity.this).load(user.im_icon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erp_history_iv_imicon);
+                    Glide.with(MobileApplication.getInstance()).load(user.im_icon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erp_history_iv_imicon);
                 }else {
-                    Glide.with(ErpDetailActivity.this).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erp_history_iv_imicon);
+                    Glide.with(MobileApplication.getInstance()).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erp_history_iv_imicon);
                 }
 
                 erpdetail_ll_history.addView(backInfoView, 0);
@@ -266,9 +267,9 @@ public class ErpDetailActivity extends Activity{
         erpdetail_tv_lastUpdateUser.setText(detail.lastUpdateUser);
         erpdetail_tv_lastUpdateTime.setText(detail.lastUpdateTime);
         if(!"".equals(detail.imIcon)) {
-            Glide.with(ErpDetailActivity.this).load(detail.imIcon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erpdetail_iv_imicon);
+            Glide.with(MobileApplication.getInstance()).load(detail.imIcon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erpdetail_iv_imicon);
         }else {
-            Glide.with(ErpDetailActivity.this).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erpdetail_iv_imicon);
+            Glide.with(MobileApplication.getInstance()).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erpdetail_iv_imicon);
         }
         boolean isBegin = MobileAssitantCache.getInstance().getBusinessStep(detail.stepId).isBegin;
         if(isBegin) {
@@ -343,9 +344,9 @@ public class ErpDetailActivity extends Activity{
             erp_history_tv_info.setText(historyData.info);
             RoundImageView erp_history_iv_imicon = (RoundImageView) infoView.findViewById(R.id.erp_history_iv_imicon);
             if(!"".equals(historyData.imIcon)) {
-                Glide.with(ErpDetailActivity.this).load(historyData.imIcon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erp_history_iv_imicon);
+                Glide.with(MobileApplication.getInstance()).load(historyData.imIcon+"?imageView2/0/w/100/h/100").asBitmap().placeholder(R.drawable.ic_person_grey600_48dp).into(erp_history_iv_imicon);
             }else {
-                Glide.with(ErpDetailActivity.this).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erp_history_iv_imicon);
+                Glide.with(MobileApplication.getInstance()).load(R.drawable.ic_person_grey600_48dp).asBitmap().into(erp_history_iv_imicon);
             }
             erpdetail_ll_history.addView(infoView);
 
