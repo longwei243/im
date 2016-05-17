@@ -170,17 +170,17 @@ public class RoalUnDealOrderFragment extends Fragment{
     }
 
     private void initCache() {
-        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
+//        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
             showLoadingDialog();
             MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
-        }else if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) == null) {
-            showLoadingDialog();
-            MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
-        }else {
-            HashMap<String, String> datas = new HashMap<>();
-            MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
-            showLoadingDialog();
-        }
+//        }else if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessFlow) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessStep) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MABusinessField) == null) {
+//            showLoadingDialog();
+//            MobileHttpManager.getBusinessFlow(user._id, new GetBusinessFlowResponseHandler());
+//        }else {
+//            HashMap<String, String> datas = new HashMap<>();
+//            MobileHttpManager.queryRoleUnDealOrder(user._id, datas, new QueryRoleUnDealOrderResponseHandler());
+//            showLoadingDialog();
+//        }
 
 
     }

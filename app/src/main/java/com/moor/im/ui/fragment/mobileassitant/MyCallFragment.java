@@ -257,15 +257,15 @@ public class MyCallFragment extends Fragment{
      * 初始化缓存
      */
     private void initCache() {
-        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
+//        if (MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAAgent) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAQueue) == null || MobileApplication.cacheUtil.getAsObject(CacheKey.CACHE_MAOption) == null) {
             loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
             MobileHttpManager.getAgentCache(user._id, new GetAgentResponseHandler());
-        }else {
-            HashMap<String, String> datas = new HashMap<>();
-            datas.put("DISPOSAL_AGENT", user._id);
-            MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
-            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
-        }
+//        }else {
+//            HashMap<String, String> datas = new HashMap<>();
+//            datas.put("DISPOSAL_AGENT", user._id);
+//            MobileHttpManager.queryCdr(user._id, datas, new QueryCdrResponseHandler());
+//            loadingFragmentDialog.show(getActivity().getFragmentManager(), "");
+//        }
     }
 
     class GetAgentResponseHandler extends TextHttpResponseHandler {

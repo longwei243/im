@@ -2,6 +2,7 @@ package com.moor.im.ui.dialog;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -34,7 +35,10 @@ public class LoadingFragmentDialog extends DialogFragment{
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void show(FragmentManager manager, String tag) {
+        try {
+            super.show(manager, tag);
+        }catch (Exception e) {}
 
     }
 }
