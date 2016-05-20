@@ -53,7 +53,7 @@
                 android:ellipsize="end"
                 android:padding="3dp"
                 android:textColor="@color/all_white"
-                android:background="@color/flow_bg"
+                android:background="@drawable/flow_bg"
                 android:text="流程"/>
             <TextView
                 android:layout_centerVertical="true"
@@ -67,7 +67,7 @@
                 android:ellipsize="end"
                 android:padding="3dp"
                 android:textColor="@color/all_white"
-                android:background="@color/step_bg"
+                android:background="@drawable/step_bg"
                 android:text="步骤"/>
             <TextView
                 android:layout_centerVertical="true"

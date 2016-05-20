@@ -89,9 +89,9 @@ public class MyCallAdapter extends BaseAdapter{
 
         viewHolder.tv_statusDesc.setText(NullUtil.checkNull(maCallLog.status));
         if("success".equals(maCallLog.statusClass)) {
-            viewHolder.tv_statusDesc.setBackgroundColor(context.getResources().getColor(R.color.call_green));
+            viewHolder.tv_statusDesc.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.call_green_bg));
         }else {
-            viewHolder.tv_statusDesc.setBackgroundColor(context.getResources().getColor(R.color.call_red));
+            viewHolder.tv_statusDesc.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.call_red_bg));
         }
 
         if("outbound".equals(maCallLog.dialType)) {

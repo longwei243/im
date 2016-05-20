@@ -444,13 +444,15 @@ public class UserUnDealOrderFragment extends BaseLazyFragment{
     }
 
     public void onEventMainThread(HaveOrderEvent event) {
-        userundeal_sp_quickquery.setSelection(0);
-        myCallEditor.clear();
-        myCallEditor.commit();
-        HashMap<String, String> datas = new HashMap<>();
-        MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
-        showLoadingDialog();
-        userundeal_rl_queryitem.setVisibility(View.GONE);
+        if(event.type == 1) {
+            userundeal_sp_quickquery.setSelection(0);
+            myCallEditor.clear();
+            myCallEditor.commit();
+            HashMap<String, String> datas = new HashMap<>();
+            MobileHttpManager.queryUserUnDealOrder(user._id, datas, new QueryUserUnDealOrderResponseHandler());
+//            showLoadingDialog();
+            userundeal_rl_queryitem.setVisibility(View.GONE);
+        }
     }
 
     public void onEventMainThread(ErpExcuteSuccess event) {

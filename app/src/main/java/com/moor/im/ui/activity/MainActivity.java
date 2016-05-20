@@ -166,8 +166,6 @@ public class MainActivity extends FragmentActivity implements
 
 		setContentView(R.layout.activity_main);
 
-
-
 		MyPreferences = getSharedPreferences(MobileApplication.getInstance()
 						.getResources().getString(R.string.spname),
 				Activity.MODE_PRIVATE);

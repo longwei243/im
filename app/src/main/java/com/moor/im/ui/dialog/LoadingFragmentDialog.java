@@ -39,6 +39,13 @@ public class LoadingFragmentDialog extends DialogFragment{
         try {
             super.show(manager, tag);
         }catch (Exception e) {}
+    }
+
+    @Override
+    public void dismiss() {
+        try {
+            super.dismiss();
+        }catch (Exception e) {}
 
     }
 }

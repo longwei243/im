@@ -255,7 +255,6 @@ public class RoalUnDealOrderFragment extends Fragment{
         @Override
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
-            System.out.println("获取option缓存数据:"+responseString);
             try {
                 JSONObject o = new JSONObject(responseString);
                 if(o.getBoolean("success")) {
@@ -590,6 +589,7 @@ public class RoalUnDealOrderFragment extends Fragment{
         if(unReadCount-1 > 0) {
             mAllUnreadcount.setVisibility(View.VISIBLE);
             mAllUnreadcount.setText(unReadCount-1 + "");
+            unReadCount--;
         }else {
             mAllUnreadcount.setVisibility(View.GONE);
         }

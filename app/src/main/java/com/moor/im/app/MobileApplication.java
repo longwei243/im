@@ -26,6 +26,7 @@ import com.moor.im.utils.FaceConversionUtil;
 import com.moor.im.utils.LogUtil;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.InitListener;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import de.greenrobot.event.EventBus;
 
@@ -95,6 +96,7 @@ public class MobileApplication extends Application {
 		startSipService();
 		startIMService();
 
+		CrashReport.initCrashReport(getApplicationContext(), "900005144", false);
 
 		/**
 		 * 初始化配置文件
@@ -133,14 +135,16 @@ public class MobileApplication extends Application {
 		LogUtil.d("MobileApplication", "启动IMService");
 	}
 
-
-	
 	public static MobileApplication getInstance() {
 		return mobileApplication;
 	}
 	
 	public void add(Activity a) {
 		activities.add(a);
+	}
+
+	public void remove(Activity a) {
+		activities.remove(a);
 	}
 	
 	public void exit() {

@@ -69,11 +69,11 @@ public class ErpCBAdapter extends BaseAdapter{
         public CheckBox cb;
     }
 
-    public static HashMap<Integer,Boolean> getIsSelected() {
+    public HashMap<Integer,Boolean> getIsSelected() {
         return isSelected;
     }
 
-    public static void setIsSelected(HashMap<Integer,Boolean> isSelected) {
+    public void setIsSelected(HashMap<Integer,Boolean> isSelected) {
         ErpCBAdapter.isSelected = isSelected;
     }
 }

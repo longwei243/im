@@ -19,6 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:textColor="@color/all_white"
+            android:singleLine="true"
+            android:maxEms="6"
+            android:ellipsize="end"
             android:textSize="20sp"
             android:text="文件名"/>
         <TextView

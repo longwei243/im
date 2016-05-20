@@ -162,9 +162,9 @@ public class ErpDetailActivity extends Activity{
         erpdetail_rl_customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent customerIntent = new Intent(ErpDetailActivity.this, ErpCustomerDetailActivity.class);
-                customerIntent.putExtra("customerId", customerId);
-                startActivity(customerIntent);
+//                Intent customerIntent = new Intent(ErpDetailActivity.this, ErpCustomerDetailActivity.class);
+//                customerIntent.putExtra("customerId", customerId);
+//                startActivity(customerIntent);
             }
         });
     }
@@ -1321,22 +1321,22 @@ public class ErpDetailActivity extends Activity{
             MAOption maoption = MobileAssitantCache.getInstance().getMAOption(cacheField.dic);
             if(maoption != null) {
                 List<Option> options = maoption.options;
-                for (int i=0; i<options.size(); i++) {
-                    Option o = options.get(i);
-                    checkbox_gv.setAdapter(new ErpCBAdapter(ErpDetailActivity.this, options));
+                final ErpCBAdapter adapter = new ErpCBAdapter(ErpDetailActivity.this, options);
+//                for (int i=0; i<options.size(); i++) {
+                    checkbox_gv.setAdapter(adapter);
                     checkbox_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ErpCBAdapter.ViewHolder holder = (ErpCBAdapter.ViewHolder) view.getTag();
                             holder.cb.toggle();
                             if (holder.cb.isChecked()) {
-                                ErpCBAdapter.getIsSelected().put(position, true);
+                                adapter.getIsSelected().put(position, true);
                             } else {
-                                ErpCBAdapter.getIsSelected().put(position, false);
+                                adapter.getIsSelected().put(position, false);
                             }
                         }
                     });
-                }
+//                }
             }
         }
         pane.addView(checkboxView);
@@ -1630,7 +1630,7 @@ public class ErpDetailActivity extends Activity{
                     GridViewInScrollView gv = (GridViewInScrollView) childView.getChildAt(1);
                     String cbFieldId = (String) gv.getTag();
                     List<Option> options = ((ErpCBAdapter)gv.getAdapter()).getOptions();
-                    HashMap<Integer, Boolean> selected = ErpCBAdapter.getIsSelected();
+                    HashMap<Integer, Boolean> selected = ((ErpCBAdapter)gv.getAdapter()).getIsSelected();
                     for (int o = 0; o < selected.size(); o++) {
                         if(selected.get(o)) {
                             Option option = options.get(o);

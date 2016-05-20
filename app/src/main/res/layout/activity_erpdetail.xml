@@ -198,7 +198,7 @@
                         android:singleLine="true"
                         android:maxEms="6"
                         android:ellipsize="end"
-                        android:background="@color/flow_bg"
+                        android:background="@drawable/flow_bg"
                         android:text="流程"/>
                     <TextView
                         android:padding="2dp"
@@ -213,7 +213,7 @@
                         android:singleLine="true"
                         android:maxEms="6"
                         android:ellipsize="end"
-                        android:background="@color/step_bg"
+                        android:background="@drawable/step_bg"
                         android:text="步骤"/>
                 </RelativeLayout>
                 <View
@@ -310,6 +310,8 @@
                         android:singleLine="true"
                         android:layout_marginLeft="8dp"
                         android:paddingLeft="4dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
                         android:hint="添加备注"
                         android:textSize="16sp"
                         android:layout_width="match_parent"
@@ -320,7 +322,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/all_white"
-                    android:layout_margin="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginBottom="2dp"
                     android:orientation="vertical">
 
                 </LinearLayout>
