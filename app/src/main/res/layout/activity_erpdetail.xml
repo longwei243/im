@@ -182,7 +182,7 @@
                         android:textColor="@color/all_black"
                         android:textSize="20sp"
                         android:singleLine="true"
-                        android:maxEms="6"
+                        android:maxEms="4"
                         android:ellipsize="end"
                         android:text="客户名"/>
                     <TextView
@@ -196,7 +196,7 @@
                         android:textColor="@color/all_white"
                         android:textSize="16sp"
                         android:singleLine="true"
-                        android:maxEms="6"
+                        android:maxEms="4"
                         android:ellipsize="end"
                         android:background="@drawable/flow_bg"
                         android:text="流程"/>
@@ -211,7 +211,7 @@
                         android:textColor="@color/all_white"
                         android:textSize="16sp"
                         android:singleLine="true"
-                        android:maxEms="6"
+                        android:maxEms="4"
                         android:ellipsize="end"
                         android:background="@drawable/step_bg"
                         android:text="步骤"/>
