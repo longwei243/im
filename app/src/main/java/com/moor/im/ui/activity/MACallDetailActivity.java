@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.model.entity.MACallLogData;
 import com.moor.im.model.entity.User;
@@ -72,6 +73,7 @@ public class MACallDetailActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_macalldetail);
 
         Intent intent = getIntent();
@@ -167,6 +169,9 @@ public class MACallDetailActivity extends Activity{
         super.onDestroy();
         mycalldetail_mp3player.stop();
         unbindService(connection);
+
+        MobileApplication.getInstance().remove(this);
+
     }
 
     public void callingDialog(final String number) {

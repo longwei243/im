@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.model.entity.Contacts;
@@ -41,6 +42,7 @@ public class ContactsSearchActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_contact_serach);
 
         title_btn_back = (ImageView) findViewById(R.id.title_btn_back);
@@ -149,5 +151,10 @@ public class ContactsSearchActivity extends Activity{
 
             initDatas(contactses);
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

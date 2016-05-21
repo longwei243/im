@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.ErpExcuteSuccess;
 import com.moor.im.http.MobileHttpManager;
@@ -36,6 +37,7 @@ public class ErpActionBackActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_erp_action_back);
 
         Intent intent = getIntent();
@@ -84,5 +86,10 @@ public class ErpActionBackActivity extends Activity{
                 Toast.makeText(ErpActionBackActivity.this, "退回失败", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

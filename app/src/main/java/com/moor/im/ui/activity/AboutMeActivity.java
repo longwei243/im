@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 
 /**
  * Created by long on 2015/7/30.
@@ -24,6 +25,7 @@ public class AboutMeActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_aboutme);
 
         btn_back = (ImageView) findViewById(R.id.btn_back);
@@ -56,5 +58,11 @@ public class AboutMeActivity extends Activity{
             e.printStackTrace();
             return "";
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

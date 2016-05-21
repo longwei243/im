@@ -59,7 +59,7 @@ public class UpdateActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		MobileApplication.getInstance().add(this);
 		sp = getSharedPreferences("SP", 0);
 		setContentView(R.layout.parentdialog);
 		
@@ -316,5 +316,11 @@ public class UpdateActivity extends Activity{
 		return (x < -slop) || (y < -slop)
 				|| (x > (decorView.getWidth() + slop))
 				|| (y > (decorView.getHeight() + slop));
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MobileApplication.getInstance().remove(this);
 	}
 }

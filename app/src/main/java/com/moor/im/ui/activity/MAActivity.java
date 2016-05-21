@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 
 
 /**
@@ -21,6 +22,7 @@ public class MAActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_ma);
         findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +48,10 @@ public class MAActivity extends Activity{
             }
         });
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
 
 }

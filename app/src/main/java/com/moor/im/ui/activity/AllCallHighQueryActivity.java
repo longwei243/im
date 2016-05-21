@@ -48,6 +48,7 @@ public class AllCallHighQueryActivity  extends Activity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_mycall_highquery);
         initViews();
     }
@@ -466,5 +467,9 @@ public class AllCallHighQueryActivity  extends Activity implements View.OnClickL
         setResult(Activity.RESULT_OK, dataIntent);
         finish();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
 }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.Contacts;
@@ -56,6 +57,7 @@ public class AddDiscussionActivity extends Activity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_add_gourp);
 
         adminContacts.clear();
@@ -86,7 +88,11 @@ public class AddDiscussionActivity extends Activity implements View.OnClickListe
 
 
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()) {

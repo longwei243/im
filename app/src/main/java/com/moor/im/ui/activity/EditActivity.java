@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.event.UserIconUpdate;
 import com.moor.im.http.HttpManager;
@@ -50,6 +51,7 @@ public class EditActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_edituserinfo);
         sp = getSharedPreferences("SP", 4);
         Intent intent = getIntent();
@@ -188,5 +190,9 @@ public class EditActivity extends Activity{
             }
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
 }

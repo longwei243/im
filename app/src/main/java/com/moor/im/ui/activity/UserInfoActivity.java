@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.User;
@@ -50,6 +51,7 @@ public class UserInfoActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		MobileApplication.getInstance().add(this);
 		setContentView(R.layout.activity_userinfo);
 		
 		sp = getSharedPreferences("SP", 4);
@@ -170,5 +172,11 @@ public class UserInfoActivity extends Activity{
 				user_btn_save.setVisibility(View.VISIBLE);
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MobileApplication.getInstance().remove(this);
 	}
 }

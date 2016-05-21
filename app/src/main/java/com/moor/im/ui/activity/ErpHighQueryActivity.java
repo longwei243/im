@@ -34,6 +34,7 @@ public class ErpHighQueryActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_erp_highquery);
         initViews();
     }
@@ -191,5 +192,9 @@ public class ErpHighQueryActivity extends Activity{
         setResult(Activity.RESULT_OK, dataIntent);
         finish();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
 }

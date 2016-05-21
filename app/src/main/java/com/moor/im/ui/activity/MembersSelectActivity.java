@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.ContactsDao;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Department;
@@ -49,6 +50,7 @@ public class MembersSelectActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		MobileApplication.getInstance().add(this);
 		setContentView(R.layout.activity_subdepartment_select);
 		sp = getSharedPreferences("SP", 4);
 		mListView = (ListView) findViewById(R.id.department_select_list);
@@ -136,5 +138,9 @@ public class MembersSelectActivity extends Activity{
 		});
 
 	}
-
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MobileApplication.getInstance().remove(this);
+	}
 }

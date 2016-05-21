@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.app.RequestUrl;
 import com.moor.im.db.dao.MessageDao;
 import com.moor.im.db.dao.UserDao;
@@ -71,6 +72,7 @@ public class ClipImageViewActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_clipimageview);
         sp = this.getSharedPreferences("SP", 4);
 
@@ -270,5 +272,10 @@ public class ClipImageViewActivity extends Activity{
                     filePath, new UploadFileResponseHandler(filePath));
 
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

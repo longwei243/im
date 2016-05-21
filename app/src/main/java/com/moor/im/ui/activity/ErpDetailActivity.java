@@ -109,6 +109,7 @@ public class ErpDetailActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_erpdetail);
         EventBus.getDefault().register(this);
         Intent intent = getIntent();
@@ -1094,6 +1095,8 @@ public class ErpDetailActivity extends Activity{
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        MobileApplication.getInstance().remove(this);
+
     }
 
 
@@ -1585,16 +1588,37 @@ public class ErpDetailActivity extends Activity{
             String type = (String) childView.getTag();
             switch(type) {
                 case "single":
+
                     EditText et = (EditText) childView.getChildAt(1);
                     String id = (String) et.getTag();
                     String value = et.getText().toString().trim();
+                    TextView tv_single_required = (TextView) childView.getChildAt(0);
+                    String fieldName = tv_single_required.getText().toString();
+                    String required = (String) tv_single_required.getTag();
+                    if("required".equals(required)) {
+                        if("".equals(value)) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName + "是必填项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     datas.put(id, value);
                     System.out.println("id is:" + id + "," + "value is:" + value);
                     break;
                 case "multi":
+
                     EditText et_multi = (EditText) childView.getChildAt(1);
                     String id_multi = (String) et_multi.getTag();
                     String value_multi = et_multi.getText().toString().trim();
+
+                    TextView tv_multi_required = (TextView) childView.getChildAt(0);
+                    String fieldName_multi = tv_multi_required.getText().toString();
+                    String required_multi = (String) tv_multi_required.getTag();
+                    if("required".equals(required_multi)) {
+                        if("".equals(value_multi)) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_multi + "是必填项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     datas.put(id_multi, value_multi);
                     System.out.println("id_multi is:"+id_multi+","+"value_multi is:"+value_multi);
                     break;
@@ -1602,19 +1626,49 @@ public class ErpDetailActivity extends Activity{
                     EditText et_number = (EditText) childView.getChildAt(1);
                     String id_number = (String) et_number.getTag();
                     String value_number = et_number.getText().toString().trim();
+                    TextView tv_number_required = (TextView) childView.getChildAt(0);
+                    String fieldName_number = tv_number_required.getText().toString();
+                    String required_number = (String) tv_number_required.getTag();
+                    if("required".equals(required_number)) {
+                        if("".equals(value_number)) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_number + "是必填项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     datas.put(id_number, value_number);
                     System.out.println("id_number is:"+id_number+","+"value_number is:"+value_number);
                     break;
                 case "date":
+
                     EditText et_data = (EditText) childView.getChildAt(1);
                     String id_data = (String) et_data.getTag();
                     String value_data = et_data.getText().toString().trim();
+
+                    TextView tv_data_required = (TextView) childView.getChildAt(0);
+                    String fieldName_data = tv_data_required.getText().toString();
+                    String required_data = (String) tv_data_required.getTag();
+                    if("required".equals(required_data)) {
+                        if("".equals(value_data)) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_data + "是必填项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     datas.put(id_data, value_data);
                     System.out.println("id_data is:"+id_data+","+"value_number is:"+value_data);
                     break;
                 case "radio":
                     RadioGroup radioGroup = (RadioGroup) childView.getChildAt(1);
                     int selectId = radioGroup.getCheckedRadioButtonId();
+
+                    TextView tv_radio_required = (TextView) childView.getChildAt(0);
+                    String fieldName_radio = tv_radio_required.getText().toString();
+                    String required_radio = (String) tv_radio_required.getTag();
+                    if("required".equals(required_radio)) {
+                        if(selectId == -1) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_radio + "是必选项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     if(selectId != -1) {
                         RadioButton rb = (RadioButton) radioGroup.findViewById(selectId);
                         String id_radio = (String) radioGroup.getTag();
@@ -1625,12 +1679,22 @@ public class ErpDetailActivity extends Activity{
                     break;
                 case "checkbox":
                     //数组
+
                     JSONArray jsonArray = new JSONArray();
                     JSONArray jsonArray_default = new JSONArray();
                     GridViewInScrollView gv = (GridViewInScrollView) childView.getChildAt(1);
                     String cbFieldId = (String) gv.getTag();
                     List<Option> options = ((ErpCBAdapter)gv.getAdapter()).getOptions();
                     HashMap<Integer, Boolean> selected = ((ErpCBAdapter)gv.getAdapter()).getIsSelected();
+                    TextView tv_checkbox_required = (TextView) childView.getChildAt(0);
+                    String fieldName_checkbox = tv_checkbox_required.getText().toString();
+                    String required_checkbox = (String) tv_checkbox_required.getTag();
+                    if("required".equals(required_checkbox)) {
+                        if(selected.size() == 0) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_checkbox + "是必选项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     for (int o = 0; o < selected.size(); o++) {
                         if(selected.get(o)) {
                             Option option = options.get(o);
@@ -1674,7 +1738,7 @@ public class ErpDetailActivity extends Activity{
                         String id_dropdown1 = (String) sp1.getTag();
                         String value_dropdown1 = ((Option)sp1.getSelectedItem()).key;
                         datas.put(id_dropdown1, value_dropdown1);
-                        datas.put(id_dropdown1 + "_default", ((Option) sp1.getSelectedItem()).name);
+                        datas.put(id_dropdown1+"_default", ((Option)sp1.getSelectedItem()).name);
 
                         System.out.println("id_dropdown1 is:"+id_dropdown1+",value_dropdown1"+value_dropdown1);
 
@@ -1697,10 +1761,22 @@ public class ErpDetailActivity extends Activity{
                     }
                     break;
                 case "file":
+                    LinearLayout ll_file = (LinearLayout) childView.getChildAt(0);
+                    TextView tv_file_required = (TextView) ll_file.getChildAt(0);
+                    String fieldName_file = tv_file_required.getText().toString();
+                    String required_file = (String) tv_file_required.getTag();
+
                     LinearLayout filell = (LinearLayout) childView.getChildAt(1);
                     String fileFieldId = (String) filell.getTag();
                     System.out.println("附件的字段id是:"+fileFieldId);
                     int fileCount = filell.getChildCount();
+                    if("required".equals(required_file)) {
+                        if(fileCount == 0) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_file+"是必上传项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                    }
                     JSONArray ja = new JSONArray();
                     for(int f=0; f<fileCount; f++) {
                         JSONObject jb = new JSONObject();

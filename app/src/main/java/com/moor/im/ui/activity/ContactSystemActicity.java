@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.db.dao.UserDao;
 import com.moor.im.model.entity.ContactBean;
 import com.moor.im.model.entity.Contacts;
@@ -98,6 +99,7 @@ public class ContactSystemActicity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_systemcontact);
         sp = getSharedPreferences("SP", 4);
         bindService(new Intent().setComponent(new ComponentName("com.moor.im", "com.csipsimple.service.SipService"))
@@ -484,5 +486,8 @@ public class ContactSystemActicity extends Activity{
         // TODO Auto-generated method stub
         super.onDestroy();
         unbindService(connection);
+
+        MobileApplication.getInstance().remove(this);
+
     }
 }

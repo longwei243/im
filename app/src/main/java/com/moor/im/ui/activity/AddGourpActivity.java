@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.Contacts;
 import com.moor.im.model.entity.Group;
@@ -48,6 +49,7 @@ public class AddGourpActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_add_gourp);
 
         adminContacts.clear();
@@ -163,5 +165,11 @@ public class AddGourpActivity extends Activity implements View.OnClickListener {
             group_add_gv_members.setAdapter(memberAdapter);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

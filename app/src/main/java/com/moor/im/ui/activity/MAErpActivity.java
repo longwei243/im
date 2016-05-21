@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.ui.fragment.mobileassitant.AllCallFragment;
 import com.moor.im.ui.fragment.mobileassitant.MyCallFragment;
 import com.moor.im.ui.fragment.mobileassitant.RoalUnDealOrderFragment;
@@ -36,6 +37,7 @@ public class MAErpActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_maerp);
 
         mViewPager = (ViewPager) findViewById(R.id.ma_viewpager);
@@ -146,5 +148,11 @@ public class MAErpActivity extends FragmentActivity implements
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

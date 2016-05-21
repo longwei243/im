@@ -292,5 +292,7 @@ public class ContactDetailActivity extends MyBaseActivity implements
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		unbindService(connection);
+		MobileApplication.getInstance().remove(this);
+
 	}
 }

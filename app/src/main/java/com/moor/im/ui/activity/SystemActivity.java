@@ -58,6 +58,7 @@ public class SystemActivity extends Activity implements ChatListView.OnRefreshLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_system);
         mChatList = (ChatListView) findViewById(R.id.system_list);
         header = View.inflate(this, R.layout.chatlist_header, null);
@@ -153,5 +154,11 @@ public class SystemActivity extends Activity implements ChatListView.OnRefreshLi
                 };
             }.start();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

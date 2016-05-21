@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.ui.fragment.mobileassitant.AllCallFragment;
 import com.moor.im.ui.fragment.mobileassitant.MyCallFragment;
 import com.moor.im.ui.view.ChangeColorTabItem;
@@ -32,6 +33,7 @@ public class MACdrActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_mobileassitant);
 
         mViewPager = (ViewPager) findViewById(R.id.ma_viewpager);
@@ -137,5 +139,10 @@ public class MACdrActivity extends FragmentActivity implements
     @Override
     public void onPageSelected(int arg0) {
 
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

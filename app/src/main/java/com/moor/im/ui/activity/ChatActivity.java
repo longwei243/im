@@ -1412,6 +1412,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onDestroy();
 		readflag = false;
 		MediaManager.relese();
+
+		MobileApplication.getInstance().remove(this);
+
 	}
 
 	@Override

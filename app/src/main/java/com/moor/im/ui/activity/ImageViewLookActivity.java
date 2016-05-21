@@ -35,6 +35,7 @@ public class ImageViewLookActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_image_look);
         touchImageView = (TouchImageView) findViewById(R.id.matrixImageView);
         image_btn_save = (Button) findViewById(R.id.image_btn_save);
@@ -118,5 +119,10 @@ public class ImageViewLookActivity extends Activity{
             }
         });
 
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
     }
 }

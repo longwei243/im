@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.im.R;
+import com.moor.im.app.MobileApplication;
 import com.moor.im.app.RequestUrl;
 import com.moor.im.db.dao.MessageDao;
 import com.moor.im.db.dao.UserDao;
@@ -93,6 +94,7 @@ public class ErpActionProcessActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MobileApplication.getInstance().add(this);
         setContentView(R.layout.activity_erp_action_process);
 
         erp_action_pro_field = (LinearLayout) findViewById(R.id.erp_action_pro_field);
@@ -952,4 +954,10 @@ public class ErpActionProcessActivity extends Activity{
             erp_field_file_ll_already.addView(rl);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MobileApplication.getInstance().remove(this);
+    }
 }

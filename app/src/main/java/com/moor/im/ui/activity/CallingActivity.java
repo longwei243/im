@@ -171,5 +171,9 @@ public class CallingActivity extends Activity {
 		}
 
 	}
-
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MobileApplication.getInstance().remove(this);
+	}
 }
