@@ -222,6 +222,8 @@ public class ErpDetailActivity extends Activity{
                 }
 
                 erpdetail_ll_history.addView(backInfoView, 0);
+                Toast.makeText(ErpDetailActivity.this, "保存备注成功", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -1696,12 +1698,7 @@ public class ErpDetailActivity extends Activity{
                     TextView tv_checkbox_required = (TextView) childView.getChildAt(0);
                     String fieldName_checkbox = tv_checkbox_required.getText().toString();
                     String required_checkbox = (String) tv_checkbox_required.getTag();
-                    if("required".equals(required_checkbox)) {
-                        if(selected.size() == 0) {
-                            Toast.makeText(ErpDetailActivity.this, fieldName_checkbox + "是必选项", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
+
                     for (int o = 0; o < selected.size(); o++) {
                         if(selected.get(o)) {
                             Option option = options.get(o);
@@ -1709,6 +1706,13 @@ public class ErpDetailActivity extends Activity{
                             jsonArray_default.put(option.name);
                             System.out.println("checkbox name is:"+option.name);
                         }
+                    }
+                    if("required".equals(required_checkbox)) {
+                        if(jsonArray.length() == 0) {
+                            Toast.makeText(ErpDetailActivity.this, fieldName_checkbox + "是必选项", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                     }
                     jadatas.put(cbFieldId, jsonArray);
                     jadatas.put(cbFieldId+"_default", jsonArray_default);
