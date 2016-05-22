@@ -1123,6 +1123,7 @@ public class ErpDetailActivity extends Activity{
                                 singleView.setTag("single");
                                 TextView erp_field_single_tv_name = (TextView) singleView.findViewById(R.id.erp_field_single_tv_name);
                                 erp_field_single_tv_name.setText(cacheField.name);
+                                erp_field_single_tv_name.setTag(cacheField.required);
                                 EditText erp_field_single_et_value = (EditText) singleView.findViewById(R.id.erp_field_single_et_value);
                                 erp_field_single_et_value.setTag(cacheField._id);
                                 pane.addView(singleView);
@@ -1132,6 +1133,7 @@ public class ErpDetailActivity extends Activity{
                                 multiView.setTag("multi");
                                 TextView erp_field_multi_tv_name = (TextView) multiView.findViewById(R.id.erp_field_multi_tv_name);
                                 erp_field_multi_tv_name.setText(cacheField.name);
+                                erp_field_multi_tv_name.setTag(cacheField.required);
                                 EditText erp_field_multi_et_value = (EditText) multiView.findViewById(R.id.erp_field_multi_et_value);
                                 erp_field_multi_et_value.setTag(cacheField._id);
                                 pane.addView(multiView);
@@ -1144,6 +1146,7 @@ public class ErpDetailActivity extends Activity{
                                 numberView.setTag("number");
                                 TextView erp_field_number_tv_name = (TextView) numberView.findViewById(R.id.erp_field_number_tv_name);
                                 erp_field_number_tv_name.setText(cacheField.name);
+                                erp_field_number_tv_name.setTag(cacheField.required);
                                 EditText erp_field_number_et_value = (EditText) numberView.findViewById(R.id.erp_field_number_et_value);
                                 erp_field_number_et_value.setTag(cacheField._id);
                                 pane.addView(numberView);
@@ -1318,6 +1321,7 @@ public class ErpDetailActivity extends Activity{
         checkboxView.setTag("checkbox");
         TextView erp_field_checkbox_tv_name = (TextView) checkboxView.findViewById(R.id.erp_field_checkbox_tv_name);
         erp_field_checkbox_tv_name.setText(cacheField.name);
+        erp_field_checkbox_tv_name.setTag(cacheField.required);
         GridViewInScrollView checkbox_gv = (GridViewInScrollView) checkboxView.findViewById(R.id.erp_field_checkbox_gv_value);
         checkbox_gv.setTag(cacheField._id);
         if(cacheField.dic != null) {
@@ -1355,6 +1359,7 @@ public class ErpDetailActivity extends Activity{
         radioView.setTag("radio");
         TextView erp_field_radio_tv_name = (TextView) radioView.findViewById(R.id.erp_field_radio_tv_name);
         erp_field_radio_tv_name.setText(cacheField.name);
+        erp_field_radio_tv_name.setTag(cacheField.required);
         RadioGroup radioGroup = (RadioGroup) radioView.findViewById(R.id.erp_field_radio_rg_value);
         radioGroup.setTag(cacheField._id);
         if(cacheField.dic != null) {
@@ -1388,6 +1393,7 @@ public class ErpDetailActivity extends Activity{
         dataView.setTag("date");
         TextView erp_field_data_tv_name = (TextView) dataView.findViewById(R.id.erp_field_data_tv_name);
         erp_field_data_tv_name.setText(cacheField.name);
+        erp_field_data_tv_name.setTag(cacheField.required);
         final EditText erp_field_data_et_value = (EditText) dataView.findViewById(R.id.erp_field_data_et_value);
         erp_field_data_et_value.setTag(cacheField._id);
         erp_field_data_et_value.setOnClickListener(new View.OnClickListener() {
@@ -1466,6 +1472,7 @@ public class ErpDetailActivity extends Activity{
 
         TextView erp_field_file_tv_name = (TextView) fileView.findViewById(R.id.erp_field_file_tv_name);
         erp_field_file_tv_name.setText(cacheField.name);
+        erp_field_file_tv_name.setTag(cacheField.required);
         erp_field_file_ll_already = (LinearLayout) fileView.findViewById(R.id.erp_field_file_ll_already);
         erp_field_file_ll_already.setTag(cacheField._id);
         Button erp_field_file_btn_uploadfile = (Button) fileView.findViewById(R.id.erp_field_file_btn_uploadfile);

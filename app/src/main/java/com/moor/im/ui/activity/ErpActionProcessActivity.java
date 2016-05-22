@@ -242,6 +242,7 @@ public class ErpActionProcessActivity extends Activity{
                     TextView tv_data_required = (TextView) childView.getChildAt(0);
                     String fieldName_data = tv_data_required.getText().toString();
                     String required_data = (String) tv_data_required.getTag();
+                    System.out.println("日期==========data is:"+value_data+",required is:"+required_data);
                     if("required".equals(required_data)) {
                         if("".equals(value_data)) {
                             Toast.makeText(ErpActionProcessActivity.this, fieldName_data + "是必填项", Toast.LENGTH_SHORT).show();
@@ -738,6 +739,7 @@ public class ErpActionProcessActivity extends Activity{
         dataView.setTag("date");
         TextView erp_field_data_tv_name = (TextView) dataView.findViewById(R.id.erp_field_data_tv_name);
         erp_field_data_tv_name.setText(cacheField.name);
+        erp_field_data_tv_name.setTag(cacheField.required);
         final EditText erp_field_data_et_value = (EditText) dataView.findViewById(R.id.erp_field_data_et_value);
         erp_field_data_et_value.setTag(cacheField._id);
         erp_field_data_et_value.setOnClickListener(new View.OnClickListener() {
